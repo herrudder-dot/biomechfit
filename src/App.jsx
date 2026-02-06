@@ -274,46 +274,63 @@ const RadarChart = ({ data, size = 200, color = C.accent }) => {
 };
 
 // 質問プール
+// 軸1: AかBか（体幹タイプ） - A=みぞおち・股関節主導 / B=首・肩甲骨・腰主導
+// 軸2: 1か2か（重心タイプ） - 1=前重心（つま先） / 2=後重心（踵）
+// APA: ケイデンス（高回転/トルク）、姿勢（胸開き/前傾）
 const QUESTION_POOL = [
-  // 重心系（前後）
-  { id: "stair_down", cat: "balance", q: "階段を降りるとき、最初に着くのは？", a: "つま先から", b: "踵から", weight: { fore: [1, 0], rear: [0, 1] } },
-  { id: "stand_up", cat: "balance", q: "椅子から立ち上がるとき", a: "前に重心移動してから立つ", b: "真上にスッと立つ", weight: { fore: [1, 0], rear: [0, 1] } },
-  { id: "reach_high", cat: "balance", q: "高い棚のものを取るとき", a: "つま先立ちになる", b: "踵は浮かせず腕を伸ばす", weight: { fore: [1, 0], rear: [0, 1] } },
-  { id: "wait_stand", cat: "balance", q: "電車で立って待つとき、体重は？", a: "つま先〜母指球あたり", b: "踵〜足裏全体", weight: { fore: [1, 0], rear: [0, 1] } },
-  { id: "pick_floor", cat: "balance", q: "床のものを拾うとき", a: "膝を曲げてしゃがむ", b: "腰を曲げて手を伸ばす", weight: { fore: [1, 0], rear: [0, 1] } },
-  { id: "push_door", cat: "balance", q: "重いドアを押すとき", a: "体重を前にかけて押す", b: "腕の力で押す", weight: { fore: [1, 0], rear: [0, 1] } },
-  { id: "run_start", cat: "balance", q: "走り出すとき", a: "前に倒れ込むように", b: "地面を蹴って進む", weight: { fore: [1, 0], rear: [0, 1] } },
+  // === AかBか（体幹タイプ）===
+  // A/B選択肢の順序をバランスよく混ぜる
+  { id: "lift_heavy", cat: "trunk", q: "重いものを持ち上げるとき、力を入れるのは？", a: "お腹〜みぞおちあたり", b: "背中〜腰あたり", weight: { typeA: [1, 0], typeB: [0, 1] } },
+  { id: "power_source", cat: "trunk", q: "グッと踏ん張るとき、意識が向くのは？", a: "背中・肩甲骨まわり", b: "お腹・丹田あたり", weight: { typeA: [0, 1], typeB: [1, 0] } },
+  { id: "carry_bag", cat: "trunk", q: "重いカバンを持つとき楽なのは？", a: "体に近づけて持つ", b: "腕を伸ばして持つ", weight: { typeA: [1, 0], typeB: [0, 1] } },
+  { id: "stand_stable", cat: "trunk", q: "安定して立つとき意識するのは？", a: "腰と肩のライン", b: "みぞおちと股関節", weight: { typeA: [0, 1], typeB: [1, 0] } },
+  { id: "push_wall", cat: "trunk", q: "壁を思いっきり押すとき、力の起点は？", a: "お腹から押す感じ", b: "背中で押す感じ", weight: { typeA: [1, 0], typeB: [0, 1] } },
+  { id: "body_twist", cat: "trunk", q: "体をねじるとき、動きの起点は？", a: "腰・肩甲骨から", b: "みぞおち・股関節から", weight: { typeA: [0, 1], typeB: [1, 0] } },
+  { id: "sit_relax", cat: "trunk", q: "椅子でリラックスするとき", a: "骨盤を立てて、みぞおちの力を抜く", b: "背もたれに寄りかかり、腰を預ける", weight: { typeA: [1, 0], typeB: [0, 1] } },
+  { id: "arm_swing", cat: "trunk", q: "歩くときの腕振りは？", a: "肩甲骨から大きく振る", b: "自然に小さく振る程度", weight: { typeA: [0, 1], typeB: [1, 0] } },
+  { id: "jump_prep", cat: "trunk", q: "ジャンプするとき、力を溜めるのは？", a: "お腹にグッと力を入れる", b: "背中・腰をバネのように使う", weight: { typeA: [1, 0], typeB: [0, 1] } },
+  { id: "catch_ball", cat: "trunk", q: "飛んできたボールをキャッチするとき", a: "体に引き寄せるように", b: "手を伸ばして前で取る", weight: { typeA: [1, 0], typeB: [0, 1] } },
   
-  // 回旋系
-  { id: "arm_cross", cat: "rotation", q: "腕を組むと自然なのは？", a: "右腕が上", b: "左腕が上", weight: { ext: [1, 0], int: [0, 1] } },
-  { id: "throw_ball", cat: "rotation", q: "ボールを投げるとき、肘は？", a: "外側に開く感じ", b: "身体に近い軌道", weight: { ext: [1, 0], int: [0, 1] } },
-  { id: "knee_sit", cat: "rotation", q: "床に座るとき、膝は？", a: "外に開きがち", b: "内側に入りがち", weight: { ext: [1, 0], int: [0, 1] } },
-  { id: "turn_back", cat: "rotation", q: "後ろを振り返るとき", a: "肩から大きく回す", b: "首だけで見ようとする", weight: { ext: [1, 0], int: [0, 1] } },
-  { id: "squat_knee", cat: "rotation", q: "スクワットすると膝は？", a: "つま先より外に開く", b: "つま先と同じか内側", weight: { ext: [1, 0], int: [0, 1] } },
-  { id: "golf_swing", cat: "rotation", q: "バットやクラブを振るイメージ", a: "身体を大きく開いて振る", b: "コンパクトに振る", weight: { ext: [1, 0], int: [0, 1] } },
+  // === 1か2か（重心タイプ）===
+  // 選択肢の順序をバランスよく混ぜる
+  { id: "stair_down", cat: "balance", q: "階段を降りるとき、最初に着くのは？", a: "つま先から", b: "踵から", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "stand_up", cat: "balance", q: "椅子から立ち上がるとき", a: "真上にスッと立つ", b: "前に重心移動してから立つ", weight: { num1: [0, 1], num2: [1, 0] } },
+  { id: "wait_stand", cat: "balance", q: "電車で立って待つとき、体重は？", a: "つま先〜母指球あたり", b: "踵〜足裏全体", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "reach_high", cat: "balance", q: "高い棚のものを取るとき", a: "踵は浮かせず腕を伸ばす", b: "つま先立ちになる", weight: { num1: [0, 1], num2: [1, 0] } },
+  { id: "run_start", cat: "balance", q: "走り出すとき", a: "前に倒れ込むように", b: "地面を蹴って進む", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "braking", cat: "balance", q: "急に止まるとき、体重は？", a: "踵に体重が残る", b: "つま先側でブレーキをかける", weight: { num1: [0, 1], num2: [1, 0] } },
+  { id: "lean_wall", cat: "balance", q: "壁にもたれるとき", a: "肩・背中で寄りかかる", b: "手をついて前体重", weight: { num1: [0, 1], num2: [1, 0] } },
+  { id: "pick_floor", cat: "balance", q: "床のものを拾うとき", a: "膝を曲げてしゃがむ", b: "腰を曲げて手を伸ばす", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "slope_stand", cat: "balance", q: "坂道に立つとき安定するのは？", a: "つま先側に体重をかける", b: "踵側でしっかり立つ", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "push_door", cat: "balance", q: "重いドアを押すとき", a: "腕の力で押す", b: "体重を前にかけて押す", weight: { num1: [0, 1], num2: [1, 0] } },
   
-  // ペダリング特性
+  // === APA: ペダリング特性（ケイデンス）===
   { id: "bike_uphill", cat: "cadence", q: "自転車で坂道を登るとき", a: "軽いギアでクルクル回す", b: "重いギアでグイグイ踏む", weight: { high: [1, 0], low: [0, 1] } },
-  { id: "walk_pace", cat: "cadence", q: "歩くペースは？", a: "小股で速く", b: "大股でゆったり", weight: { high: [1, 0], low: [0, 1] } },
+  { id: "walk_pace", cat: "cadence", q: "歩くペースは？", a: "大股でゆったり", b: "小股で速く", weight: { high: [0, 1], low: [1, 0] } },
   { id: "run_style", cat: "cadence", q: "走るときのイメージ", a: "ピッチを上げて軽快に", b: "ストライドを伸ばして力強く", weight: { high: [1, 0], low: [0, 1] } },
-  { id: "stair_up", cat: "cadence", q: "階段を登るとき", a: "一段ずつテンポよく", b: "二段飛ばしもあり", weight: { high: [1, 0], low: [0, 1] } },
+  { id: "stair_up", cat: "cadence", q: "階段を登るとき", a: "二段飛ばしもあり", b: "一段ずつテンポよく", weight: { high: [0, 1], low: [1, 0] } },
   { id: "music_tempo", cat: "cadence", q: "運動するときの音楽は？", a: "BPM高めが好き", b: "ゆったりめでも集中できる", weight: { high: [1, 0], low: [0, 1] } },
   
-  // 姿勢傾向
-  { id: "desk_posture", cat: "posture", q: "デスクワーク中の姿勢", a: "背もたれに寄りかかる", b: "前のめりになりがち", weight: { open: [1, 0], forward: [0, 1] } },
+  // === APA: 姿勢傾向 ===
+  { id: "desk_posture", cat: "posture", q: "デスクワーク中の姿勢", a: "前のめりになりがち", b: "背もたれに寄りかかる", weight: { open: [0, 1], forward: [1, 0] } },
   { id: "breath_feel", cat: "posture", q: "深呼吸するとき楽なのは", a: "胸を開いて吸う", b: "お腹を膨らませて吸う", weight: { open: [1, 0], forward: [0, 1] } },
-  { id: "sleep_position", cat: "posture", q: "寝るとき楽な姿勢", a: "仰向けが多い", b: "横向き・うつ伏せが多い", weight: { open: [1, 0], forward: [0, 1] } },
+  { id: "sleep_position", cat: "posture", q: "寝るとき楽な姿勢", a: "横向き・うつ伏せが多い", b: "仰向けが多い", weight: { open: [0, 1], forward: [1, 0] } },
   { id: "shoulder_relax", cat: "posture", q: "肩の力を抜くと", a: "後ろに引く感じ", b: "前に落ちる感じ", weight: { open: [1, 0], forward: [0, 1] } },
   
-  // 筋肉優位性
-  { id: "leg_power", cat: "muscle", q: "脚のどこが疲れやすい？", a: "太ももの前", b: "太ももの裏・お尻", weight: { quad: [1, 0], ham: [0, 1] } },
-  { id: "jump_land", cat: "muscle", q: "ジャンプの着地で使うのは", a: "膝のクッション", b: "足首のクッション", weight: { quad: [1, 0], ham: [0, 1] } },
-  { id: "sprint_feel", cat: "muscle", q: "全力ダッシュ後に張るのは", a: "太ももの前側", b: "お尻〜もも裏", weight: { quad: [1, 0], ham: [0, 1] } },
+  // === メンタルAPA: 攻撃性（アグレッシブ vs ステディ）===
+  { id: "janken", cat: "mental_agg", q: "じゃんけんで最初に出しがちなのは？", a: "グー", b: "パー", weight: { aggressive: [1, 0], steady: [0, 1] } },
+  { id: "game_style", cat: "mental_agg", q: "ゲームや勝負ごとで好きなのは？", a: "コツコツ積み上げ", b: "一発逆転", weight: { aggressive: [0, 1], steady: [1, 0] } },
+  { id: "lost_road", cat: "mental_agg", q: "知らない道で迷ったら？", a: "直感で進む", b: "一旦戻って確認", weight: { aggressive: [1, 0], steady: [0, 1] } },
+  { id: "task_start", cat: "mental_agg", q: "仕事やタスクの進め方は？", a: "計画してから始める", b: "まずやってみる", weight: { aggressive: [0, 1], steady: [1, 0] } },
+  { id: "risk_take", cat: "mental_agg", q: "チャンスがあったとき", a: "リスク覚悟で飛び込む", b: "確実なときまで待つ", weight: { aggressive: [1, 0], steady: [0, 1] } },
+  { id: "deadline", cat: "mental_agg", q: "締め切りがあるとき", a: "ギリギリに集中して仕上げる", b: "余裕をもって早めに終わらせる", weight: { aggressive: [1, 0], steady: [0, 1] } },
   
-  // 身体意識
-  { id: "body_aware", cat: "awareness", q: "運動中に意識するのは", a: "動かしている部分", b: "全体のバランス", weight: { local: [1, 0], global: [0, 1] } },
-  { id: "learn_move", cat: "awareness", q: "新しい動きを覚えるとき", a: "部分から組み立てる", b: "全体の流れを掴む", weight: { local: [1, 0], global: [0, 1] } },
-  { id: "stretch_pref", cat: "awareness", q: "ストレッチで気持ちいいのは", a: "一箇所をじっくり伸ばす", b: "全身を動かしながら伸ばす", weight: { local: [1, 0], global: [0, 1] } },
+  // === メンタルAPA: 集団性（ソロ vs チーム）===
+  { id: "travel_style", cat: "mental_team", q: "旅行するなら？", a: "一人旅", b: "グループで", weight: { solo: [1, 0], team: [0, 1] } },
+  { id: "sports_watch", cat: "mental_team", q: "スポーツで注目するのは？", a: "個人の活躍・エース", b: "チーム戦術・連携", weight: { solo: [1, 0], team: [0, 1] } },
+  { id: "work_focus", cat: "mental_team", q: "作業に集中できるのは？", a: "誰かと一緒のとき", b: "一人のとき", weight: { solo: [0, 1], team: [1, 0] } },
+  { id: "achieve_joy", cat: "mental_team", q: "達成感を感じるのは？", a: "チームで成し遂げたとき", b: "自分の力で成し遂げたとき", weight: { solo: [0, 1], team: [1, 0] } },
+  { id: "problem_solve", cat: "mental_team", q: "問題にぶつかったとき", a: "まず自分で考える", b: "すぐ誰かに相談する", weight: { solo: [1, 0], team: [0, 1] } },
 ];
 
 // 精度レベル
@@ -330,11 +347,11 @@ const ACCURACY_LEVELS = [
 const TYPE_INFO = {
   A1: {
     name: "パワースプリンター",
-    sub: "前足部重心 × 外旋",
+    sub: "Aタイプ × 前重心",
     icon: "zap",
     color: "#f59e0b",
     gradient: "linear-gradient(135deg, #f59e0b, #ea580c)",
-    traits: ["瞬発力が高い", "つま先で地面を捉える", "膝が外に開きやすい"],
+    traits: ["瞬発力が高い", "みぞおち・股関節主導", "つま先重心で軽快"],
     cycling: "高回転でスパッと加速するタイプ。ダンシングが得意。",
     strengths: ["スプリント", "アタック", "短い登り"],
     weaknesses: ["長時間の一定ペース", "向かい風"],
@@ -375,11 +392,11 @@ const TYPE_INFO = {
   },
   A2: {
     name: "グラインダー",
-    sub: "踵重心 × 外旋",
+    sub: "Aタイプ × 後重心",
     icon: "mountain",
     color: "#10b981",
     gradient: "linear-gradient(135deg, #10b981, #059669)",
-    traits: ["持久力が高い", "踵でしっかり踏める", "下半身が安定"],
+    traits: ["持久力が高い", "みぞおち・股関節主導", "踵重心で安定"],
     cycling: "重いギアでグイグイ進むタイプ。ヒルクライムが得意。",
     strengths: ["ロングライド", "ヒルクライム", "一定ペース維持"],
     weaknesses: ["急加速", "スプリント勝負"],
@@ -418,13 +435,13 @@ const TYPE_INFO = {
       }
     }
   },
-  A3: {
+  B1: {
     name: "スムースペダラー",
-    sub: "前足部重心 × 内旋",
+    sub: "Bタイプ × 前重心",
     icon: "wave",
     color: "#6366f1",
     gradient: "linear-gradient(135deg, #6366f1, #4f46e5)",
-    traits: ["動きが滑らか", "内股傾向", "リズム感がいい"],
+    traits: ["動きが滑らか", "首・肩甲骨・腰主導", "つま先重心で効率的"],
     cycling: "綺麗な円運動でロスなく回すタイプ。効率がいい。",
     strengths: ["ペダリング効率", "平地巡航", "集団走行"],
     weaknesses: ["ダンシング", "急な地形変化"],
@@ -465,11 +482,11 @@ const TYPE_INFO = {
   },
   B2: {
     name: "オールラウンダー",
-    sub: "踵重心 × 内旋",
+    sub: "Bタイプ × 後重心",
     icon: "crosshair",
     color: "#ec4899",
     gradient: "linear-gradient(135deg, #ec4899, #db2777)",
-    traits: ["バランス型", "適応力が高い", "安定感がある"],
+    traits: ["バランス型", "首・肩甲骨・腰主導", "踵重心で安定感"],
     cycling: "どんな状況にも対応できる万能タイプ。",
     strengths: ["適応力", "安定感", "レース全般"],
     weaknesses: ["突出した武器がない（逆に強み）"],
@@ -535,7 +552,8 @@ export default function App() {
   const [answers, setAnswers] = useState({});
   const [skipped, setSkipped] = useState(new Set());
   const [scores, setScores] = useState({
-    fore: 0, rear: 0, ext: 0, int: 0, high: 0, low: 0, open: 0, forward: 0, quad: 0, ham: 0, local: 0, global: 0,
+    typeA: 0, typeB: 0, num1: 0, num2: 0, high: 0, low: 0, open: 0, forward: 0,
+    aggressive: 0, steady: 0, solo: 0, team: 0,
   });
   const [showingAnswer, setShowingAnswer] = useState(false);
   const [result, setResult] = useState(null);
@@ -602,7 +620,7 @@ export default function App() {
   const generateSetup = (type, cadence, posture) => {
     // ベース設定（4スタンスタイプ別）
     const baseSetup = {
-      A1: { // 前足部×外旋
+      A1: { // Aタイプ×前重心
         saddle: {
           heightBase: "やや高め",
           heightCoef: "0.885〜0.890",
@@ -618,7 +636,7 @@ export default function App() {
           floatBase: "少なめ",
         }
       },
-      A2: { // 踵×外旋
+      A2: { // Aタイプ×後重心
         saddle: {
           heightBase: "標準〜やや低め",
           heightCoef: "0.875〜0.883",
@@ -634,7 +652,7 @@ export default function App() {
           floatBase: "少なめ",
         }
       },
-      A3: { // 前足部×内旋
+      B1: { // Bタイプ×前重心
         saddle: {
           heightBase: "標準〜やや高め",
           heightCoef: "0.883〜0.888",
@@ -650,7 +668,7 @@ export default function App() {
           floatBase: "あり",
         }
       },
-      B2: { // 踵×内旋
+      B2: { // Bタイプ×後重心
         saddle: {
           heightBase: "標準",
           heightCoef: "0.880〜0.885",
@@ -717,17 +735,19 @@ export default function App() {
   };
 
   const calculateResult = () => {
-    const isFore = scores.fore > scores.rear;
-    const isExt = scores.ext > scores.int;
+    const isA = scores.typeA >= scores.typeB;
+    const is1 = scores.num1 >= scores.num2;
     
     let type;
-    if (isFore && isExt) type = "A1";
-    else if (!isFore && isExt) type = "A2";
-    else if (isFore && !isExt) type = "A3";
+    if (isA && is1) type = "A1";
+    else if (isA && !is1) type = "A2";
+    else if (!isA && is1) type = "B1";
     else type = "B2";
     
     const cadence = scores.high > scores.low ? "high" : "low";
     const posture = scores.open > scores.forward ? "open" : "forward";
+    const aggression = scores.aggressive > scores.steady ? "aggressive" : "steady";
+    const teamwork = scores.team > scores.solo ? "team" : "solo";
     
     // セットアップを動的に生成
     const setup = generateSetup(type, cadence, posture);
@@ -737,6 +757,8 @@ export default function App() {
       typeInfo: TYPE_INFO[type],
       cadence,
       posture,
+      aggression,
+      teamwork,
       setup,
       scores: { ...scores },
       answerCount: Object.keys(answers).length
@@ -774,10 +796,11 @@ export default function App() {
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {[
-                { icon: Icons.foot(C.cyan, 22), label: "重心タイプ", desc: "前足部 or 踵" },
-                { icon: Icons.rotate(C.pink, 22), label: "回旋傾向", desc: "外旋 or 内旋" },
+                { icon: Icons.user(C.pink, 22), label: "体幹タイプ", desc: "Aタイプ or Bタイプ" },
+                { icon: Icons.foot(C.cyan, 22), label: "重心タイプ", desc: "1（前重心）or 2（後重心）" },
                 { icon: Icons.activity(C.orange, 22), label: "ペダリング特性", desc: "高回転 or トルク" },
-                { icon: Icons.user(C.green, 22), label: "姿勢傾向", desc: "胸開き or 前傾" },
+                { icon: Icons.bike(C.green, 22), label: "姿勢傾向", desc: "胸開き or 前傾" },
+                { icon: Icons.sparkles(C.accent, 22), label: "メンタル傾向", desc: "攻撃性 & チーム性" },
               ].map(item => (
                 <div key={item.label} style={{ display: "flex", alignItems: "center", gap: 12, background: "#0a0e1a", borderRadius: 10, padding: 12 }}>
                   {item.icon}
@@ -877,14 +900,14 @@ export default function App() {
     }
     
     const catInfo = {
+      trunk: { icon: Icons.user(C.pink, 16), label: "体幹タイプ" },
       balance: { icon: Icons.foot(C.cyan, 16), label: "重心" },
-      rotation: { icon: Icons.rotate(C.pink, 16), label: "回旋" },
       cadence: { icon: Icons.activity(C.orange, 16), label: "ペダリング" },
-      posture: { icon: Icons.user(C.green, 16), label: "姿勢" },
-      muscle: { icon: Icons.zap(C.yellow, 16), label: "筋肉" },
-      awareness: { icon: Icons.target(C.accent, 16), label: "感覚" },
+      posture: { icon: Icons.bike(C.green, 16), label: "姿勢" },
+      mental_agg: { icon: Icons.zap(C.orange, 16), label: "攻撃性" },
+      mental_team: { icon: Icons.target(C.accent, 16), label: "チーム性" },
     };
-    const cat = catInfo[q.cat] || catInfo.awareness;
+    const cat = catInfo[q.cat] || catInfo.trunk;
     
     return (
       <div style={{ minHeight: "100vh", background: C.bg, padding: "24px 16px" }}>
@@ -1074,6 +1097,34 @@ export default function App() {
                 </p>
                 <p style={{ color: C.textDim, fontSize: 11, margin: 0 }}>
                   {posture === "open" ? "アップライト気味" : "エアロ姿勢向き"}
+                </p>
+              </div>
+            </div>
+          </Card>
+          
+          {/* メンタル傾向 */}
+          <Card style={{ marginTop: 16 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+              {Icons.sparkles(C.accent, 20)}
+              <p style={{ color: C.text, fontSize: 16, fontWeight: 700, margin: 0 }}>メンタル傾向</p>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              <div style={{ background: "#0a0e1a", borderRadius: 12, padding: 14, textAlign: "center" }}>
+                <div style={{ marginBottom: 8 }}>{result.aggression === "aggressive" ? Icons.zap(C.orange, 28) : Icons.target(C.cyan, 28)}</div>
+                <p style={{ color: result.aggression === "aggressive" ? C.orange : C.cyan, fontSize: 14, fontWeight: 700, margin: "0 0 2px" }}>
+                  {result.aggression === "aggressive" ? "アグレッシブ" : "ステディ"}
+                </p>
+                <p style={{ color: C.textDim, fontSize: 11, margin: 0 }}>
+                  {result.aggression === "aggressive" ? "攻め・飛び出し型" : "堅実・確実型"}
+                </p>
+              </div>
+              <div style={{ background: "#0a0e1a", borderRadius: 12, padding: 14, textAlign: "center" }}>
+                <div style={{ marginBottom: 8 }}>{result.teamwork === "solo" ? Icons.user(C.pink, 28) : Icons.bike(C.green, 28)}</div>
+                <p style={{ color: result.teamwork === "solo" ? C.pink : C.green, fontSize: 14, fontWeight: 700, margin: "0 0 2px" }}>
+                  {result.teamwork === "solo" ? "ソロ型" : "チーム型"}
+                </p>
+                <p style={{ color: C.textDim, fontSize: 11, margin: 0 }}>
+                  {result.teamwork === "solo" ? "単独で力を発揮" : "集団で活きる"}
                 </p>
               </div>
             </div>
@@ -1418,7 +1469,7 @@ export default function App() {
               setMode("start");
               setAnswers({});
               setSkipped(new Set());
-              setScores({ fore: 0, rear: 0, ext: 0, int: 0, high: 0, low: 0, open: 0, forward: 0, quad: 0, ham: 0, local: 0, global: 0 });
+              setScores({ typeA: 0, typeB: 0, num1: 0, num2: 0, high: 0, low: 0, open: 0, forward: 0, aggressive: 0, steady: 0, solo: 0, team: 0 });
               setCurrentIndex(0);
               setResult(null);
               setIsPro(false);
