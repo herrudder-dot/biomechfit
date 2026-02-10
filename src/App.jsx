@@ -2295,7 +2295,7 @@ export default function App() {
                                   
                                   <div style={{ display: "flex", gap: 8 }}>
                                     <a
-                                      href={`https://www.amazon.co.jp/s?k=${gear.amazonQuery}&tag=YOUR_AMAZON_TAG`}
+                                      href={`https://www.amazon.co.jp/s?k=${gear.amazonQuery}&tag=biomechfit-22`}
                                       target="_blank"
                                       rel="noopener noreferrer"
                                       style={{
@@ -2308,7 +2308,7 @@ export default function App() {
                                       Amazon
                                     </a>
                                     <a
-                                      href={`https://search.rakuten.co.jp/search/mall/${gear.rakutenQuery}/?sid=YOUR_RAKUTEN_TAG`}
+                                      href={`https://hb.afl.rakuten.co.jp/ichiba/50df1b4b.7f702b2c.50df1b4c.1f8e3d5f/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F${gear.rakutenQuery}%2F`}
                                       target="_blank"
                                       rel="noopener noreferrer"
                                       style={{
@@ -3019,10 +3019,76 @@ export default function App() {
           {/* シェア */}
           <Card style={{ marginTop: 20, background: `linear-gradient(135deg, ${C.accent}10, ${C.pink}08)`, border: `1px solid ${C.accent}20` }}>
             <div style={{ textAlign: "center" }}>
-              <p style={{ color: C.text, fontSize: 14, fontWeight: 600, margin: "0 0 8px" }}>友達にもシェアしよう！</p>
-              <p style={{ color: C.textMuted, fontSize: 13, margin: "0 0 4px" }}>
-                「私は<span style={{ color: typeInfo.color, fontWeight: 600 }}>{typeInfo.name}</span>タイプだった！」
+              <p style={{ color: C.text, fontSize: 14, fontWeight: 600, margin: "0 0 12px" }}>🎉 結果をシェアしよう！</p>
+              <p style={{ color: C.textMuted, fontSize: 12, margin: "0 0 16px", lineHeight: 1.6 }}>
+                「私は<span style={{ color: typeInfo.color, fontWeight: 600 }}>{typeInfo.name}</span>タイプ」<br/>
+                友達も診断してみよう！
               </p>
+              
+              <button
+                onClick={() => {
+                  const text = `🚴 4スタンス理論でサイクリングタイプを診断したら「${typeInfo.name}（${type}）」だった！
+
+${typeInfo.traits.join('、')}
+
+あなたも診断してみて👇
+https://biomechfit.vercel.app
+
+#CyclingFit #4スタンス理論 #ロードバイク`;
+                  const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+                  window.open(url, '_blank');
+                }}
+                style={{
+                  width: "100%",
+                  padding: "14px 20px",
+                  borderRadius: 12,
+                  border: "none",
+                  background: "#000",
+                  color: "#fff",
+                  fontSize: 14,
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 8,
+                }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+                X (Twitter) でシェア
+              </button>
+              
+              <button
+                onClick={() => {
+                  const text = `🚴 4スタンス理論でサイクリングタイプを診断したら「${typeInfo.name}（${type}）」だった！ https://biomechfit.vercel.app`;
+                  if (navigator.share) {
+                    navigator.share({ title: 'CyclingFit 診断結果', text: text, url: 'https://biomechfit.vercel.app' });
+                  } else {
+                    navigator.clipboard.writeText(text);
+                    alert('クリップボードにコピーしました！');
+                  }
+                }}
+                style={{
+                  width: "100%",
+                  marginTop: 8,
+                  padding: "12px 20px",
+                  borderRadius: 12,
+                  border: `1px solid ${C.cardBorder}`,
+                  background: "transparent",
+                  color: C.textMuted,
+                  fontSize: 13,
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 8,
+                }}
+              >
+                📋 テキストをコピー
+              </button>
             </div>
           </Card>
         </div>
