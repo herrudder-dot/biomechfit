@@ -1686,11 +1686,14 @@ export default function App() {
   };
   
   const handleAnswer = (choice) => {
+    // 処理中または回答済みならスキップ
+    if (showingAnswer) return;
+    
     const q = questions[currentIndex];
     if (!q) return;
-    
-    // 既に回答済みならスキップ
     if (answers[q.id] !== undefined) return;
+    
+    setShowingAnswer(true);
     
     const newAnswers = { ...answers, [q.id]: choice };
     setAnswers(newAnswers);
@@ -1704,7 +1707,6 @@ export default function App() {
     // ステージアップチェック（newScoresを渡す）
     checkStageUp(Object.keys(newAnswers).length, newScores);
     
-    setShowingAnswer(true);
     setTimeout(() => {
       setShowingAnswer(false);
       goToNext(newAnswers, newScores);
@@ -1713,11 +1715,14 @@ export default function App() {
   
   // 4択回答用
   const handleQuadAnswer = (optionIndex) => {
+    // 処理中ならスキップ
+    if (showingAnswer) return;
+    
     const q = questions[currentIndex];
     if (!q || !q.options || !q.options[optionIndex]) return;
-    
-    // 既に回答済みならスキップ
     if (answers[q.id] !== undefined) return;
+    
+    setShowingAnswer(true);
     
     const selectedOption = q.options[optionIndex];
     const newAnswers = { ...answers, [q.id]: optionIndex };
@@ -1732,7 +1737,6 @@ export default function App() {
     // ステージアップチェック（newScoresを渡す）
     checkStageUp(Object.keys(newAnswers).length, newScores);
     
-    setShowingAnswer(true);
     setTimeout(() => {
       setShowingAnswer(false);
       goToNext(newAnswers, newScores);
@@ -2430,12 +2434,15 @@ export default function App() {
                     <button
                       key={idx}
                       onClick={() => handleQuadAnswer(idx)}
+                      disabled={showingAnswer}
                       style={{
                         width: "100%", padding: "14px 18px", borderRadius: 14,
                         border: "none", 
                         background: C.bg,
-                        color: C.text, fontSize: 14, fontWeight: 500, cursor: "pointer",
+                        color: C.text, fontSize: 14, fontWeight: 500, 
+                        cursor: showingAnswer ? "default" : "pointer",
                         textAlign: "left", transition: "all 0.15s",
+                        opacity: showingAnswer ? 0.6 : 1,
                         ...neu.raised,
                       }}
                     >
@@ -2448,9 +2455,11 @@ export default function App() {
                 })}
                 <button
                   onClick={handleSkip}
+                  disabled={showingAnswer}
                   style={{
                     width: "100%", padding: "12px", borderRadius: 10, border: "none",
-                    background: "transparent", color: C.textDim, fontSize: 12, cursor: "pointer", marginTop: 8
+                    background: "transparent", color: C.textDim, fontSize: 12, 
+                    cursor: showingAnswer ? "default" : "pointer", marginTop: 8
                   }}
                 >
                   ピンとこない、スキップ →
@@ -2465,12 +2474,15 @@ export default function App() {
                 <button
                   key={choice}
                   onClick={() => handleAnswer(choice)}
+                  disabled={showingAnswer}
                   style={{
                     width: "100%", padding: "16px 20px", borderRadius: 16,
                     border: "none", 
                     background: C.bg,
-                    color: C.text, fontSize: 15, fontWeight: 500, cursor: "pointer",
+                    color: C.text, fontSize: 15, fontWeight: 500, 
+                    cursor: showingAnswer ? "default" : "pointer",
                     textAlign: "left", transition: "all 0.15s",
+                    opacity: showingAnswer ? 0.6 : 1,
                     ...neu.raised,
                   }}
                 >
@@ -2483,9 +2495,11 @@ export default function App() {
               
               <button
                 onClick={handleSkip}
+                disabled={showingAnswer}
                 style={{
                   width: "100%", padding: "12px", borderRadius: 10, border: "none",
-                  background: "transparent", color: C.textDim, fontSize: 12, cursor: "pointer", marginTop: 8
+                  background: "transparent", color: C.textDim, fontSize: 12, 
+                  cursor: showingAnswer ? "default" : "pointer", marginTop: 8
                 }}
               >
                 ピンとこない、スキップ →
