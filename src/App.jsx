@@ -1,59 +1,283 @@
 import { useState, useEffect } from "react";
 
-// ニューモーフィズム カラーパレット（ライトモード）
+// グローバルスタイル（アニメーション）
+const GlobalStyles = () => (
+  <style>{`
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 20px currentColor; }
+      50% { box-shadow: 0 0 40px currentColor; }
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    @keyframes aurora {
+      0%, 100% { 
+        background-position: 0% 50%, 100% 50%, 50% 100%, 0% 0%, 0% 0%;
+      }
+      50% { 
+        background-position: 100% 50%, 0% 50%, 50% 0%, 100% 100%, 0% 0%;
+      }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #F0F5F9; }
+  `}</style>
+);
+
+// ========================================
+// テーマ設定（ここを変更するだけでデザイン切替可能）
+// ========================================
+const THEMES = {
+  // 新: クリーンライト（参考画像風）
+  cleanLight: {
+    name: "cleanLight",
+    // ベース
+    bg: "#F0F5F9",
+    bgSolid: "#F0F5F9",
+    aurora: null, // ライトモードではオーロラなし
+    
+    // カード
+    card: "#FFFFFF",
+    cardBorder: "rgba(0, 0, 0, 0.04)",
+    cardHover: "#FAFBFC",
+    
+    // テキスト
+    text: "#1F2937",
+    textMuted: "#6B7280",
+    textDim: "#9CA3AF",
+    
+    // アクセント（ティール）
+    accent: "#14B8A6",
+    accentGradient: "linear-gradient(135deg, #14B8A6, #0D9488)",
+    accentLight: "#5EEAD4",
+    accentDark: "#0D9488",
+    
+    // タイプ別カラー
+    typeColors: {
+      A1: { main: "#F59E0B", gradient: "linear-gradient(135deg, #F59E0B, #D97706)", glow: "rgba(245, 158, 11, 0.2)" },
+      A2: { main: "#10B981", gradient: "linear-gradient(135deg, #10B981, #059669)", glow: "rgba(16, 185, 129, 0.2)" },
+      B1: { main: "#8B5CF6", gradient: "linear-gradient(135deg, #8B5CF6, #7C3AED)", glow: "rgba(139, 92, 246, 0.2)" },
+      B2: { main: "#EC4899", gradient: "linear-gradient(135deg, #EC4899, #DB2777)", glow: "rgba(236, 72, 153, 0.2)" },
+    },
+    
+    // セマンティック
+    pink: "#EC4899",
+    green: "#10B981",
+    orange: "#F59E0B",
+    red: "#EF4444",
+    cyan: "#14B8A6",
+    yellow: "#EAB308",
+    
+    // エフェクト
+    shadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
+    shadowLg: "0 8px 30px rgba(0, 0, 0, 0.12)",
+    shadowCard: "0 2px 12px rgba(0, 0, 0, 0.06)",
+    glow: (color) => `0 4px 14px ${color}30`,
+    glassBg: "rgba(255, 255, 255, 0.8)",
+    glassBorder: "rgba(0, 0, 0, 0.05)",
+    blur: "backdrop-filter: blur(10px)",
+  },
+  
+  // C案: グラデーションリッチ + Aurora（ダークモード）
+  gradientRich: {
+    name: "gradientRich",
+    // ベース（Aurora Gradients）
+    bg: "#0a0a12",
+    bgSolid: "#0a0a12",
+    // オーロラグラデーション（複数レイヤー）
+    aurora: `
+      radial-gradient(ellipse 80% 50% at 20% 40%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+      radial-gradient(ellipse 60% 40% at 80% 20%, rgba(236, 72, 153, 0.12) 0%, transparent 50%),
+      radial-gradient(ellipse 50% 60% at 60% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+      radial-gradient(ellipse 40% 30% at 10% 90%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
+      linear-gradient(180deg, #0a0a12 0%, #0f1219 50%, #0a0a12 100%)
+    `,
+    card: "rgba(255, 255, 255, 0.03)",
+    cardBorder: "rgba(255, 255, 255, 0.08)",
+    cardHover: "rgba(255, 255, 255, 0.06)",
+    
+    // テキスト
+    text: "#FFFFFF",
+    textMuted: "rgba(255, 255, 255, 0.7)",
+    textDim: "rgba(255, 255, 255, 0.5)",
+    
+    // アクセント（グラデーション対応）
+    accent: "#818CF8",
+    accentGradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    accentLight: "#A5B4FC",
+    accentDark: "#6366F1",
+    
+    // タイプ別カラー（より鮮やか）
+    typeColors: {
+      A1: { main: "#F59E0B", gradient: "linear-gradient(135deg, #F59E0B, #EF4444)", glow: "rgba(245, 158, 11, 0.4)" },
+      A2: { main: "#10B981", gradient: "linear-gradient(135deg, #10B981, #06B6D4)", glow: "rgba(16, 185, 129, 0.4)" },
+      B1: { main: "#8B5CF6", gradient: "linear-gradient(135deg, #8B5CF6, #EC4899)", glow: "rgba(139, 92, 246, 0.4)" },
+      B2: { main: "#EC4899", gradient: "linear-gradient(135deg, #EC4899, #F43F5E)", glow: "rgba(236, 72, 153, 0.4)" },
+    },
+    
+    // セマンティック
+    pink: "#EC4899",
+    green: "#10B981",
+    orange: "#F59E0B",
+    red: "#EF4444",
+    cyan: "#06B6D4",
+    yellow: "#EAB308",
+    
+    // エフェクト
+    shadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
+    shadowLg: "0 16px 48px rgba(0, 0, 0, 0.4)",
+    glow: (color) => `0 0 20px ${color}40, 0 0 40px ${color}20`,
+    glassBg: "rgba(255, 255, 255, 0.05)",
+    glassBorder: "rgba(255, 255, 255, 0.1)",
+    blur: "backdrop-filter: blur(10px)",
+  },
+  
+  // A案: ニューモーフィズム（元のデザイン）
+  neumorphism: {
+    name: "neumorphism",
+    bg: "#E4E9F2",
+    bgSolid: "#E4E9F2",
+    aurora: null,
+    card: "#E4E9F2",
+    cardBorder: "transparent",
+    text: "#2D3748",
+    textMuted: "#4A5568",
+    textDim: "#718096",
+    accent: "#6366F1",
+    accentGradient: "linear-gradient(135deg, #6366F1, #4F46E5)",
+    accentLight: "#818CF8",
+    accentDark: "#4F46E5",
+    typeColors: {
+      A1: { main: "#F59E0B", gradient: "linear-gradient(135deg, #F59E0B, #EA580C)", glow: "none" },
+      A2: { main: "#10B981", gradient: "linear-gradient(135deg, #10B981, #059669)", glow: "none" },
+      B1: { main: "#6366F1", gradient: "linear-gradient(135deg, #6366F1, #4F46E5)", glow: "none" },
+      B2: { main: "#EC4899", gradient: "linear-gradient(135deg, #EC4899, #DB2777)", glow: "none" },
+    },
+    pink: "#EC4899",
+    green: "#10B981",
+    orange: "#F59E0B",
+    red: "#EF4444",
+    cyan: "#06B6D4",
+    yellow: "#EAB308",
+    shadow: "6px 6px 12px #C8CDD8, -6px -6px 12px #FFFFFF",
+    shadowLg: "10px 10px 20px #C8CDD8, -10px -10px 20px #FFFFFF",
+    glow: () => "none",
+    glassBg: "#E4E9F2",
+    glassBorder: "transparent",
+  },
+};
+
+// 現在のテーマを選択（ここを変えるだけでテーマ切替）
+const CURRENT_THEME = "cleanLight";
+const theme = THEMES[CURRENT_THEME];
+
+// テーマからカラーを取得（後方互換のため C としてもエクスポート）
 const C = {
-  // ベース
-  bg: "#E4E9F2",
-  card: "#E4E9F2",
-  
-  // テキスト
-  text: "#2D3748",
-  textMuted: "#4A5568",
-  textDim: "#718096",
-  
-  // アクセント
-  accent: "#6366F1",
-  accentLight: "#818CF8",
-  accentDark: "#4F46E5",
-  
-  // セマンティック
-  pink: "#EC4899",
-  green: "#10B981",
-  orange: "#F59E0B",
-  red: "#EF4444",
-  cyan: "#06B6D4",
-  yellow: "#EAB308",
-  
-  // ニューモーフィズム用シャドウカラー
+  bg: theme.bgSolid,
+  card: theme.card,
+  cardBorder: theme.cardBorder,
+  text: theme.text,
+  textMuted: theme.textMuted,
+  textDim: theme.textDim,
+  accent: theme.accent,
+  accentLight: theme.accentLight,
+  accentDark: theme.accentDark,
+  pink: theme.pink,
+  green: theme.green,
+  orange: theme.orange,
+  red: theme.red,
+  cyan: theme.cyan,
+  yellow: theme.yellow,
   shadowLight: "#FFFFFF",
   shadowDark: "#C8CDD8",
 };
 
-// ニューモーフィズム シャドウスタイル
+// スタイルヘルパー
+const styles = {
+  // カード
+  card: {
+    background: theme.card,
+    borderRadius: 20,
+    padding: 24,
+    border: `1px solid ${theme.cardBorder}`,
+    boxShadow: theme.shadow,
+    backdropFilter: "blur(10px)",
+  },
+  cardPressed: {
+    background: theme.glassBg,
+    borderRadius: 16,
+    padding: 16,
+    border: `1px solid ${theme.glassBorder}`,
+    boxShadow: "inset 0 2px 4px rgba(0,0,0,0.2)",
+  },
+  // ボタン
+  buttonPrimary: {
+    background: theme.accentGradient,
+    border: "none",
+    borderRadius: 14,
+    padding: "14px 24px",
+    color: "#fff",
+    fontWeight: 700,
+    cursor: "pointer",
+    boxShadow: theme.glow(theme.accent),
+    transition: "all 0.3s ease",
+  },
+  buttonSecondary: {
+    background: "transparent",
+    border: `1px solid ${theme.cardBorder}`,
+    borderRadius: 12,
+    padding: "12px 20px",
+    color: theme.textMuted,
+    fontWeight: 600,
+    cursor: "pointer",
+    transition: "all 0.3s ease",
+  },
+  // グロー効果（タイプ別）
+  typeGlow: (type) => ({
+    boxShadow: theme.typeColors[type]?.glow ? `0 0 30px ${theme.typeColors[type].glow}` : "none",
+  }),
+  // Aurora グラデーション背景
+  auroraBg: {
+    background: theme.aurora || theme.bg,
+    backgroundColor: theme.bgSolid,
+    minHeight: "100vh",
+  },
+  // グラデーション背景（後方互換）
+  gradientBg: {
+    background: theme.aurora || theme.bg,
+    backgroundColor: theme.bgSolid,
+    minHeight: "100vh",
+  },
+  // アニメーション用
+  fadeIn: {
+    animation: "fadeIn 0.5s ease-out",
+  },
+  slideUp: {
+    animation: "slideUp 0.5s ease-out",
+  },
+};
+
+// 後方互換のための neu オブジェクト
 const neu = {
-  // 浮き出し（デフォルト）
-  raised: {
-    boxShadow: "6px 6px 12px #C8CDD8, -6px -6px 12px #FFFFFF",
-  },
-  // 強い浮き出し
-  raisedLg: {
-    boxShadow: "10px 10px 20px #C8CDD8, -10px -10px 20px #FFFFFF",
-  },
-  // 凹み
-  pressed: {
-    boxShadow: "inset 4px 4px 8px #C8CDD8, inset -4px -4px 8px #FFFFFF",
-  },
-  // 軽い凹み
-  pressedSm: {
-    boxShadow: "inset 2px 2px 4px #C8CDD8, inset -2px -2px 4px #FFFFFF",
-  },
-  // フラット（ホバー前）
-  flat: {
-    boxShadow: "none",
-  },
-  // アクセント付き浮き出し
+  raised: { boxShadow: theme.shadow },
+  raisedLg: { boxShadow: theme.shadowLg },
+  pressed: { boxShadow: "inset 0 2px 4px rgba(0,0,0,0.2)" },
+  pressedSm: { boxShadow: "inset 0 1px 2px rgba(0,0,0,0.15)" },
+  flat: { boxShadow: "none" },
   accentRaised: (color) => ({
-    boxShadow: `6px 6px 12px #C8CDD8, -6px -6px 12px #FFFFFF, inset 0 0 0 2px ${color}20`,
+    boxShadow: `${theme.shadow}, inset 0 0 0 2px ${color}20`,
   }),
 };
 
@@ -67,28 +291,34 @@ const CYCLING_GEAR_DB = [
   { id: "power-arc", name: "Specialized Power Arc", brand: "Specialized", price: 28000, category: "saddle",
     style: "forward", type: ["A1", "B1"], 
     reason: "ショートノーズで前乗りに最適。高出力ペダリングをサポート。",
+    image: "https://m.media-amazon.com/images/I/61Qi3Y1uURL._AC_SX679_.jpg",
     amazonQuery: "Specialized+Power+Saddle", rakutenQuery: "Specialized%20Power%20サドル" },
   { id: "argo-r3", name: "fi'zi:k Argo Tempo R3", brand: "fi'zi:k", price: 15000, category: "saddle",
     style: "forward", type: ["A1", "B1"],
     reason: "ショートノーズの入門モデル。前乗りポジションに。",
+    image: "https://m.media-amazon.com/images/I/71Qs5PiYURL._AC_SX679_.jpg",
     amazonQuery: "fizik+Argo+Tempo", rakutenQuery: "fizik%20Argo%20Tempo" },
   // A2向け（後ろ乗り・ロングノーズ）
   { id: "antares-r3", name: "fi'zi:k Antares R3", brand: "fi'zi:k", price: 18000, category: "saddle",
     style: "rear", type: ["A2", "B2"],
     reason: "クラシックな形状で後ろ乗りに最適。ロングライドも快適。",
+    image: "https://m.media-amazon.com/images/I/61d5PZ+HLZL._AC_SX679_.jpg",
     amazonQuery: "fizik+Antares", rakutenQuery: "fizik%20Antares" },
   { id: "aspide", name: "Selle Italia SLR Boost", brand: "Selle Italia", price: 22000, category: "saddle",
     style: "rear", type: ["A2"],
     reason: "軽量でクライマー向け。後ろ乗りでトルクをかけやすい。",
+    image: "https://m.media-amazon.com/images/I/61V1a4LlURL._AC_SX679_.jpg",
     amazonQuery: "Selle+Italia+SLR+Boost", rakutenQuery: "Selle%20Italia%20SLR%20Boost" },
   // B1/B2向け（バランス型）
   { id: "romin-evo", name: "Specialized Romin Evo", brand: "Specialized", price: 25000, category: "saddle",
     style: "neutral", type: ["B1", "B2"],
     reason: "オールラウンドな形状。様々なポジションに対応。",
+    image: "https://m.media-amazon.com/images/I/71kWlx+gURL._AC_SX679_.jpg",
     amazonQuery: "Specialized+Romin+Evo", rakutenQuery: "Specialized%20Romin%20Evo" },
   { id: "cambium-c17", name: "Brooks Cambium C17", brand: "Brooks", price: 16000, category: "saddle",
     style: "neutral", type: ["B2"],
     reason: "快適性重視。ロングライドやエンデュランスに。",
+    image: "https://m.media-amazon.com/images/I/71J8tSPyURL._AC_SX679_.jpg",
     amazonQuery: "Brooks+Cambium+C17", rakutenQuery: "Brooks%20Cambium%20C17" },
 
   // === ペダル ===
@@ -96,19 +326,23 @@ const CYCLING_GEAR_DB = [
   { id: "dura-ace-pedal", name: "Shimano Dura-Ace PD-R9200", brand: "Shimano", price: 35000, category: "pedal",
     style: "stiff", type: ["A1"],
     reason: "最高剛性でパワー伝達ロスなし。スプリンター向け。",
+    image: "https://m.media-amazon.com/images/I/61Bl5koTURL._AC_SX679_.jpg",
     amazonQuery: "Shimano+Dura-Ace+PD-R9200", rakutenQuery: "Shimano%20Dura-Ace%20ペダル" },
   { id: "keo-blade", name: "Look Keo Blade Carbon", brand: "Look", price: 28000, category: "pedal",
     style: "stiff", type: ["A1", "B1"],
     reason: "カーボンブレードで軽量×高剛性。反応の良いペダリングに。",
+    image: "https://m.media-amazon.com/images/I/71vZ3mGnURL._AC_SX679_.jpg",
     amazonQuery: "Look+Keo+Blade+Carbon", rakutenQuery: "Look%20Keo%20Blade%20Carbon" },
   // A2/B2向け（バランス型）
   { id: "ultegra-pedal", name: "Shimano Ultegra PD-R8000", brand: "Shimano", price: 18000, category: "pedal",
     style: "balanced", type: ["A2", "B1", "B2"],
     reason: "剛性と価格のバランス◎。オールラウンドに使える定番。",
+    image: "https://m.media-amazon.com/images/I/71ZtT4dG8kL._AC_SX679_.jpg",
     amazonQuery: "Shimano+Ultegra+PD-R8000", rakutenQuery: "Shimano%20Ultegra%20ペダル" },
   { id: "keo-classic", name: "Look Keo Classic 3", brand: "Look", price: 8000, category: "pedal",
     style: "balanced", type: ["A2", "B2"],
     reason: "入門〜中級向け。軽いエントリーで始めやすい。",
+    image: "https://m.media-amazon.com/images/I/71fGqz8URL._AC_SX679_.jpg",
     amazonQuery: "Look+Keo+Classic+3", rakutenQuery: "Look%20Keo%20Classic%203" },
 
   // === シューズ ===
@@ -116,38 +350,44 @@ const CYCLING_GEAR_DB = [
   { id: "s-works-torch", name: "Specialized S-Works Torch", brand: "Specialized", price: 55000, category: "shoes",
     style: "stiff", type: ["A1"],
     reason: "最高剛性ソール。スプリントでパワーを逃さない。",
+    image: "https://m.media-amazon.com/images/I/61KhURL._AC_SX679_.jpg",
     amazonQuery: "Specialized+S-Works+Torch", rakutenQuery: "Specialized%20S-Works%20Torch" },
   { id: "rc9", name: "Shimano RC9", brand: "Shimano", price: 45000, category: "shoes",
     style: "stiff", type: ["A1", "B1"],
     reason: "カーボンソールで高剛性。レースからロングライドまで。",
+    image: "https://m.media-amazon.com/images/I/61pPmEURL._AC_SX679_.jpg",
     amazonQuery: "Shimano+RC9", rakutenQuery: "Shimano%20RC9" },
   // バランス型
   { id: "rc7", name: "Shimano RC7", brand: "Shimano", price: 28000, category: "shoes",
     style: "balanced", type: ["A2", "B1", "B2"],
     reason: "剛性と快適性のバランス。長時間でも疲れにくい。",
+    image: "https://m.media-amazon.com/images/I/71G5yYtURL._AC_SX679_.jpg",
     amazonQuery: "Shimano+RC7", rakutenQuery: "Shimano%20RC7" },
   { id: "torch-2", name: "Specialized Torch 2.0", brand: "Specialized", price: 22000, category: "shoes",
     style: "balanced", type: ["A2", "B2"],
     reason: "快適フィットで長距離向け。初めてのビンディングにも。",
+    image: "https://m.media-amazon.com/images/I/71VxZaURL._AC_SX679_.jpg",
     amazonQuery: "Specialized+Torch+2.0", rakutenQuery: "Specialized%20Torch%202.0" },
 
   // === バーテープ ===
   { id: "supacaz-sticky", name: "Supacaz Super Sticky Kush", brand: "Supacaz", price: 4000, category: "bartape",
     style: "thin", type: ["A1", "B1"],
     reason: "薄手でダイレクト感◎。振動よりハンドリング重視。",
+    image: "https://m.media-amazon.com/images/I/71TqPsURL._AC_SX679_.jpg",
     amazonQuery: "Supacaz+Super+Sticky+Kush", rakutenQuery: "Supacaz%20Super%20Sticky%20Kush" },
   { id: "lizard-dsp", name: "Lizard Skins DSP 3.2mm", brand: "Lizard Skins", price: 5000, category: "bartape",
     style: "cushion", type: ["A2", "B2"],
     reason: "厚手でクッション性◎。ロングライドの疲労軽減。",
+    image: "https://m.media-amazon.com/images/I/71Kl5nURL._AC_SX679_.jpg",
     amazonQuery: "Lizard+Skins+DSP+3.2", rakutenQuery: "Lizard%20Skins%20DSP%203.2" },
 ];
 
-// サイクリング機材カテゴリ
+// サイクリング機材カテゴリ（フィッティングパーツのみ）
 const CYCLING_CATEGORIES = [
-  { id: "saddle", label: "サドル", icon: "🪑" },
-  { id: "pedal", label: "ペダル", icon: "🦶" },
-  { id: "shoes", label: "シューズ", icon: "👟" },
-  { id: "bartape", label: "バーテープ", icon: "🎀" },
+  { id: "saddle", label: "サドル", icon: "saddle" },
+  { id: "pedal", label: "ペダル", icon: "pedal" },
+  { id: "shoes", label: "シューズ", icon: "shoe" },
+  { id: "bartape", label: "バーテープ", icon: "bartape" },
 ];
 
 // サイクリングブランドリスト
@@ -156,6 +396,44 @@ const CYCLING_BRANDS = ["Shimano", "Specialized", "fi'zi:k", "Selle Italia", "Lo
 
 // カスタムSVGアイコン
 const Icons = {
+  // BiomechFit ロゴ（カエル博士）
+  frogDoctor: (color = C.accent, size = 24) => (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none">
+      {/* 白衣 */}
+      <path d="M20 44 L32 54 L44 44 L44 62 L20 62 Z" fill="#fff" stroke={color} strokeWidth="2"/>
+      <path d="M32 54 L32 62" stroke={color} strokeWidth="2"/>
+      
+      {/* 蝶ネクタイ */}
+      <path d="M26 50 L32 47 L38 50 L32 53 Z" fill="#E74C3C"/>
+      <circle cx="32" cy="50" r="2" fill="#C0392B"/>
+      
+      {/* カエルの顔 */}
+      <ellipse cx="32" cy="28" rx="16" ry="14" fill={color}/>
+      
+      {/* メガネ */}
+      <circle cx="24" cy="22" r="6" fill="none" stroke="#333" strokeWidth="2"/>
+      <circle cx="40" cy="22" r="6" fill="none" stroke="#333" strokeWidth="2"/>
+      <path d="M30 22 L34 22" stroke="#333" strokeWidth="2"/>
+      <path d="M18 20 L18 22" stroke="#333" strokeWidth="1.5"/>
+      <path d="M46 20 L46 22" stroke="#333" strokeWidth="1.5"/>
+      
+      {/* 目（メガネの奥） */}
+      <circle cx="24" cy="22" r="4" fill="#fff"/>
+      <circle cx="40" cy="22" r="4" fill="#fff"/>
+      <circle cx="25" cy="22" r="2.5" fill="#333"/>
+      <circle cx="41" cy="22" r="2.5" fill="#333"/>
+      <circle cx="26" cy="21" r="1" fill="#fff"/>
+      <circle cx="42" cy="21" r="1" fill="#fff"/>
+      
+      {/* 口（にっこり） */}
+      <path d="M24 34 Q32 40 40 34" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round"/>
+      
+      {/* 頬 */}
+      <circle cx="18" cy="30" r="2.5" fill={color} opacity="0.5"/>
+      <circle cx="46" cy="30" r="2.5" fill={color} opacity="0.5"/>
+    </svg>
+  ),
+  
   dna: (color = C.accent, size = 24) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M2 15c6.667-6 13.333 0 20-6"/>
@@ -342,6 +620,41 @@ const Icons = {
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
       <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+    </svg>
+  ),
+  // ギアファインダー用アイコン
+  pedal: (color = C.accent, size = 24) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="4" y="8" width="16" height="8" rx="2"/>
+      <line x1="12" y1="8" x2="12" y2="4"/>
+      <circle cx="12" cy="3" r="1" fill={color}/>
+      <line x1="8" y1="16" x2="8" y2="20"/>
+      <line x1="16" y1="16" x2="16" y2="20"/>
+    </svg>
+  ),
+  bartape: (color = C.accent, size = 24) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 6c0-1.1.9-2 2-2h12a2 2 0 0 1 2 2v0a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/>
+      <path d="M4 6v12c0 1.1.9 2 2 2h2"/>
+      <path d="M20 6v12c0 1.1-.9 2-2 2h-2"/>
+      <line x1="8" y1="10" x2="8" y2="14"/>
+      <line x1="12" y1="10" x2="12" y2="14"/>
+      <line x1="16" y1="10" x2="16" y2="14"/>
+    </svg>
+  ),
+  crank: (color = C.accent, size = 24) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="3"/>
+      <circle cx="12" cy="12" r="7"/>
+      <line x1="12" y1="15" x2="12" y2="22"/>
+      <circle cx="12" cy="22" r="2" fill={color}/>
+    </svg>
+  ),
+  powermeter: (color = C.accent, size = 24) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M12 6v6l4 2"/>
+      <circle cx="12" cy="12" r="2" fill={color}/>
     </svg>
   ),
 };
@@ -560,8 +873,10 @@ const Illustrations = {
 
 // レーダーチャートコンポーネント
 const RadarChart = ({ data, size = 200, color = C.accent }) => {
+  const margin = 35; // ラベル用のマージン
+  const chartSize = size - margin * 2;
   const center = size / 2;
-  const radius = size * 0.38;
+  const radius = chartSize * 0.38;
   const labels = ["瞬発力", "持久力", "効率性", "適応力", "安定性"];
   const angles = labels.map((_, i) => (Math.PI * 2 * i) / labels.length - Math.PI / 2);
   
@@ -580,7 +895,7 @@ const RadarChart = ({ data, size = 200, color = C.accent }) => {
   const gridLevels = [20, 40, 60, 80, 100];
   
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ overflow: "visible" }}>
       {/* 背景グリッド */}
       {gridLevels.map((level, i) => {
         const r = radius * (level / 100);
@@ -589,7 +904,7 @@ const RadarChart = ({ data, size = 200, color = C.accent }) => {
           y: center + r * Math.sin(angle)
         }));
         const path = gridPoints.map((p, j) => `${j === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ') + ' Z';
-        return <path key={i} d={path} fill="none" stroke={C.shadowDark} strokeWidth="1" opacity={0.4}/>;
+        return <path key={i} d={path} fill="none" stroke={C.shadowDark} strokeWidth="1" opacity={0.3}/>;
       })}
       
       {/* 軸線 */}
@@ -602,7 +917,7 @@ const RadarChart = ({ data, size = 200, color = C.accent }) => {
           y2={center + radius * Math.sin(angle)}
           stroke={C.shadowDark}
           strokeWidth="1"
-          opacity={0.4}
+          opacity={0.3}
         />
       ))}
       
@@ -621,7 +936,7 @@ const RadarChart = ({ data, size = 200, color = C.accent }) => {
       
       {/* ラベル */}
       {labels.map((label, i) => {
-        const labelRadius = radius + 24;
+        const labelRadius = radius + 20;
         const x = center + labelRadius * Math.cos(angles[i]);
         const y = center + labelRadius * Math.sin(angles[i]);
         return (
@@ -631,9 +946,9 @@ const RadarChart = ({ data, size = 200, color = C.accent }) => {
             y={y} 
             textAnchor="middle" 
             dominantBaseline="middle"
-            fill={C.textMuted}
-            fontSize="11"
-            fontWeight="500"
+            fill={C.text}
+            fontSize="12"
+            fontWeight="600"
           >
             {label}
           </text>
@@ -647,20 +962,23 @@ const RadarChart = ({ data, size = 200, color = C.accent }) => {
 // 軸1: AかBか（体幹タイプ） - A=みぞおち・股関節主導 / B=首・肩甲骨・腰主導
 // 軸2: 1か2か（重心タイプ） - 1=前重心（つま先） / 2=後重心（踵）
 // APA: ケイデンス（高回転/トルク）、姿勢（胸開き/前傾）
-// type: "text"（テキスト2択）, "visual"（イラスト選択）, "action"（体験型）, "quad"（4択）
+// type: "text"（テキスト2択）, "action"（体験型）, "quad"（4択）
 const QUESTION_POOL = [
-  // === イラスト質問（リアル版） ===
-  { id: "visual_foot", cat: "balance", type: "visual", visual: "footPressure", 
+  // === 基本質問（重心・体幹） ===
+  { id: "foot_pressure", cat: "balance", type: "text",
     q: "👣 立っているとき、足裏のどこに体重を感じる？", 
-    a: "front", b: "back", aLabel: "つま先側", bLabel: "かかと側",
+    a: "つま先側（前足部）に体重がかかる", 
+    b: "かかと側（後足部）に体重がかかる",
     weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "visual_stand", cat: "balance", type: "visual", visual: "standingSide", 
+  { id: "stand_balance", cat: "balance", type: "text",
     q: "🧍 自然に立ったとき、重心はどっち寄り？", 
-    a: "forward", b: "back", aLabel: "やや前", bLabel: "真ん中〜後ろ",
+    a: "やや前寄り（つま先側）", 
+    b: "真ん中〜後ろ寄り（かかと側）",
     weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "visual_carry", cat: "trunk", type: "visual", visual: "carryBag", 
+  { id: "carry_bag", cat: "trunk", type: "text",
     q: "🎒 重い荷物を持つとき、楽なのは？", 
-    a: "close", b: "far", aLabel: "体に近づけて", bLabel: "腕を伸ばして",
+    a: "体に近づけて抱えるように持つ", 
+    b: "腕を伸ばして体から離して持つ",
     weight: { typeA: [1, 0], typeB: [0, 1] } },
   
   // === 4択質問（2軸同時判定） ===
@@ -727,10 +1045,10 @@ const QUESTION_POOL = [
   { id: "push_car", cat: "trunk", q: "重いものを押すとき、体のどこを使う感じ？", a: "体幹の前側で押す", b: "背中側で押し込む", weight: { typeA: [1, 0], typeB: [0, 1] } },
   { id: "pull_rope", cat: "trunk", q: "綱引きで引っ張るとき、力を入れるのは？", a: "腰を落として背中で引く", b: "お腹に力を入れて引く", weight: { typeA: [0, 1], typeB: [1, 0] } },
   { id: "dance_move", cat: "trunk", q: "ダンスや体を動かすとき、動きの起点は？", a: "みぞおち・胸のあたり", b: "腰・肩甲骨のあたり", weight: { typeA: [1, 0], typeB: [0, 1] } },
-  { id: "sneeze", cat: "trunk", q: "くしゃみをするとき、体は？", a: "お腹がギュッと縮む", b: "背中が丸まる感じ", weight: { typeA: [1, 0], typeB: [0, 1] } },
-  { id: "laugh_hard", cat: "trunk", q: "大笑いするとき、力が入るのは？", a: "お腹を抱える感じ", b: "背中を反らす感じ", weight: { typeA: [1, 0], typeB: [0, 1] } },
+  { id: "sneeze", cat: "trunk", q: "くしゃみをするとき、体は？", a: "背中が丸まる感じ", b: "お腹がギュッと縮む", weight: { typeA: [0, 1], typeB: [1, 0] } },
+  { id: "laugh_hard", cat: "trunk", q: "大笑いするとき、力が入るのは？", a: "背中を反らす感じ", b: "お腹を抱える感じ", weight: { typeA: [0, 1], typeB: [1, 0] } },
   { id: "yawn", cat: "trunk", q: "あくびをするとき、伸びるのは？", a: "背中〜肩甲骨", b: "お腹〜胸", weight: { typeA: [0, 1], typeB: [1, 0] } },
-  { id: "cough", cat: "trunk", q: "咳をするとき、力が入るのは？", a: "お腹が収縮する", b: "背中が丸まる", weight: { typeA: [1, 0], typeB: [0, 1] } },
+  { id: "cough", cat: "trunk", q: "咳をするとき、力が入るのは？", a: "背中が丸まる", b: "お腹が収縮する", weight: { typeA: [0, 1], typeB: [1, 0] } },
   { id: "stretch_morning", cat: "trunk", q: "朝の伸びで気持ちいいのは？", a: "両手を上げて背中を伸ばす", b: "体を丸めてから伸ばす", weight: { typeA: [0, 1], typeB: [1, 0] } },
   
   // === 1か2か（重心タイプ）===
@@ -746,15 +1064,15 @@ const QUESTION_POOL = [
   { id: "slope_stand", cat: "balance", q: "坂道に立つとき安定するのは？", a: "つま先側に体重をかける", b: "踵側でしっかり立つ", weight: { num1: [1, 0], num2: [0, 1] } },
   { id: "push_door", cat: "balance", q: "重いドアを押すとき", a: "腕の力で押す", b: "体重を前にかけて押す", weight: { num1: [0, 1], num2: [1, 0] } },
   // 追加：重心タイプ質問
-  { id: "shower_stand", cat: "balance", q: "シャワーを浴びるとき、体重は？", a: "つま先寄り", b: "踵寄り", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "kitchen_stand", cat: "balance", q: "キッチンで料理するとき、足の体重は？", a: "前のめり気味", b: "どっしり後ろ体重", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "brush_teeth", cat: "balance", q: "歯磨きで鏡を見るとき、体重は？", a: "つま先側に寄りがち", b: "踵側で安定", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "queue_wait", cat: "balance", q: "行列で待つとき、足は？", a: "つま先で軽く揺れる", b: "踵でどっしり待つ", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "escalator", cat: "balance", q: "エスカレーターに乗るとき", a: "つま先から乗る", b: "足全体でしっかり乗る", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "jump_land", cat: "balance", q: "ジャンプの着地は？", a: "つま先から柔らかく", b: "足裏全体でしっかり", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "shower_stand", cat: "balance", q: "シャワーを浴びるとき、体重は？", a: "踵寄り", b: "つま先寄り", weight: { num1: [0, 1], num2: [1, 0] } },
+  { id: "kitchen_stand", cat: "balance", q: "キッチンで料理するとき、足の体重は？", a: "どっしり後ろ体重", b: "前のめり気味", weight: { num1: [0, 1], num2: [1, 0] } },
+  { id: "brush_teeth", cat: "balance", q: "歯磨きで鏡を見るとき、体重は？", a: "踵側で安定", b: "つま先側に寄りがち", weight: { num1: [0, 1], num2: [1, 0] } },
+  { id: "queue_wait", cat: "balance", q: "行列で待つとき、足は？", a: "踵でどっしり待つ", b: "つま先で軽く揺れる", weight: { num1: [0, 1], num2: [1, 0] } },
+  { id: "escalator", cat: "balance", q: "エスカレーターに乗るとき", a: "足全体でしっかり乗る", b: "つま先から乗る", weight: { num1: [0, 1], num2: [1, 0] } },
+  { id: "jump_land", cat: "balance", q: "ジャンプの着地は？", a: "足裏全体でしっかり", b: "つま先から柔らかく", weight: { num1: [0, 1], num2: [1, 0] } },
   { id: "tiptoe_reach", cat: "balance", q: "つま先立ちは？", a: "自然にできる", b: "ちょっと不安定", weight: { num1: [1, 0], num2: [0, 1] } },
   { id: "heel_stand", cat: "balance", q: "踵だけで立つのは？", a: "結構難しい", b: "わりと安定する", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "squat_weight", cat: "balance", q: "スクワットで体重がかかるのは？", a: "つま先寄り", b: "踵寄り", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "squat_weight", cat: "balance", q: "スクワットで体重がかかるのは？", a: "踵寄り", b: "つま先寄り", weight: { num1: [0, 1], num2: [1, 0] } },
   { id: "walk_first", cat: "balance", q: "歩くとき、最初に地面につくのは？", a: "つま先〜母指球", b: "踵から", weight: { num1: [1, 0], num2: [0, 1] } },
   
   // === APA: テンポ・リズム傾向 ===
@@ -948,13 +1266,13 @@ const ACCURACY_LEVELS = [
 // タイプ定義（サイクリング用）
 const TYPE_INFO_CYCLING = {
   A1: {
-    name: "パワースプリンター",
-    sub: "Aタイプ × 前重心",
+    name: "クロス×フロント",
+    sub: "捻って、前へ",
     icon: "zap",
     color: "#f59e0b",
     gradient: "linear-gradient(135deg, #f59e0b, #ea580c)",
-    traits: ["瞬発力が高い", "みぞおち・股関節主導", "つま先重心で軽快"],
-    description: "高回転でスパッと加速するタイプ。ダンシングが得意。",
+    traits: ["捻りながら前に踏み込む", "みぞおちと股関節がエンジン", "つま先でリズムを取る"],
+    description: "身体を捻じりながら前方向にパワーを出すタイプ。高回転でスパッと加速。",
     strengths: ["スプリント", "アタック", "短い登り"],
     weaknesses: ["長時間の一定ペース", "向かい風"],
     radarData: [95, 45, 60, 55, 50],
@@ -1013,13 +1331,13 @@ const TYPE_INFO_CYCLING = {
     }
   },
   A2: {
-    name: "グラインダー",
-    sub: "Aタイプ × 後重心",
+    name: "クロス×リア",
+    sub: "捻って、溜める",
     icon: "mountain",
     color: "#10b981",
     gradient: "linear-gradient(135deg, #10b981, #059669)",
-    traits: ["持久力が高い", "みぞおち・股関節主導", "踵重心で安定"],
-    description: "重いギアでグイグイ進むタイプ。ヒルクライムが得意。",
+    traits: ["捻りながら後ろで溜める", "みぞおちと股関節がエンジン", "踵でどっしり安定"],
+    description: "身体を捻じりながら後ろで力を溜めるタイプ。粘り強く登れる。",
     strengths: ["ロングライド", "ヒルクライム", "一定ペース維持"],
     weaknesses: ["急加速", "スプリント勝負"],
     radarData: [50, 95, 70, 65, 85],
@@ -1078,13 +1396,13 @@ const TYPE_INFO_CYCLING = {
     }
   },
   B1: {
-    name: "スムースペダラー",
-    sub: "Bタイプ × 前重心",
+    name: "パラレル×フロント",
+    sub: "流れて、前へ",
     icon: "wave",
     color: "#6366f1",
     gradient: "linear-gradient(135deg, #6366f1, #4f46e5)",
-    traits: ["動きが滑らか", "首・肩甲骨・腰主導", "つま先重心で効率的"],
-    description: "綺麗な円運動でロスなく回すタイプ。効率がいい。",
+    traits: ["身体を一体で前に押し出す", "首・肩甲骨・腰が連動", "つま先で滑らかに進む"],
+    description: "身体全体を一体で使い、流れるように前へ進むタイプ。効率的。",
     strengths: ["ペダリング効率", "平地巡航", "集団走行"],
     weaknesses: ["ダンシング", "急な地形変化"],
     radarData: [55, 70, 95, 75, 70],
@@ -1143,13 +1461,13 @@ const TYPE_INFO_CYCLING = {
     }
   },
   B2: {
-    name: "オールラウンダー",
-    sub: "Bタイプ × 後重心",
+    name: "パラレル×リア",
+    sub: "流れて、安定",
     icon: "crosshair",
     color: "#ec4899",
     gradient: "linear-gradient(135deg, #ec4899, #db2777)",
-    traits: ["バランス型", "首・肩甲骨・腰主導", "踵重心で安定感"],
-    description: "どんな状況にも対応できる万能タイプ。",
+    traits: ["身体を一体で後ろで支える", "首・肩甲骨・腰が連動", "踵でどっしり安定"],
+    description: "身体全体を一体で使い、安定感を持って進むタイプ。適応力が高い。",
     strengths: ["適応力", "安定感", "レース全般"],
     weaknesses: ["突出した武器がない（逆に強み）"],
     radarData: [70, 75, 75, 95, 80],
@@ -1218,28 +1536,29 @@ const getTypeInfo = (sport, type) => {
 // ニューモーフィズム Cardコンポーネント
 const Card = ({ children, style = {}, pressed = false }) => (
   <div style={{ 
-    background: C.bg, 
-    borderRadius: 20, 
+    background: theme.card,
+    borderRadius: 24, 
     padding: 24,
-    ...(pressed ? neu.pressed : neu.raised),
+    border: `1px solid ${theme.cardBorder}`,
+    boxShadow: pressed ? "inset 0 2px 4px rgba(0,0,0,0.1)" : (theme.shadowCard || theme.shadow),
     ...style 
   }}>
     {children}
   </div>
 );
 
-// ニューモーフィズム ボタン
+// ボタン
 const NeuButton = ({ children, onClick, active = false, color = C.accent, style = {} }) => (
   <button
     onClick={onClick}
     style={{
-      background: C.bg,
-      border: "none",
-      borderRadius: 12,
-      padding: "12px 20px",
+      background: active ? `${color}15` : theme.card,
+      border: `1px solid ${active ? color + "30" : theme.cardBorder}`,
+      borderRadius: 16,
+      padding: "14px 24px",
       cursor: "pointer",
       transition: "all 0.2s ease",
-      ...(active ? { ...neu.pressed, color } : neu.raised),
+      boxShadow: active ? `0 4px 12px ${color}20` : theme.shadowCard || "none",
       color: active ? color : C.textMuted,
       fontWeight: 600,
       fontSize: 14,
@@ -1286,6 +1605,9 @@ export default function App() {
     category: null, // サイクリング用カテゴリ
   });
   
+  // 商品シャッフル用state（カテゴリごと）
+  const [shuffleKey, setShuffleKey] = useState({});
+  
   // フィッティング計算用state
   const [bodyMetrics, setBodyMetrics] = useState({
     height: "", // 身長(cm)
@@ -1295,6 +1617,9 @@ export default function App() {
     bodyType: "", // 体型タイプ: "long" | "standard" | "short" | ""
   });
   const [showFittingCalc, setShowFittingCalc] = useState(false);
+  const [showHistory, setShowHistory] = useState(false); // 回答履歴表示
+  const [stageUp, setStageUp] = useState(null); // ステージアップ演出 { level, message }
+  const [prevAccuracyLevel, setPrevAccuracyLevel] = useState(0); // 前回の精度レベル
   
   // 初期化：質問シャッフル＆保存結果ロード
   useEffect(() => {
@@ -1322,6 +1647,51 @@ export default function App() {
     return { ...level, count };
   };
   
+  // ステージアップチェック
+  const STAGE_THRESHOLDS = [
+    { min: 5, level: 1, label: "基本解析", emoji: "🔍", message: "基本解析モード突入！" },
+    { min: 10, level: 2, label: "標準解析", emoji: "📊", message: "標準解析モードへ！" },
+    { min: 20, level: 3, label: "高精度", emoji: "🎯", message: "高精度モードへ！" },
+    { min: 30, level: 4, label: "完全解析", emoji: "🏆", message: "完全解析達成！！" },
+  ];
+  
+  const checkStageUp = (answerCount, newScores) => {
+    const newStage = STAGE_THRESHOLDS.filter(s => answerCount >= s.min).pop();
+    const newLevel = newStage?.level || 0;
+    
+    if (newLevel > prevAccuracyLevel) {
+      setPrevAccuracyLevel(newLevel);
+      
+      // 僅差チェック
+      const typeABDiff = Math.abs(newScores.typeA - newScores.typeB);
+      const num12Diff = Math.abs(newScores.num1 - newScores.num2);
+      const isClose = typeABDiff <= 2 || num12Diff <= 2;
+      
+      // 完全解析達成時
+      if (newLevel === 4) {
+        if (isClose) {
+          // 僅差の場合は警告付きで表示、自動遷移しない
+          setStageUp({
+            ...newStage,
+            isClose: true,
+            message: "完全解析達成！でも判定が僅差..."
+          });
+          setTimeout(() => setStageUp(null), 2500);
+        } else {
+          // 僅差でなければ自動で結果画面へ
+          setStageUp(newStage);
+          setTimeout(() => {
+            setStageUp(null);
+            calculateResult();
+          }, 2500);
+        }
+      } else {
+        setStageUp(newStage);
+        setTimeout(() => setStageUp(null), 2000);
+      }
+    }
+  };
+  
   const handleAnswer = (choice) => {
     const q = questions[currentIndex];
     const newAnswers = { ...answers, [q.id]: choice };
@@ -1333,10 +1703,13 @@ export default function App() {
     });
     setScores(newScores);
     
+    // ステージアップチェック（newScoresを渡す）
+    checkStageUp(Object.keys(newAnswers).length, newScores);
+    
     setShowingAnswer(true);
     setTimeout(() => {
       setShowingAnswer(false);
-      goToNext();
+      goToNext(newAnswers, newScores);
     }, 250);
   };
   
@@ -1353,16 +1726,20 @@ export default function App() {
     });
     setScores(newScores);
     
+    // ステージアップチェック（newScoresを渡す）
+    checkStageUp(Object.keys(newAnswers).length, newScores);
+    
     setShowingAnswer(true);
     setTimeout(() => {
       setShowingAnswer(false);
-      goToNext();
+      goToNext(newAnswers, newScores);
     }, 250);
   };
   
   const handleSkip = () => {
     const q = questions[currentIndex];
-    setSkipped(prev => new Set([...prev, q.id]));
+    const newSkipped = new Set([...skipped, q.id]);
+    setSkipped(newSkipped);
     setShowingAnswer(true);
     setTimeout(() => {
       setShowingAnswer(false);
@@ -1370,14 +1747,83 @@ export default function App() {
     }, 200);
   };
   
-  const goToNext = () => {
-    // 次の未回答・未スキップの質問を探す
-    let next = currentIndex + 1;
-    while (next < questions.length && (answers[questions[next]?.id] || skipped.has(questions[next]?.id))) {
-      next++;
+  // 回答を削除（履歴から修正）
+  const removeAnswer = (questionId) => {
+    const newAnswers = { ...answers };
+    delete newAnswers[questionId];
+    setAnswers(newAnswers);
+    
+    // スコアを再計算
+    const newScores = { typeA: 0, typeB: 0, num1: 0, num2: 0, high: 0, low: 0, open: 0, forward: 0, aggressive: 0, steady: 0, solo: 0, team: 0 };
+    Object.entries(newAnswers).forEach(([qId, ans]) => {
+      const q = questions.find(q => q.id === qId);
+      if (!q) return;
+      
+      if (q.type === "quad" && typeof ans === "number") {
+        const opt = q.options[ans];
+        if (opt?.weight) {
+          Object.entries(opt.weight).forEach(([key, val]) => {
+            if (newScores[key] !== undefined) newScores[key] += val;
+          });
+        }
+      } else if (q.weight) {
+        Object.entries(q.weight).forEach(([key, val]) => {
+          if (Array.isArray(val)) {
+            newScores[key] += val[ans === "a" ? 0 : 1];
+          }
+        });
+      }
+    });
+    setScores(newScores);
+    
+    // その質問に移動
+    const qIndex = questions.findIndex(q => q.id === questionId);
+    if (qIndex >= 0) {
+      setCurrentIndex(qIndex);
+      setShowHistory(false);
     }
-    if (next < questions.length) {
-      setCurrentIndex(next);
+  };
+  
+  const goToNext = (latestAnswers, latestScores) => {
+    // 未回答・未スキップの質問を取得
+    const currentAnswers = latestAnswers || answers;
+    const currentScores = latestScores || scores;
+    const unanswered = questions.filter(q => !currentAnswers[q.id] && !skipped.has(q.id));
+    
+    if (unanswered.length === 0) return;
+    
+    // 同点チェック
+    const typeATied = currentScores.typeA === currentScores.typeB;
+    const numTied = currentScores.num1 === currentScores.num2;
+    
+    // 優先すべきカテゴリを決定
+    let priorityCat = null;
+    if (typeATied && numTied) {
+      // 両方同点 → trunk（体幹）を優先
+      priorityCat = "trunk";
+    } else if (typeATied) {
+      // A/B同点 → trunk（体幹）質問を優先
+      priorityCat = "trunk";
+    } else if (numTied) {
+      // 1/2同点 → balance（重心）質問を優先
+      priorityCat = "balance";
+    }
+    
+    // 優先カテゴリの質問を探す
+    let nextQuestion = null;
+    if (priorityCat) {
+      nextQuestion = unanswered.find(q => q.cat === priorityCat || q.cat === "both");
+    }
+    
+    // なければ順番通り
+    if (!nextQuestion) {
+      nextQuestion = unanswered[0];
+    }
+    
+    // 質問のインデックスを取得して移動
+    const nextIndex = questions.findIndex(q => q.id === nextQuestion.id);
+    if (nextIndex >= 0) {
+      setCurrentIndex(nextIndex);
     }
   };
   
@@ -1391,6 +1837,12 @@ export default function App() {
     const is1 = scores.num1 >= scores.num2;
     const isCross = scores.cross >= scores.parallel;
     
+    // 僅差判定（同点または差が2以下）
+    const typeABDiff = Math.abs(scores.typeA - scores.typeB);
+    const num12Diff = Math.abs(scores.num1 - scores.num2);
+    const isTypeABClose = typeABDiff <= 2;
+    const isNum12Close = num12Diff <= 2;
+    
     // 基本判定（A/Bと1/2）
     let baseType;
     if (isA && is1) baseType = "A1";
@@ -1403,8 +1855,6 @@ export default function App() {
     // 矛盾がある場合は、クロス/パラレルのスコア差が大きければ補正
     let type = baseType;
     const crossDiff = Math.abs(scores.cross - scores.parallel);
-    const typeABDiff = Math.abs(scores.typeA - scores.typeB);
-    const num12Diff = Math.abs(scores.num1 - scores.num2);
     
     // クロス/パラレルが明確で、A/Bまたは1/2が僅差の場合に補正
     if (crossDiff > 3) {
@@ -1432,7 +1882,17 @@ export default function App() {
       teamwork,
       scores: { ...scores },
       answerCount: Object.keys(answers).length,
-      savedAt: new Date().toISOString()
+      savedAt: new Date().toISOString(),
+      // 僅差フラグ
+      isClose: {
+        typeAB: isTypeABClose,
+        num12: isNum12Close,
+        any: isTypeABClose || isNum12Close,
+      },
+      scoreDiff: {
+        typeAB: typeABDiff,
+        num12: num12Diff,
+      }
     };
     
     setResult(resultData);
@@ -1459,80 +1919,78 @@ export default function App() {
     };
     
     return (
-      <div style={{ minHeight: "100vh", background: C.bg, padding: "32px 20px" }}>
-        <div style={{ maxWidth: 440, margin: "0 auto" }}>
+      <>
+      <GlobalStyles />
+      <div style={{ minHeight: "100vh", background: theme.aurora || theme.bg, backgroundColor: theme.bgSolid, padding: "32px 20px" }}>
+        <div style={{ maxWidth: 440, margin: "0 auto", animation: "fadeIn 0.5s ease-out" }}>
           {/* ロゴ・ヘッダー */}
-          <div style={{ textAlign: "center", marginBottom: 40 }}>
+          <div style={{ textAlign: "center", marginBottom: 32 }}>
             <div style={{ 
               display: "inline-flex", 
-              padding: 20, 
+              padding: 12, 
               borderRadius: 24, 
-              background: C.bg,
-              ...neu.raised,
+              background: `${theme.accent}10`,
+              border: `1px solid ${theme.accent}15`,
+              boxShadow: `0 8px 24px ${theme.accent}15`,
               marginBottom: 20 
             }}>
-              {Icons.dna(C.accent, 52)}
+              {Icons.frogDoctor(theme.accent, 64)}
             </div>
             <h1 style={{ color: C.text, fontSize: 32, fontWeight: 800, margin: "0 0 8px", letterSpacing: "-0.5px" }}>
               BiomechFit
             </h1>
-            <p style={{ color: C.accent, fontSize: 13, fontWeight: 700, margin: "0 0 16px", letterSpacing: "2px", textTransform: "uppercase" }}>
+            <p style={{ color: theme.accent, fontSize: 13, fontWeight: 700, margin: 0, letterSpacing: "2px", textTransform: "uppercase" }}>
               Body Type Diagnosis
-            </p>
-            <p style={{ color: C.textMuted, fontSize: 15, lineHeight: 1.8 }}>
-              いくつかの質問に答えるだけで<br/>
-              あなたに最適な<span style={{ color: C.text, fontWeight: 700 }}>フォーム・機材</span>がわかります
             </p>
           </div>
           
-          {/* スポーツ選択（ニューモーフィズム） */}
-          <Card style={{ marginBottom: 20 }}>
-            <p style={{ color: C.textDim, fontSize: 11, fontWeight: 700, margin: "0 0 16px", letterSpacing: "1px", textTransform: "uppercase" }}>
-              Select Sport
-            </p>
-            {/* サイクリング専用 - ロゴ表示 */}
-            <div style={{ 
-              display: "flex", 
-              justifyContent: "center", 
-              padding: "20px 0"
-            }}>
-              <div style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 12
-              }}>
-                {Pictograms.sports.cycling(true, C.accent)}
-                <span style={{ 
-                  color: C.accent, 
-                  fontSize: 14, 
-                  fontWeight: 700,
-                  letterSpacing: "1px",
-                  textTransform: "uppercase"
-                }}>
-                  Cycling Fit
+          {/* ストーリーセクション */}
+          <Card style={{ marginBottom: 24 }}>
+            <div style={{ textAlign: "center" }}>
+              <p style={{ color: C.orange, fontSize: 15, fontWeight: 700, margin: "0 0 16px", lineHeight: 1.8 }}>
+                「踏め」「いや、回せ」<br/>
+                <span style={{ color: C.textMuted, fontSize: 13, fontWeight: 500 }}>
+                  人によって真逆のアドバイス...
                 </span>
-              </div>
+              </p>
+              
+              <div style={{ 
+                width: 40, 
+                height: 2, 
+                background: `linear-gradient(90deg, transparent, ${theme.accent}, transparent)`,
+                margin: "0 auto 16px"
+              }}/>
+              
+              <p style={{ color: C.text, fontSize: 14, margin: "0 0 12px", lineHeight: 1.8 }}>
+                実は<span style={{ color: C.green, fontWeight: 700 }}>どちらも正解</span>。<br/>
+                ただし「その人にとって」は。
+              </p>
+              
+              <p style={{ color: C.textMuted, fontSize: 13, margin: 0, lineHeight: 1.8 }}>
+                人には生まれ持った<span style={{ color: C.text, fontWeight: 600 }}>身体の使い方</span>がある。<br/>
+                自分のタイプを知れば、もう迷わない。
+              </p>
             </div>
           </Card>
           
           {/* リピーター向け：前回の結果カード */}
           {savedResult && (() => {
             const savedTypeInfo = getTypeInfo("cycling", savedResult.type);
+            if (!savedTypeInfo) return null;
             return (
-            <Card style={{ marginBottom: 20 }}>
+            <Card style={{ marginBottom: 20, background: `linear-gradient(135deg, ${savedTypeInfo.color}15, ${savedTypeInfo.color}05)`, border: `1px solid ${savedTypeInfo.color}30` }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
                 <div style={{ 
-                  padding: 10, 
-                  borderRadius: 12, 
-                  background: C.bg,
-                  ...neu.pressedSm 
+                  padding: 12, 
+                  borderRadius: 14, 
+                  background: savedTypeInfo.color + "20",
+                  boxShadow: `0 0 15px ${savedTypeInfo.color}30`,
                 }}>
-                  {Icons.save(savedTypeInfo.color, 18)}
+                  {Icons.save(savedTypeInfo.color, 20)}
                 </div>
                 <div>
                   <p style={{ color: C.textDim, fontSize: 10, fontWeight: 600, margin: "0 0 2px", textTransform: "uppercase", letterSpacing: "0.5px" }}>Previous Result</p>
-                  <p style={{ color: savedTypeInfo.color, fontSize: 18, fontWeight: 800, margin: 0 }}>{savedTypeInfo.name}</p>
+                  <p style={{ color: savedTypeInfo.color, fontSize: 18, fontWeight: 800, margin: 0, textShadow: `0 0 10px ${savedTypeInfo.color}50` }}>{savedTypeInfo.name}</p>
                 </div>
               </div>
               
@@ -1629,19 +2087,20 @@ export default function App() {
               width: "100%", 
               marginTop: 28, 
               padding: "18px 24px", 
-              borderRadius: 18, 
+              borderRadius: 16, 
               border: "none",
-              background: `linear-gradient(135deg, ${C.accent}, ${C.accentDark})`,
+              background: theme.accentGradient,
               color: "#fff", 
-              fontSize: 15, 
+              fontSize: 16, 
               fontWeight: 700, 
               cursor: "pointer",
               display: "flex", 
               alignItems: "center", 
               justifyContent: "center", 
               gap: 10,
-              boxShadow: `0 8px 24px ${C.accent}40`,
-              letterSpacing: "0.5px"
+              boxShadow: `0 8px 24px ${theme.accent}40`,
+              letterSpacing: "0.5px",
+              transition: "all 0.3s ease",
             }}
           >
             診断をはじめる {Icons.arrowRight("#fff", 18)}
@@ -1649,6 +2108,7 @@ export default function App() {
           )}
         </div>
       </div>
+      </>
     );
   }
   
@@ -1662,7 +2122,7 @@ export default function App() {
     // 全問終了時
     if (isAllDone && canShowResult) {
       return (
-        <div style={{ minHeight: "100vh", background: C.bg, padding: "24px 16px" }}>
+        <div style={{ minHeight: "100vh", background: theme.aurora || theme.bg, backgroundColor: theme.bgSolid, padding: "24px 16px" }}>
           <div style={{ maxWidth: 480, margin: "0 auto", textAlign: "center" }}>
             <div style={{ marginBottom: 32, paddingTop: 40 }}>
               <div style={{ display: "inline-flex", padding: 20, borderRadius: "50%", background: `${C.green}15`, marginBottom: 20 }}>
@@ -1720,15 +2180,89 @@ export default function App() {
     const cat = catInfo[q.cat] || catInfo.trunk;
     
     return (
-      <div style={{ minHeight: "100vh", background: C.bg, padding: "24px 20px" }}>
+      <div style={{ minHeight: "100vh", background: theme.aurora || theme.bg, backgroundColor: theme.bgSolid, padding: "24px 20px", position: "relative" }}>
+        
+        {/* ステージアップ演出 */}
+        {stageUp && (
+          <div 
+            onClick={() => setStageUp(null)}
+            style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0,0,0,0.85)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000,
+            animation: "fadeIn 0.3s ease-out",
+            cursor: "pointer",
+          }}>
+            <div style={{
+              textAlign: "center",
+              padding: 40,
+              animation: "slideUp 0.5s ease-out",
+            }}>
+              <div style={{
+                fontSize: 80,
+                marginBottom: 20,
+                animation: "pulse 1s ease-in-out infinite",
+              }}>
+                {stageUp.emoji}
+              </div>
+              <h2 style={{
+                color: "#fff",
+                fontSize: 28,
+                fontWeight: 800,
+                margin: "0 0 12px",
+                textShadow: `0 0 30px ${stageUp.level === 4 ? (stageUp.isClose ? C.orange : C.green) : C.accent}`,
+              }}>
+                {stageUp.message}
+              </h2>
+              <p style={{
+                color: C.textMuted,
+                fontSize: 16,
+                margin: 0,
+              }}>
+                {stageUp.level === 4 
+                  ? (stageUp.isClose 
+                      ? "より正確な診断のため、追加質問に回答してください" 
+                      : "診断精度が最大になりました！結果を表示します...")
+                  : `精度レベル: ${stageUp.label}`
+                }
+              </p>
+              {stageUp.level === 4 && !stageUp.isClose && (
+                <div style={{
+                  marginTop: 24,
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: 4,
+                }}>
+                  {[...Array(5)].map((_, i) => (
+                    <div key={i} style={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: "50%",
+                      background: C.green,
+                      animation: `pulse 0.6s ease-in-out ${i * 0.1}s infinite`,
+                    }} />
+                  ))}
+                </div>
+              )}
+              <p style={{ color: C.textDim, fontSize: 12, marginTop: 24, opacity: 0.7 }}>
+                タップして続ける
+              </p>
+            </div>
+          </div>
+        )}
+        
         <div style={{ maxWidth: 440, margin: "0 auto" }}>
           {/* 精度メーター */}
-          <div style={{ 
+          <Card style={{ 
             marginBottom: 24, 
             padding: "16px 20px", 
-            borderRadius: 16, 
-            background: C.bg,
-            ...neu.raised
           }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -1741,13 +2275,12 @@ export default function App() {
             <div style={{ 
               width: "100%", 
               height: 8, 
-              background: C.bg, 
+              background: `${theme.accent}15`, 
               borderRadius: 4,
-              ...neu.pressedSm
             }}>
               <div style={{
                 width: `${progress}%`, height: "100%",
-                background: `linear-gradient(90deg, ${C.accent}, ${C.pink})`,
+                background: theme.accentGradient,
                 borderRadius: 4, transition: "width 0.5s ease"
               }} />
             </div>
@@ -1755,7 +2288,107 @@ export default function App() {
               <p style={{ color: C.textDim, fontSize: 11, margin: 0 }}>回答: {accuracy.count}</p>
               <p style={{ color: C.textDim, fontSize: 11, margin: 0 }}>残り: {remainingQuestions}</p>
             </div>
-          </div>
+            
+            {/* 履歴ボタン */}
+            {accuracy.count > 0 && (
+              <button
+                onClick={() => setShowHistory(!showHistory)}
+                style={{
+                  width: "100%",
+                  marginTop: 12,
+                  padding: "8px",
+                  borderRadius: 8,
+                  border: "none",
+                  background: showHistory ? `${theme.accent}15` : "transparent",
+                  color: showHistory ? theme.accent : C.textDim,
+                  fontSize: 11,
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 6,
+                }}
+              >
+                📋 回答履歴 {showHistory ? "を閉じる" : "を見る・修正する"}
+              </button>
+            )}
+          </Card>
+          
+          {/* 回答履歴パネル */}
+          {showHistory && (
+            <Card style={{ marginBottom: 16, padding: 16 }}>
+              <p style={{ color: C.text, fontSize: 13, fontWeight: 700, margin: "0 0 12px" }}>
+                📋 回答履歴（タップで修正）
+              </p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8, maxHeight: 200, overflowY: "auto" }}>
+                {questions.filter(q => answers[q.id] !== undefined).map((q, i) => {
+                  const ans = answers[q.id];
+                  let answerText = "";
+                  if (q.type === "quad" && typeof ans === "number") {
+                    answerText = q.options[ans]?.label || "";
+                  } else {
+                    answerText = ans === "a" ? q.a : q.b;
+                  }
+                  return (
+                    <div 
+                      key={q.id}
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        padding: "10px 12px",
+                        borderRadius: 10,
+                        background: "rgba(255,255,255,0.03)",
+                        border: "1px solid rgba(255,255,255,0.06)",
+                      }}
+                    >
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <p style={{ 
+                          color: C.textMuted, 
+                          fontSize: 11, 
+                          margin: "0 0 4px",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                        }}>
+                          {q.q.replace(/^[^\s]+\s/, "")}
+                        </p>
+                        <p style={{ 
+                          color: C.text, 
+                          fontSize: 12, 
+                          fontWeight: 600, 
+                          margin: 0,
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                        }}>
+                          → {answerText.slice(0, 25)}{answerText.length > 25 ? "..." : ""}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => removeAnswer(q.id)}
+                        style={{
+                          padding: "6px 10px",
+                          borderRadius: 6,
+                          border: "none",
+                          background: `${C.orange}20`,
+                          color: C.orange,
+                          fontSize: 10,
+                          fontWeight: 700,
+                          cursor: "pointer",
+                          marginLeft: 8,
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        修正
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </Card>
+          )}
           
           {/* 質問カード */}
           <Card style={{ 
@@ -1783,33 +2416,6 @@ export default function App() {
                 </p>
               )}
             </div>
-            
-            {/* ビジュアル質問（ピクトグラム） */}
-            {q.type === "visual" && q.visual && Illustrations[q.visual] && (
-              <div style={{ display: "flex", justifyContent: "center", gap: 16, marginBottom: 20 }}>
-                {["a", "b"].map((choice) => {
-                  const visualKey = q[choice];
-                  const IllustrationFn = Illustrations[q.visual][visualKey];
-                  const choiceColor = choice === "a" ? C.accent : C.pink;
-                  return (
-                    <button
-                      key={choice}
-                      onClick={() => handleAnswer(choice)}
-                      style={{
-                        padding: 20, borderRadius: 20,
-                        border: "none", 
-                        background: C.bg,
-                        cursor: "pointer", 
-                        transition: "all 0.2s",
-                        ...neu.raised,
-                      }}
-                    >
-                      {IllustrationFn && IllustrationFn(false, choiceColor)}
-                    </button>
-                  );
-                })}
-              </div>
-            )}
             
             {/* 4択質問 */}
             {q.type === "quad" && q.options && (
@@ -1883,19 +2489,6 @@ export default function App() {
               </button>
             </div>
             )}
-            
-            {/* ビジュアル質問のスキップボタン */}
-            {q.type === "visual" && (
-              <button
-                onClick={handleSkip}
-                style={{
-                  width: "100%", padding: "12px", borderRadius: 10, border: "none",
-                  background: "transparent", color: C.textDim, fontSize: 12, cursor: "pointer"
-                }}
-              >
-                ピンとこない、スキップ →
-              </button>
-            )}
           </Card>
           
           {/* 結果を見るボタン */}
@@ -1938,39 +2531,182 @@ export default function App() {
     
     
     return (
-      <div style={{ minHeight: "100vh", background: C.bg, padding: "24px 16px" }}>
+      <div style={{ minHeight: "100vh", background: theme.aurora || theme.bg, backgroundColor: theme.bgSolid, padding: "24px 16px" }}>
         <div style={{ maxWidth: 480, margin: "0 auto" }}>
           
-          {/* タイプカード */}
-          <Card style={{ textAlign: "center", background: `linear-gradient(135deg, ${typeInfo.color}12, ${typeInfo.color}05)`, border: `1px solid ${typeInfo.color}33` }}>
-            <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
-              <StarRating stars={accuracy.stars} color={accuracy.color} size={16} />
+          {/* タイプカード（レーダーチャート統合） */}
+          <Card style={{ 
+            textAlign: "center", 
+            padding: 32,
+          }}>
+            {/* 精度表示 */}
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, marginBottom: 16 }}>
+              <StarRating stars={accuracy.stars} color={typeInfo.color} size={18} />
             </div>
-            <p style={{ color: C.textDim, fontSize: 12, margin: "0 0 16px" }}>{accuracy.label}（{result.answerCount}問回答）</p>
+            <p style={{ color: C.textMuted, fontSize: 12, margin: "0 0 24px", fontWeight: 500 }}>
+              {accuracy.label}（{result.answerCount}問回答）
+            </p>
             
-            <div style={{ display: "inline-flex", padding: 20, borderRadius: "50%", background: typeInfo.gradient, marginBottom: 16 }}>
+            {/* アイコン */}
+            <div style={{ 
+              display: "inline-flex", 
+              padding: 28, 
+              borderRadius: "50%", 
+              background: typeInfo.color, 
+              marginBottom: 20,
+              boxShadow: `0 8px 24px ${typeInfo.color}40`,
+            }}>
               {TypeIcon && TypeIcon("#fff", 48)}
             </div>
             
-            <h2 style={{ color: typeInfo.color, fontSize: 28, fontWeight: 800, margin: "0 0 4px" }}>
+            {/* タイプ名 */}
+            <h2 style={{ 
+              color: typeInfo.color, 
+              fontSize: 28, 
+              fontWeight: 800, 
+              margin: "0 0 6px",
+            }}>
               {typeInfo.name}
             </h2>
-            <p style={{ color: C.textMuted, fontSize: 14, margin: "0 0 16px" }}>
+            <p style={{ color: C.textMuted, fontSize: 14, margin: "0 0 16px", fontWeight: 600 }}>
               {typeInfo.sub}
             </p>
-            <p style={{ color: C.text, fontSize: 15, lineHeight: 1.7, margin: 0 }}>
+            
+            {/* 説明 */}
+            <p style={{ color: C.text, fontSize: 14, lineHeight: 1.8, margin: "0 0 24px" }}>
               {typeInfo.description}
             </p>
+            
+            {/* レーダーチャート（統合） */}
+            <div style={{ 
+              background: theme.bg, 
+              borderRadius: 16, 
+              padding: 16,
+              marginTop: 8,
+            }}>
+              <p style={{ color: C.textMuted, fontSize: 11, fontWeight: 700, margin: "0 0 8px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                能力バランス
+              </p>
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <RadarChart data={typeInfo.radarData} size={220} color={typeInfo.color} />
+              </div>
+            </div>
           </Card>
           
-          {/* レーダーチャート */}
+          {/* 僅差警告 */}
+          {result.isClose?.any && remainingQuestions > 0 && (
+            <Card style={{ 
+              marginTop: 16, 
+              background: `${C.orange}08`,
+              border: `2px solid ${C.orange}`,
+            }}>
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+                <span style={{ fontSize: 24 }}>⚠️</span>
+                <div style={{ flex: 1 }}>
+                  <p style={{ color: C.orange, fontSize: 14, fontWeight: 700, margin: "0 0 8px" }}>
+                    判定が僅差です
+                  </p>
+                  <p style={{ color: C.text, fontSize: 13, margin: "0 0 12px", lineHeight: 1.6 }}>
+                    {result.isClose?.typeAB && result.isClose?.num12 
+                      ? "体幹タイプ（A/B）と重心タイプ（1/2）の両方"
+                      : result.isClose?.typeAB 
+                        ? "体幹タイプ（A/B）"
+                        : "重心タイプ（1/2）"
+                    }の判定が僅差のため、結果が変わる可能性があります。
+                  </p>
+                  <button
+                    onClick={() => {
+                      setMode("quiz");
+                      setStageUp(null);
+                      setPrevAccuracyLevel(Math.min(3, prevAccuracyLevel)); // 完全解析をリセット
+                    }}
+                    style={{
+                      width: "100%",
+                      padding: "12px 16px",
+                      borderRadius: 12,
+                      border: "none",
+                      background: C.orange,
+                      color: "#fff",
+                      fontSize: 13,
+                      fontWeight: 700,
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: 8,
+                    }}
+                  >
+                    🎯 追加の質問に回答して精度を上げる（残り{remainingQuestions}問）
+                  </button>
+                </div>
+              </div>
+            </Card>
+          )}
+          
+          {/* だから納得セクション（改善版） */}
           <Card style={{ marginTop: 16 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
-              {Icons.target(typeInfo.color, 20)}
-              <p style={{ color: C.text, fontSize: 16, fontWeight: 700, margin: 0 }}>能力バランス</p>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
+              <span style={{ fontSize: 20 }}>💡</span>
+              <p style={{ color: C.text, fontSize: 16, fontWeight: 700, margin: 0 }}>だから納得</p>
             </div>
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              <RadarChart data={typeInfo.radarData} size={220} color={typeInfo.color} />
+            
+            <p style={{ color: C.text, fontSize: 14, margin: "0 0 20px", lineHeight: 1.7 }}>
+              こんな経験、ありませんか？
+            </p>
+            
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              {/* 過去のあるある */}
+              <div style={{ 
+                background: `${typeInfo.color}12`, 
+                borderRadius: 16, 
+                padding: 16,
+                border: `1px solid ${typeInfo.color}25`,
+              }}>
+                <p style={{ color: typeInfo.color, fontSize: 13, fontWeight: 700, margin: "0 0 10px" }}>
+                  🤔 こう言われて困惑したことは？
+                </p>
+                <p style={{ color: C.text, fontSize: 14, margin: 0, lineHeight: 1.7 }}>
+                  {type === "A1" && "「もっと腰を安定させて」「後ろ体重で粘って」と言われても、なんかしっくりこなかった"}
+                  {type === "A2" && "「もっと前に突っ込んで」「軽やかに動いて」と言われても、逆に力が入らなかった"}
+                  {type === "B1" && "「腰をもっと回して」「捻りを使え」と言われても、動きがギクシャクした"}
+                  {type === "B2" && "「前傾でアグレッシブに」「つま先で軽く」と言われても、バランスを崩しやすかった"}
+                </p>
+              </div>
+              
+              {/* 本当の理由 */}
+              <div style={{ 
+                background: C.green + "15", 
+                borderRadius: 16, 
+                padding: 16,
+                border: `1px solid ${C.green}30`,
+              }}>
+                <p style={{ color: C.green, fontSize: 13, fontWeight: 700, margin: "0 0 10px" }}>
+                  ✓ それは、あなたの身体に合わなかっただけ
+                </p>
+                <p style={{ color: C.text, fontSize: 14, margin: 0, lineHeight: 1.7 }}>
+                  {type === "A1" && "あなたは「捻りながら前へ」が自然。指導者と身体の使い方が違っただけです。"}
+                  {type === "A2" && "あなたは「捻りながら溜める」が自然。前傾より後ろで力を溜める方が合っています。"}
+                  {type === "B1" && "あなたは「一体で前へ」が自然。捻りより身体全体で動く方が力が出ます。"}
+                  {type === "B2" && "あなたは「一体で安定」が自然。前傾より後ろでどっしり構える方が安定します。"}
+                </p>
+              </div>
+              
+              {/* 今後のヒント */}
+              <div style={{ 
+                background: theme.bg, 
+                borderRadius: 16, 
+                padding: 16,
+              }}>
+                <p style={{ color: C.textMuted, fontSize: 13, fontWeight: 700, margin: "0 0 10px" }}>
+                  📌 これからのアドバイス
+                </p>
+                <p style={{ color: C.text, fontSize: 14, margin: 0, lineHeight: 1.7 }}>
+                  {type === "A1" && "「前に踏み込め」「高回転で」「瞬発力で勝負」というアドバイスを積極的に取り入れてみて。"}
+                  {type === "A2" && "「後ろで溜めろ」「じっくり粘れ」「重いギアでグイグイ」が合うはず。"}
+                  {type === "B1" && "「滑らかに」「一定ペースで」「効率重視」を意識すると本来の力が出せます。"}
+                  {type === "B2" && "「安定感を活かして」「リズムを大切に」「適応力で勝負」がおすすめ。"}
+                </p>
+              </div>
             </div>
           </Card>
           
@@ -1983,7 +2719,7 @@ export default function App() {
             
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {/* 体幹タイプ */}
-              <div style={{ background: "#0a0e1a", borderRadius: 12, padding: 14 }}>
+              <div style={{ background: theme.bg, borderRadius: 12, padding: 14 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                   <p style={{ color: C.textDim, fontSize: 11, fontWeight: 600, margin: 0, textTransform: "uppercase" }}>体幹タイプ</p>
                   <p style={{ color: typeInfo.color, fontSize: 14, fontWeight: 700, margin: 0 }}>{typeInfo.bodyMechanics.trunk.type}</p>
@@ -1993,7 +2729,7 @@ export default function App() {
               </div>
               
               {/* 連動パターン */}
-              <div style={{ background: "#0a0e1a", borderRadius: 12, padding: 14 }}>
+              <div style={{ background: theme.bg, borderRadius: 12, padding: 14 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                   <p style={{ color: C.textDim, fontSize: 11, fontWeight: 600, margin: 0, textTransform: "uppercase" }}>連動パターン</p>
                   <p style={{ color: typeInfo.color, fontSize: 14, fontWeight: 700, margin: 0 }}>{typeInfo.bodyMechanics.movement.type}</p>
@@ -2003,7 +2739,7 @@ export default function App() {
               </div>
               
               {/* 重心 */}
-              <div style={{ background: "#0a0e1a", borderRadius: 12, padding: 14 }}>
+              <div style={{ background: theme.bg, borderRadius: 12, padding: 14 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                   <p style={{ color: C.textDim, fontSize: 11, fontWeight: 600, margin: 0, textTransform: "uppercase" }}>重心</p>
                   <p style={{ color: typeInfo.color, fontSize: 14, fontWeight: 700, margin: 0 }}>{typeInfo.bodyMechanics.balance.type}</p>
@@ -2022,7 +2758,7 @@ export default function App() {
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               {typeInfo.traits.map((trait, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, background: "#0a0e1a", borderRadius: 10, padding: 12 }}>
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, background: "theme.bg", borderRadius: 10, padding: 12 }}>
                   <div style={{ width: 6, height: 6, borderRadius: 3, background: typeInfo.color }} />
                   <p style={{ color: C.text, fontSize: 14, margin: 0 }}>{trait}</p>
                 </div>
@@ -2037,7 +2773,7 @@ export default function App() {
               <p style={{ color: C.text, fontSize: 16, fontWeight: 700, margin: 0 }}>リズム・姿勢傾向</p>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-              <div style={{ background: "#0a0e1a", borderRadius: 12, padding: 14, textAlign: "center" }}>
+              <div style={{ background: "theme.bg", borderRadius: 12, padding: 14, textAlign: "center" }}>
                 <div style={{ marginBottom: 8 }}>{cadence === "high" ? Icons.rotate(C.cyan, 28) : Icons.zap(C.orange, 28)}</div>
                 <p style={{ color: cadence === "high" ? C.cyan : C.orange, fontSize: 14, fontWeight: 700, margin: "0 0 2px" }}>
                   {cadence === "high" ? "高ピッチ型" : "ストライド型"}
@@ -2046,7 +2782,7 @@ export default function App() {
                   {cadence === "high" ? "180spm+で軽快に" : "大きな一歩で力強く"}
                 </p>
               </div>
-              <div style={{ background: "#0a0e1a", borderRadius: 12, padding: 14, textAlign: "center" }}>
+              <div style={{ background: "theme.bg", borderRadius: 12, padding: 14, textAlign: "center" }}>
                 <div style={{ marginBottom: 8 }}>{posture === "open" ? Icons.user(C.green, 28) : Icons.activity(C.accent, 28)}</div>
                 <p style={{ color: posture === "open" ? C.green : C.accent, fontSize: 14, fontWeight: 700, margin: "0 0 2px" }}>
                   {posture === "open" ? "胸開きタイプ" : "前傾タイプ"}
@@ -2065,7 +2801,7 @@ export default function App() {
               <p style={{ color: C.text, fontSize: 16, fontWeight: 700, margin: 0 }}>メンタル傾向</p>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-              <div style={{ background: "#0a0e1a", borderRadius: 12, padding: 14, textAlign: "center" }}>
+              <div style={{ background: "theme.bg", borderRadius: 12, padding: 14, textAlign: "center" }}>
                 <div style={{ marginBottom: 8 }}>{result.aggression === "aggressive" ? Icons.zap(C.orange, 28) : Icons.target(C.cyan, 28)}</div>
                 <p style={{ color: result.aggression === "aggressive" ? C.orange : C.cyan, fontSize: 14, fontWeight: 700, margin: "0 0 2px" }}>
                   {result.aggression === "aggressive" ? "アグレッシブ" : "ステディ"}
@@ -2074,7 +2810,7 @@ export default function App() {
                   {result.aggression === "aggressive" ? "攻め・飛び出し型" : "堅実・確実型"}
                 </p>
               </div>
-              <div style={{ background: "#0a0e1a", borderRadius: 12, padding: 14, textAlign: "center" }}>
+              <div style={{ background: "theme.bg", borderRadius: 12, padding: 14, textAlign: "center" }}>
                 <div style={{ marginBottom: 8 }}>{result.teamwork === "solo" ? Icons.user(C.pink, 28) : Icons.target(C.green, 28)}</div>
                 <p style={{ color: result.teamwork === "solo" ? C.pink : C.green, fontSize: 14, fontWeight: 700, margin: "0 0 2px" }}>
                   {result.teamwork === "solo" ? "ソロ型" : "チーム型"}
@@ -2116,18 +2852,18 @@ export default function App() {
             </div>
           </Card>
           
-          {/* 機材レコメンド */}
+          {/* フィットスタイル */}
           <Card style={{ marginTop: 16 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
               {Icons.bike(typeInfo.color, 20)}
               <p style={{ color: C.text, fontSize: 16, fontWeight: 700, margin: 0 }}>
-                {"おすすめ機材"}
+                フィットスタイル
               </p>
             </div>
             
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {/* タイプ */}
-              <div style={{ background: "#0a0e1a", borderRadius: 12, padding: 14 }}>
+              <div style={{ background: "theme.bg", borderRadius: 12, padding: 14 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
                   {sport === "cycling" ? Icons.bike(C.accent, 18) : Icons.shoe(C.accent, 18)}
                   <p style={{ color: C.textDim, fontSize: 11, fontWeight: 600, margin: 0, textTransform: "uppercase", letterSpacing: 0.5 }}>
@@ -2139,7 +2875,7 @@ export default function App() {
               </div>
               
               {/* ポジション/ドロップ */}
-              <div style={{ background: "#0a0e1a", borderRadius: 12, padding: 14 }}>
+              <div style={{ background: "theme.bg", borderRadius: 12, padding: 14 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
                   {Icons.activity(C.pink, 18)}
                   <p style={{ color: C.textDim, fontSize: 11, fontWeight: 600, margin: 0, textTransform: "uppercase", letterSpacing: 0.5 }}>
@@ -2151,7 +2887,7 @@ export default function App() {
               </div>
               
               {/* ホイール/クッション */}
-              <div style={{ background: "#0a0e1a", borderRadius: 12, padding: 14 }}>
+              <div style={{ background: "theme.bg", borderRadius: 12, padding: 14 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
                   {sport === "cycling" ? Icons.wheel(C.cyan, 18) : Icons.foot(C.cyan, 18)}
                   <p style={{ color: C.textDim, fontSize: 11, fontWeight: 600, margin: 0, textTransform: "uppercase", letterSpacing: 0.5 }}>
@@ -2165,22 +2901,34 @@ export default function App() {
             </div>
           </Card>
           
-          {/* サイクリング用：ギアファインダー */}
-          {(
-          <Card style={{ marginTop: 16 }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                {Icons.star(typeInfo.color, 20)}
-                <p style={{ color: C.text, fontSize: 16, fontWeight: 700, margin: 0 }}>ギアファインダー</p>
+          {/* 機材セレクト */}
+          <Card style={{ marginTop: 16, padding: "24px 0" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, padding: "0 24px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <div style={{
+                  width: 36,
+                  height: 36,
+                  borderRadius: 10,
+                  background: `${typeInfo.color}15`,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}>
+                  {Icons.settings(typeInfo.color, 20)}
+                </div>
+                <div>
+                  <p style={{ color: C.text, fontSize: 16, fontWeight: 700, margin: 0 }}>機材セレクト</p>
+                  <p style={{ color: C.textMuted, fontSize: 11, margin: 0 }}>あなたのタイプに合ったパーツ</p>
+                </div>
               </div>
-              <span style={{ background: `${typeInfo.color}22`, color: typeInfo.color, fontSize: 10, fontWeight: 700, padding: "4px 8px", borderRadius: 12 }}>
-                {type}タイプ
+              <span style={{ background: typeInfo.color, color: "#fff", fontSize: 10, fontWeight: 700, padding: "5px 10px", borderRadius: 20 }}>
+                {type}
               </span>
             </div>
             
             {/* タイプ条件表示 */}
-            <div style={{ background: `${typeInfo.color}10`, border: `1px solid ${typeInfo.color}25`, borderRadius: 10, padding: 12, marginBottom: 16 }}>
-              <p style={{ color: C.textDim, fontSize: 11, margin: "0 0 4px" }}>あなたに合うスタイル</p>
+            <div style={{ background: `${typeInfo.color}08`, border: `1px solid ${typeInfo.color}20`, borderRadius: 12, padding: 14, marginBottom: 16, marginLeft: 24, marginRight: 24 }}>
+              <p style={{ color: C.textMuted, fontSize: 11, margin: "0 0 4px", fontWeight: 600 }}>あなたに合うスタイル</p>
               <p style={{ color: typeInfo.color, fontSize: 13, fontWeight: 600, margin: 0 }}>
                 {type === "A1" && "高剛性・前乗り・ダイレクト感重視"}
                 {type === "A2" && "軽量・後ろ乗り・快適性重視"}
@@ -2190,31 +2938,39 @@ export default function App() {
             </div>
             
             {/* カテゴリ選択 */}
-            <div style={{ marginBottom: 16 }}>
-              <p style={{ color: C.text, fontSize: 12, fontWeight: 700, margin: "0 0 10px" }}>🔧 カテゴリ</p>
+            <div style={{ marginBottom: 16, padding: "0 24px" }}>
+              <p style={{ color: C.textMuted, fontSize: 12, fontWeight: 700, margin: "0 0 10px" }}>カテゴリ</p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                {CYCLING_CATEGORIES.map(cat => (
+                {CYCLING_CATEGORIES.map(cat => {
+                  const isSelected = shoeFilters.category === cat.id;
+                  return (
                   <button
                     key={cat.id}
                     onClick={() => setShoeFilters(f => ({ ...f, category: f.category === cat.id ? null : cat.id }))}
                     style={{
-                      padding: "10px 14px", borderRadius: 12, fontSize: 13, fontWeight: 600,
-                      border: "none",
-                      background: C.bg,
-                      color: shoeFilters.category === cat.id ? typeInfo.color : C.textMuted,
+                      padding: "10px 16px", borderRadius: 12, fontSize: 13, fontWeight: 600,
+                      border: isSelected ? `2px solid ${typeInfo.color}` : `1px solid ${theme.cardBorder}`,
+                      background: isSelected ? `${typeInfo.color}10` : theme.card,
+                      color: isSelected ? typeInfo.color : C.textMuted,
                       cursor: "pointer",
-                      ...(shoeFilters.category === cat.id ? neu.pressed : neu.raised),
+                      boxShadow: isSelected ? `0 2px 8px ${typeInfo.color}20` : "none",
+                      transition: "all 0.2s ease",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 6,
                     }}
                   >
-                    {cat.icon} {cat.label}
+                    {Icons[cat.icon] && Icons[cat.icon](isSelected ? typeInfo.color : C.textMuted, 16)}
+                    {cat.label}
                   </button>
-                ))}
+                  );
+                })}
               </div>
             </div>
             
             {/* ブランド選択 */}
-            <div style={{ marginBottom: 20 }}>
-              <p style={{ color: C.text, fontSize: 12, fontWeight: 700, margin: "0 0 10px" }}>🏷️ ブランド</p>
+            <div style={{ marginBottom: 20, padding: "0 24px" }}>
+              <p style={{ color: C.textMuted, fontSize: 12, fontWeight: 700, margin: "0 0 10px" }}>ブランド</p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                 {CYCLING_BRANDS.map(brand => {
                   const isSelected = shoeFilters.brands.includes(brand);
@@ -2226,12 +2982,13 @@ export default function App() {
                         brands: isSelected ? f.brands.filter(b => b !== brand) : [...f.brands, brand]
                       }))}
                       style={{
-                        padding: "8px 12px", borderRadius: 10, fontSize: 12, fontWeight: 600,
-                        border: "none",
-                        background: C.bg,
+                        padding: "8px 14px", borderRadius: 10, fontSize: 12, fontWeight: 600,
+                        border: isSelected ? `2px solid ${typeInfo.color}` : `1px solid ${theme.cardBorder}`,
+                        background: isSelected ? `${typeInfo.color}10` : theme.card,
                         color: isSelected ? typeInfo.color : C.textMuted,
                         cursor: "pointer",
-                        ...(isSelected ? neu.pressed : neu.raised),
+                        boxShadow: isSelected ? `0 2px 8px ${typeInfo.color}20` : "none",
+                        transition: "all 0.2s ease",
                       }}
                     >
                       {brand}
@@ -2260,70 +3017,236 @@ export default function App() {
                 grouped[gear.category].push(gear);
               });
               
+              // カテゴリごとのシャッフル状態を適用
+              Object.keys(grouped).forEach(cat => {
+                const catShuffleKey = shuffleKey[cat] || 0;
+                if (catShuffleKey > 0) {
+                  // シード値を使って同じshuffleKeyなら同じ順序になるように
+                  const shuffled = [...grouped[cat]];
+                  for (let i = shuffled.length - 1; i > 0; i--) {
+                    const seed = (catShuffleKey * 9301 + 49297) % 233280;
+                    const j = Math.floor((seed / 233280 + i * catShuffleKey) % (i + 1));
+                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                  }
+                  grouped[cat] = shuffled;
+                }
+              });
+              
               return (
                 <div>
-                  <p style={{ color: C.textDim, fontSize: 12, marginBottom: 12 }}>
-                    {filtered.length}件のギアがマッチ
+                  <p style={{ color: C.textDim, fontSize: 12, marginBottom: 12, padding: "0 24px" }}>
+                    {filtered.length}件の機材がマッチ
                   </p>
                   
                   {filtered.length === 0 ? (
-                    <div style={{ background: C.bg, borderRadius: 12, padding: 20, textAlign: "center", ...neu.pressedSm }}>
-                      <p style={{ color: C.textMuted, fontSize: 14, margin: 0 }}>条件に合うギアがありません</p>
+                    <div style={{ background: theme.bg, borderRadius: 12, padding: 20, textAlign: "center", margin: "0 24px" }}>
+                      <p style={{ color: C.textMuted, fontSize: 14, margin: 0 }}>条件に合う機材がありません</p>
                       <p style={{ color: C.textDim, fontSize: 12, marginTop: 8 }}>フィルターを調整してみてください</p>
                     </div>
                   ) : (
-                    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
                       {Object.entries(grouped).map(([catId, gears]) => {
                         const catInfo = CYCLING_CATEGORIES.find(c => c.id === catId);
                         return (
                           <div key={catId}>
-                            <p style={{ color: C.text, fontSize: 13, fontWeight: 700, margin: "0 0 10px" }}>
-                              {catInfo?.icon} {catInfo?.label}
-                            </p>
-                            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                              {gears.slice(0, 3).map((gear, i) => (
-                                <div key={gear.id} style={{ background: C.bg, borderRadius: 14, padding: 14, ...neu.pressedSm }}>
-                                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 6 }}>
-                                    <div>
-                                      <p style={{ color: C.text, fontSize: 14, fontWeight: 700, margin: "0 0 2px" }}>{gear.name}</p>
-                                      <p style={{ color: C.textDim, fontSize: 11, margin: 0 }}>{gear.brand}</p>
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", margin: "0 0 12px", padding: "0 24px" }}>
+                              <p style={{ color: C.text, fontSize: 14, fontWeight: 700, margin: 0, display: "flex", alignItems: "center", gap: 8 }}>
+                                {catInfo?.icon && Icons[catInfo.icon] && Icons[catInfo.icon](typeInfo.color, 20)}
+                                {catInfo?.label}
+                                <span style={{ color: C.textDim, fontSize: 11, fontWeight: 500, marginLeft: 4 }}>
+                                  ({gears.length})
+                                </span>
+                              </p>
+                              {gears.length > 1 && (
+                                <button
+                                  onClick={() => setShuffleKey(prev => ({ ...prev, [catId]: (prev[catId] || 0) + 1 }))}
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 4,
+                                    padding: "4px 10px",
+                                    borderRadius: 6,
+                                    border: `1px solid ${theme.cardBorder}`,
+                                    background: theme.bg,
+                                    color: C.textDim,
+                                    fontSize: 10,
+                                    cursor: "pointer",
+                                  }}
+                                >
+                                  {Icons.refresh(C.textDim, 12)}
+                                  他を見る
+                                </button>
+                              )}
+                            </div>
+                            
+                            {/* カルーセル */}
+                            <div style={{ 
+                              display: "flex", 
+                              overflowX: "auto",
+                              scrollSnapType: "x mandatory",
+                              WebkitOverflowScrolling: "touch",
+                              gap: 12,
+                              paddingLeft: 24,
+                              paddingRight: 24,
+                              paddingBottom: 8,
+                              msOverflowStyle: "none",
+                              scrollbarWidth: "none",
+                            }}>
+                              {gears.slice(0, 5).map((gear, i) => (
+                                <div key={gear.id} style={{ 
+                                  minWidth: "calc(100% - 48px)",
+                                  maxWidth: "calc(100% - 48px)",
+                                  scrollSnapAlign: "start",
+                                  background: theme.card, 
+                                  borderRadius: 16, 
+                                  padding: 0,
+                                  overflow: "hidden",
+                                  border: `1px solid ${theme.cardBorder}`,
+                                  boxShadow: theme.shadowCard || theme.shadow,
+                                  flexShrink: 0,
+                                }}>
+                                  {/* 商品画像エリア */}
+                                  <div style={{
+                                    height: 160,
+                                    background: `linear-gradient(135deg, ${typeInfo.color}05, ${typeInfo.color}12)`,
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    position: "relative",
+                                    overflow: "hidden",
+                                  }}>
+                                    {gear.image ? (
+                                      <img 
+                                        src={gear.image} 
+                                        alt={gear.name}
+                                        style={{
+                                          maxHeight: "85%",
+                                          maxWidth: "85%",
+                                          objectFit: "contain",
+                                        }}
+                                        onError={(e) => {
+                                          e.target.style.display = 'none';
+                                          e.target.nextSibling.style.display = 'flex';
+                                        }}
+                                      />
+                                    ) : null}
+                                    <div style={{
+                                      display: gear.image ? "none" : "flex",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                      width: "100%",
+                                      height: "100%",
+                                    }}>
+                                      {catInfo?.icon && Icons[catInfo.icon] && Icons[catInfo.icon](typeInfo.color, 56)}
                                     </div>
-                                    <p style={{ color: typeInfo.color, fontSize: 14, fontWeight: 700, margin: 0 }}>¥{gear.price.toLocaleString()}</p>
+                                    {/* ブランドバッジ */}
+                                    <div style={{
+                                      position: "absolute",
+                                      top: 10,
+                                      left: 10,
+                                      background: "rgba(255,255,255,0.95)",
+                                      padding: "5px 12px",
+                                      borderRadius: 20,
+                                      fontSize: 11,
+                                      fontWeight: 700,
+                                      color: C.text,
+                                      boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                                    }}>
+                                      {gear.brand}
+                                    </div>
+                                    {/* インジケーター */}
+                                    <div style={{
+                                      position: "absolute",
+                                      bottom: 8,
+                                      left: "50%",
+                                      transform: "translateX(-50%)",
+                                      display: "flex",
+                                      gap: 6,
+                                    }}>
+                                      {gears.slice(0, 5).map((_, idx) => (
+                                        <div key={idx} style={{
+                                          width: idx === i ? 16 : 6,
+                                          height: 6,
+                                          borderRadius: 3,
+                                          background: idx === i ? typeInfo.color : "rgba(0,0,0,0.2)",
+                                          transition: "all 0.2s ease",
+                                        }} />
+                                      ))}
+                                    </div>
                                   </div>
                                   
-                                  <p style={{ color: C.textMuted, fontSize: 12, margin: "0 0 10px", lineHeight: 1.5 }}>{gear.reason}</p>
-                                  
-                                  <div style={{ display: "flex", gap: 8 }}>
-                                    <a
-                                      href={`https://www.amazon.co.jp/s?k=${gear.amazonQuery}&tag=biomechfit-22`}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      style={{
-                                        flex: 1, padding: "8px 10px", borderRadius: 8,
-                                        background: "#FF9900", color: "#000",
-                                        fontSize: 11, fontWeight: 700, textAlign: "center",
-                                        textDecoration: "none"
-                                      }}
-                                    >
-                                      Amazon
-                                    </a>
-                                    <a
-                                      href={`https://hb.afl.rakuten.co.jp/ichiba/50df1b4b.7f702b2c.50df1b4c.1f8e3d5f/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F${gear.rakutenQuery}%2F`}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      style={{
-                                        flex: 1, padding: "8px 10px", borderRadius: 8,
-                                        background: "#BF0000", color: "#fff",
-                                        fontSize: 11, fontWeight: 700, textAlign: "center",
-                                        textDecoration: "none"
-                                      }}
-                                    >
-                                      楽天
-                                    </a>
+                                  {/* 商品情報 */}
+                                  <div style={{ padding: 16 }}>
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 6 }}>
+                                      <p style={{ color: C.text, fontSize: 15, fontWeight: 700, margin: 0, flex: 1 }}>
+                                        {gear.name}
+                                      </p>
+                                      <p style={{ color: C.textMuted, fontSize: 13, fontWeight: 600, margin: 0, marginLeft: 8, whiteSpace: "nowrap" }}>
+                                        ¥{gear.price.toLocaleString()}
+                                      </p>
+                                    </div>
+                                    <p style={{ color: C.textMuted, fontSize: 12, margin: "0 0 14px", lineHeight: 1.6 }}>
+                                      {gear.reason}
+                                    </p>
+                                    
+                                    {/* 購入リンク（アイコンのみ） */}
+                                    <div style={{ display: "flex", gap: 12, justifyContent: "flex-end" }}>
+                                      <a
+                                        href={`https://www.amazon.co.jp/s?k=${gear.amazonQuery}&tag=biomechfit-22`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        title="Amazonで見る"
+                                        style={{
+                                          width: 40, height: 40, borderRadius: 10,
+                                          background: theme.bg,
+                                          display: "flex", alignItems: "center", justifyContent: "center",
+                                          textDecoration: "none",
+                                          border: `1px solid ${theme.cardBorder}`,
+                                        }}
+                                      >
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#FF9900">
+                                          <path d="M12.5 3.5c-4.5 0-8.5 3-8.5 6.5 0 2.2 1.3 4.2 3.3 5.4-.1.5-.4 1.8-.5 2.1-.1.4.1.4.3.3.1-.1 2.1-1.4 2.9-2 .8.1 1.6.2 2.5.2 4.5 0 8.5-2.9 8.5-6.5s-4-6.5-8.5-6.5z"/>
+                                          <path d="M21.5 18.5c-.9.5-1.8.9-2.8 1.2.1-.3.2-.5.2-.8 0-.6-.3-1.2-.8-1.5 1.8-.8 3.3-2.2 4.2-3.9.5.8.7 1.7.7 2.7 0 .8-.2 1.6-.5 2.3z" opacity="0.6"/>
+                                        </svg>
+                                      </a>
+                                      <a
+                                        href={`https://hb.afl.rakuten.co.jp/ichiba/50df1b4b.7f702b2c.50df1b4c.1f8e3d5f/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F${gear.rakutenQuery}%2F`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        title="楽天で見る"
+                                        style={{
+                                          width: 40, height: 40, borderRadius: 10,
+                                          background: theme.bg,
+                                          display: "flex", alignItems: "center", justifyContent: "center",
+                                          textDecoration: "none",
+                                          border: `1px solid ${theme.cardBorder}`,
+                                        }}
+                                      >
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#BF0000">
+                                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-2h2v2zm0-4h-2V7h2v6zm4 4h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                                        </svg>
+                                      </a>
+                                    </div>
                                   </div>
                                 </div>
                               ))}
                             </div>
+                            
+                            {/* スワイプヒント（複数ある場合のみ） */}
+                            {gears.length > 1 && (
+                              <p style={{ 
+                                color: C.textDim, 
+                                fontSize: 10, 
+                                textAlign: "center", 
+                                margin: "8px 0 0",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                gap: 4,
+                              }}>
+                                ← スワイプで他の商品を見る →
+                              </p>
+                            )}
                           </div>
                         );
                       })}
@@ -2333,11 +3256,10 @@ export default function App() {
               );
             })()}
             
-            <p style={{ color: C.textDim, fontSize: 10, marginTop: 12, textAlign: "center" }}>
+            <p style={{ color: C.textDim, fontSize: 10, marginTop: 16, textAlign: "center", padding: "0 24px" }}>
               ※ 価格は変動する場合があります。リンクはアフィリエイトを含みます。
             </p>
           </Card>
-          )}
           
           {/* フィッティング計算機 */}
           {typeInfo.fitting && (
@@ -2875,18 +3797,17 @@ export default function App() {
             )}
           </Card>
           )}
-          )}
           
           {/* フォームガイド */}
           <Card style={{ marginTop: 16 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
               {Icons.user(typeInfo.color, 20)}
-              <p style={{ color: C.text, fontSize: 16, fontWeight: 700, margin: 0 }}>あなたに合ったフォーム</p>
+              <p style={{ color: C.text, fontSize: 16, fontWeight: 700, margin: 0 }}>あなたに合ったライドスタイル</p>
             </div>
             
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {Object.entries(typeInfo.form).map(([key, item]) => (
-                <div key={key} style={{ background: "#0a0e1a", borderRadius: 12, padding: 14 }}>
+                <div key={key} style={{ background: "theme.bg", borderRadius: 12, padding: 14 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                     <p style={{ color: C.textDim, fontSize: 11, fontWeight: 600, margin: 0, textTransform: "uppercase" }}>{item.title}</p>
                     <p style={{ color: typeInfo.color, fontSize: 13, fontWeight: 700, margin: 0 }}>{item.type}</p>
@@ -2907,7 +3828,7 @@ export default function App() {
             
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {/* 5K・10K */}
-              <div style={{ background: "#0a0e1a", borderRadius: 12, padding: 16 }}>
+              <div style={{ background: "theme.bg", borderRadius: 12, padding: 16 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
                   {Icons.zap(C.accent, 20)}
                   <p style={{ color: C.text, fontSize: 15, fontWeight: 700, margin: 0 }}>{typeInfo.guide.fiveK.title}</p>
@@ -2929,7 +3850,7 @@ export default function App() {
               </div>
               
               {/* ハーフ */}
-              <div style={{ background: "#0a0e1a", borderRadius: 12, padding: 16 }}>
+              <div style={{ background: "theme.bg", borderRadius: 12, padding: 16 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
                   {Icons.road(C.pink, 20)}
                   <p style={{ color: C.text, fontSize: 15, fontWeight: 700, margin: 0 }}>{typeInfo.guide.half.title}</p>
@@ -2951,7 +3872,7 @@ export default function App() {
               </div>
               
               {/* フル */}
-              <div style={{ background: "#0a0e1a", borderRadius: 12, padding: 16 }}>
+              <div style={{ background: "theme.bg", borderRadius: 12, padding: 16 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
                   {Icons.mountain(C.green, 20)}
                   <p style={{ color: C.text, fontSize: 15, fontWeight: 700, margin: 0 }}>{typeInfo.guide.full.title}</p>
@@ -2973,7 +3894,7 @@ export default function App() {
               </div>
               
               {/* トレーニング */}
-              <div style={{ background: "#0a0e1a", borderRadius: 12, padding: 16 }}>
+              <div style={{ background: "theme.bg", borderRadius: 12, padding: 16 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
                   {Icons.target(C.cyan, 20)}
                   <p style={{ color: C.text, fontSize: 15, fontWeight: 700, margin: 0 }}>{typeInfo.guide.training.title}</p>
@@ -3016,6 +3937,92 @@ export default function App() {
             {Icons.refresh(C.textDim, 16)} 最初からやり直す
           </button>
           
+          {/* フィッター紹介 */}
+          {sport === "cycling" && (
+          <Card style={{ marginTop: 16 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+              <div style={{
+                width: 36,
+                height: 36,
+                borderRadius: 10,
+                background: `${typeInfo.color}15`,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}>
+                {Icons.frogDoctor(typeInfo.color, 28)}
+              </div>
+              <div>
+                <p style={{ color: C.text, fontSize: 16, fontWeight: 700, margin: 0 }}>プロのフィッティング</p>
+                <p style={{ color: C.textMuted, fontSize: 11, margin: 0 }}>あなたのタイプを活かすポジションへ</p>
+              </div>
+            </div>
+            
+            <p style={{ color: C.textMuted, fontSize: 13, margin: "0 0 16px", lineHeight: 1.7 }}>
+              診断結果をさらに活かすなら、プロのバイクフィッターに相談してみませんか？
+              身体の使い方に合った最適なポジションを導き出してくれます。
+            </p>
+            
+            {/* フィッターリスト */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {[
+                { name: "ACTIVIKE", area: "東京", desc: "理学療法士による身体評価ベース", url: "https://activike.com/bikefitting_activike/", color: "#4A90D9" },
+                { name: "カミハギサイクル", area: "名古屋", desc: "Retül Fit対応・実績豊富", url: "https://kamihagi.com/retul/", color: "#E85A4F" },
+                { name: "ベックオン", area: "大阪", desc: "各種フィッティング対応", url: "https://beckon.jp/pages/bikefitting", color: "#F5A623" },
+                { name: "自転車のウエサカ", area: "中部", desc: "idmatch BIKELAB・複数資格保有", url: "http://jitensha-uesaka.sun.bindcloud.jp/idmatch/idmatchbikelab.html", color: "#7ED321" },
+                { name: "一条サイクル", area: "大阪・京都・兵庫", desc: "元プロMTBライダーによるフィッティング", url: "https://www.1jyo.com/enjoy-bike/36843", color: "#9B59B6" },
+              ].map((fitter, i) => (
+                <a
+                  key={i}
+                  href={fitter.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "14px 16px",
+                    borderRadius: 12,
+                    background: theme.bg,
+                    border: `1px solid ${theme.cardBorder}`,
+                    textDecoration: "none",
+                    transition: "all 0.2s ease",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                    <div style={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: "50%",
+                      background: fitter.color,
+                    }} />
+                    <div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <p style={{ color: C.text, fontSize: 14, fontWeight: 700, margin: 0 }}>{fitter.name}</p>
+                        <span style={{ 
+                          color: C.textDim, 
+                          fontSize: 10, 
+                          background: `${C.textDim}15`,
+                          padding: "2px 8px",
+                          borderRadius: 10,
+                        }}>{fitter.area}</span>
+                      </div>
+                      <p style={{ color: C.textMuted, fontSize: 11, margin: "4px 0 0" }}>{fitter.desc}</p>
+                    </div>
+                  </div>
+                  <div style={{ color: C.textDim }}>
+                    {Icons.arrowRight(C.textDim, 16)}
+                  </div>
+                </a>
+              ))}
+            </div>
+            
+            <p style={{ color: C.textDim, fontSize: 10, margin: "16px 0 0", textAlign: "center", lineHeight: 1.5 }}>
+              ※ 各店舗の予約・詳細は直接お問い合わせください
+            </p>
+          </Card>
+          )}
+          
           {/* シェア */}
           <Card style={{ marginTop: 20, background: `linear-gradient(135deg, ${C.accent}10, ${C.pink}08)`, border: `1px solid ${C.accent}20` }}>
             <div style={{ textAlign: "center" }}>
@@ -3027,14 +4034,21 @@ export default function App() {
               
               <button
                 onClick={() => {
-                  const text = `🚴 4スタンス理論でサイクリングタイプを診断したら「${typeInfo.name}（${type}）」だった！
+                  const bodyStyle = type === "A1" ? "捻りながら前に踏み込む" 
+                    : type === "A2" ? "捻りながら後ろで溜める"
+                    : type === "B1" ? "身体を一体で前に押し出す"
+                    : "身体を一体で安定させる";
+                  const text = `「コーチの言うことがしっくりこない」の正体がわかった。
 
-${typeInfo.traits.join('、')}
+私は "${typeInfo.name}" タイプ。
+「${bodyStyle}」のが自然な身体の使い方らしい。
 
-あなたも診断してみて👇
+合わないアドバイスに悩んでたのは、身体の使い方が違っただけだった。
+
+あなたも自分のタイプ、調べてみて👇
 https://biomechfit.vercel.app
 
-#CyclingFit #4スタンス理論 #ロードバイク`;
+#BiomechFit #4スタンス理論`;
                   const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
                   window.open(url, '_blank');
                 }}
@@ -3062,9 +4076,9 @@ https://biomechfit.vercel.app
               
               <button
                 onClick={() => {
-                  const text = `🚴 4スタンス理論でサイクリングタイプを診断したら「${typeInfo.name}（${type}）」だった！ https://biomechfit.vercel.app`;
+                  const text = `自分の身体の使い方がわかった。私は "${typeInfo.name}" タイプ。 https://biomechfit.vercel.app`;
                   if (navigator.share) {
-                    navigator.share({ title: 'CyclingFit 診断結果', text: text, url: 'https://biomechfit.vercel.app' });
+                    navigator.share({ title: 'BiomechFit 診断結果', text: text, url: 'https://biomechfit.vercel.app' });
                   } else {
                     navigator.clipboard.writeText(text);
                     alert('クリップボードにコピーしました！');
