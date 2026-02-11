@@ -291,34 +291,28 @@ const CYCLING_GEAR_DB = [
   { id: "power-arc", name: "Specialized Power Arc", brand: "Specialized", price: 28000, category: "saddle",
     style: "forward", type: ["A1", "B1"], 
     reason: "ショートノーズで前乗りに最適。高出力ペダリングをサポート。",
-    image: "https://m.media-amazon.com/images/I/61Qi3Y1uURL._AC_SX679_.jpg",
     amazonQuery: "Specialized+Power+Saddle", rakutenQuery: "Specialized%20Power%20サドル" },
   { id: "argo-r3", name: "fi'zi:k Argo Tempo R3", brand: "fi'zi:k", price: 15000, category: "saddle",
     style: "forward", type: ["A1", "B1"],
     reason: "ショートノーズの入門モデル。前乗りポジションに。",
-    image: "https://m.media-amazon.com/images/I/71Qs5PiYURL._AC_SX679_.jpg",
     amazonQuery: "fizik+Argo+Tempo", rakutenQuery: "fizik%20Argo%20Tempo" },
   // A2向け（後ろ乗り・ロングノーズ）
   { id: "antares-r3", name: "fi'zi:k Antares R3", brand: "fi'zi:k", price: 18000, category: "saddle",
     style: "rear", type: ["A2", "B2"],
     reason: "クラシックな形状で後ろ乗りに最適。ロングライドも快適。",
-    image: "https://m.media-amazon.com/images/I/61d5PZ+HLZL._AC_SX679_.jpg",
     amazonQuery: "fizik+Antares", rakutenQuery: "fizik%20Antares" },
   { id: "aspide", name: "Selle Italia SLR Boost", brand: "Selle Italia", price: 22000, category: "saddle",
     style: "rear", type: ["A2"],
     reason: "軽量でクライマー向け。後ろ乗りでトルクをかけやすい。",
-    image: "https://m.media-amazon.com/images/I/61V1a4LlURL._AC_SX679_.jpg",
     amazonQuery: "Selle+Italia+SLR+Boost", rakutenQuery: "Selle%20Italia%20SLR%20Boost" },
   // B1/B2向け（バランス型）
   { id: "romin-evo", name: "Specialized Romin Evo", brand: "Specialized", price: 25000, category: "saddle",
     style: "neutral", type: ["B1", "B2"],
     reason: "オールラウンドな形状。様々なポジションに対応。",
-    image: "https://m.media-amazon.com/images/I/71kWlx+gURL._AC_SX679_.jpg",
     amazonQuery: "Specialized+Romin+Evo", rakutenQuery: "Specialized%20Romin%20Evo" },
   { id: "cambium-c17", name: "Brooks Cambium C17", brand: "Brooks", price: 16000, category: "saddle",
     style: "neutral", type: ["B2"],
     reason: "快適性重視。ロングライドやエンデュランスに。",
-    image: "https://m.media-amazon.com/images/I/71J8tSPyURL._AC_SX679_.jpg",
     amazonQuery: "Brooks+Cambium+C17", rakutenQuery: "Brooks%20Cambium%20C17" },
 
   // === ペダル ===
@@ -326,7 +320,6 @@ const CYCLING_GEAR_DB = [
   { id: "dura-ace-pedal", name: "Shimano Dura-Ace PD-R9200", brand: "Shimano", price: 35000, category: "pedal",
     style: "stiff", type: ["A1"],
     reason: "最高剛性でパワー伝達ロスなし。スプリンター向け。",
-    image: "https://m.media-amazon.com/images/I/61Bl5koTURL._AC_SX679_.jpg",
     amazonQuery: "Shimano+Dura-Ace+PD-R9200", rakutenQuery: "Shimano%20Dura-Ace%20ペダル" },
   { id: "keo-blade", name: "Look Keo Blade Carbon", brand: "Look", price: 28000, category: "pedal",
     style: "stiff", type: ["A1", "B1"],
@@ -1694,6 +1687,11 @@ export default function App() {
   
   const handleAnswer = (choice) => {
     const q = questions[currentIndex];
+    if (!q) return;
+    
+    // 既に回答済みならスキップ
+    if (answers[q.id] !== undefined) return;
+    
     const newAnswers = { ...answers, [q.id]: choice };
     setAnswers(newAnswers);
     
@@ -1716,6 +1714,11 @@ export default function App() {
   // 4択回答用
   const handleQuadAnswer = (optionIndex) => {
     const q = questions[currentIndex];
+    if (!q || !q.options || !q.options[optionIndex]) return;
+    
+    // 既に回答済みならスキップ
+    if (answers[q.id] !== undefined) return;
+    
     const selectedOption = q.options[optionIndex];
     const newAnswers = { ...answers, [q.id]: optionIndex };
     setAnswers(newAnswers);
@@ -3105,49 +3108,26 @@ export default function App() {
                                   boxShadow: theme.shadowCard || theme.shadow,
                                   flexShrink: 0,
                                 }}>
-                                  {/* 商品画像エリア */}
+                                  {/* 商品アイコンエリア */}
                                   <div style={{
-                                    height: 160,
-                                    background: `linear-gradient(135deg, ${typeInfo.color}05, ${typeInfo.color}12)`,
+                                    height: 100,
+                                    background: `linear-gradient(135deg, ${typeInfo.color}08, ${typeInfo.color}15)`,
                                     display: "flex",
                                     alignItems: "center",
                                     justifyContent: "center",
                                     position: "relative",
                                     overflow: "hidden",
                                   }}>
-                                    {gear.image ? (
-                                      <img 
-                                        src={gear.image} 
-                                        alt={gear.name}
-                                        style={{
-                                          maxHeight: "85%",
-                                          maxWidth: "85%",
-                                          objectFit: "contain",
-                                        }}
-                                        onError={(e) => {
-                                          e.target.style.display = 'none';
-                                          e.target.nextSibling.style.display = 'flex';
-                                        }}
-                                      />
-                                    ) : null}
-                                    <div style={{
-                                      display: gear.image ? "none" : "flex",
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      width: "100%",
-                                      height: "100%",
-                                    }}>
-                                      {catInfo?.icon && Icons[catInfo.icon] && Icons[catInfo.icon](typeInfo.color, 56)}
-                                    </div>
+                                    {catInfo?.icon && Icons[catInfo.icon] && Icons[catInfo.icon](typeInfo.color, 40)}
                                     {/* ブランドバッジ */}
                                     <div style={{
                                       position: "absolute",
                                       top: 10,
                                       left: 10,
                                       background: "rgba(255,255,255,0.95)",
-                                      padding: "5px 12px",
+                                      padding: "4px 10px",
                                       borderRadius: 20,
-                                      fontSize: 11,
+                                      fontSize: 10,
                                       fontWeight: 700,
                                       color: C.text,
                                       boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
@@ -3198,16 +3178,15 @@ export default function App() {
                                         title="Amazonで見る"
                                         style={{
                                           width: 40, height: 40, borderRadius: 10,
-                                          background: theme.bg,
+                                          background: "#FF9900",
                                           display: "flex", alignItems: "center", justifyContent: "center",
                                           textDecoration: "none",
-                                          border: `1px solid ${theme.cardBorder}`,
+                                          color: "#fff",
+                                          fontSize: 10,
+                                          fontWeight: 800,
                                         }}
                                       >
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#FF9900">
-                                          <path d="M12.5 3.5c-4.5 0-8.5 3-8.5 6.5 0 2.2 1.3 4.2 3.3 5.4-.1.5-.4 1.8-.5 2.1-.1.4.1.4.3.3.1-.1 2.1-1.4 2.9-2 .8.1 1.6.2 2.5.2 4.5 0 8.5-2.9 8.5-6.5s-4-6.5-8.5-6.5z"/>
-                                          <path d="M21.5 18.5c-.9.5-1.8.9-2.8 1.2.1-.3.2-.5.2-.8 0-.6-.3-1.2-.8-1.5 1.8-.8 3.3-2.2 4.2-3.9.5.8.7 1.7.7 2.7 0 .8-.2 1.6-.5 2.3z" opacity="0.6"/>
-                                        </svg>
+                                        a
                                       </a>
                                       <a
                                         href={`https://hb.afl.rakuten.co.jp/ichiba/50df1b4b.7f702b2c.50df1b4c.1f8e3d5f/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F${gear.rakutenQuery}%2F`}
@@ -3216,15 +3195,15 @@ export default function App() {
                                         title="楽天で見る"
                                         style={{
                                           width: 40, height: 40, borderRadius: 10,
-                                          background: theme.bg,
+                                          background: "#BF0000",
                                           display: "flex", alignItems: "center", justifyContent: "center",
                                           textDecoration: "none",
-                                          border: `1px solid ${theme.cardBorder}`,
+                                          color: "#fff",
+                                          fontSize: 10,
+                                          fontWeight: 800,
                                         }}
                                       >
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#BF0000">
-                                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-2h2v2zm0-4h-2V7h2v6zm4 4h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-                                        </svg>
+                                        R
                                       </a>
                                     </div>
                                   </div>
