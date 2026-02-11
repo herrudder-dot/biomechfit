@@ -974,35 +974,6 @@ const QUESTION_POOL = [
     b: "腕を伸ばして体から離して持つ",
     weight: { typeA: [1, 0], typeB: [0, 1] } },
   
-  // === 4択質問（2軸同時判定） ===
-  { id: "quad_stand", cat: "both", type: "quad",
-    q: "リラックスして立っているとき、一番近いのは？",
-    options: [
-      { label: "つま先重心で、お腹に力が入る感じ", weight: { typeA: 1, num1: 1 } },
-      { label: "つま先重心で、背中で支える感じ", weight: { typeB: 1, num1: 1 } },
-      { label: "かかと重心で、お腹に力が入る感じ", weight: { typeA: 1, num2: 1 } },
-      { label: "かかと重心で、背中で支える感じ", weight: { typeB: 1, num2: 1 } },
-    ]
-  },
-  { id: "quad_power", cat: "both", type: "quad",
-    q: "全力でダッシュするとき、近いのは？",
-    options: [
-      { label: "つま先で蹴って、みぞおちに力", weight: { typeA: 1, num1: 1 } },
-      { label: "つま先で蹴って、腰・背中に力", weight: { typeB: 1, num1: 1 } },
-      { label: "足全体で蹴って、みぞおちに力", weight: { typeA: 1, num2: 1 } },
-      { label: "足全体で蹴って、腰・背中に力", weight: { typeB: 1, num2: 1 } },
-    ]
-  },
-  { id: "quad_climb", cat: "both", type: "quad",
-    q: "坂道を走って登るとき、しっくりくるのは？",
-    options: [
-      { label: "前のめりで、小刻みにピッチを上げる", weight: { num1: 1, high: 1 } },
-      { label: "前のめりで、大きなストライドで登る", weight: { num1: 1, low: 1 } },
-      { label: "上体を起こして、小刻みにピッチを上げる", weight: { num2: 1, high: 1 } },
-      { label: "上体を起こして、大きなストライドで登る", weight: { num2: 1, low: 1 } },
-    ]
-  },
-  
   // === 体験型質問 ===
   { id: "action_stand", cat: "balance", type: "action",
     q: "今、立ってみてください",
@@ -1130,35 +1101,6 @@ const QUESTION_POOL = [
   { id: "hobby_share", cat: "mental_team", q: "趣味は", a: "一人で楽しむ派", b: "仲間と楽しむ派", weight: { solo: [1, 0], team: [0, 1] } },
   { id: "decision_make", cat: "mental_team", q: "大事な決断は", a: "自分で決める", b: "誰かに相談してから", weight: { solo: [1, 0], team: [0, 1] } },
   { id: "celebration", cat: "mental_team", q: "うれしいことがあったら", a: "一人で噛みしめる", b: "誰かに報告したい", weight: { solo: [1, 0], team: [0, 1] } },
-  
-  // === 追加4択質問 ===
-  { id: "quad_sprint", cat: "both", type: "quad",
-    q: "全力ダッシュするとき、近いのは？",
-    options: [
-      { label: "前傾でお腹に力を入れて飛び出す", weight: { typeA: 1, num1: 1 } },
-      { label: "前傾で背中を使って飛び出す", weight: { typeB: 1, num1: 1 } },
-      { label: "体を起こしてお腹から蹴り出す", weight: { typeA: 1, num2: 1 } },
-      { label: "体を起こして背中で押し出す", weight: { typeB: 1, num2: 1 } },
-    ]
-  },
-  { id: "quad_lift", cat: "both", type: "quad",
-    q: "重いダンボールを持ち上げるとき、一番近いのは？",
-    options: [
-      { label: "つま先体重で、お腹で持ち上げる", weight: { typeA: 1, num1: 1 } },
-      { label: "つま先体重で、背中で持ち上げる", weight: { typeB: 1, num1: 1 } },
-      { label: "踵体重で、お腹で持ち上げる", weight: { typeA: 1, num2: 1 } },
-      { label: "踵体重で、背中で持ち上げる", weight: { typeB: 1, num2: 1 } },
-    ]
-  },
-  { id: "quad_dance", cat: "both", type: "quad",
-    q: "音楽に合わせて体を動かすとき、近いのは？",
-    options: [
-      { label: "つま先でリズム、みぞおちから動く", weight: { typeA: 1, num1: 1 } },
-      { label: "つま先でリズム、肩甲骨から動く", weight: { typeB: 1, num1: 1 } },
-      { label: "踵でリズム、みぞおちから動く", weight: { typeA: 1, num2: 1 } },
-      { label: "踵でリズム、肩甲骨から動く", weight: { typeB: 1, num2: 1 } },
-    ]
-  },
   
   // === 追加体験型質問 ===
   { id: "action_squat", cat: "balance", type: "action",
@@ -1713,36 +1655,6 @@ export default function App() {
     }, 250);
   };
   
-  // 4択回答用
-  const handleQuadAnswer = (optionIndex) => {
-    // 処理中ならスキップ
-    if (showingAnswer) return;
-    
-    const q = questions[currentIndex];
-    if (!q || !q.options || !q.options[optionIndex]) return;
-    if (answers[q.id] !== undefined) return;
-    
-    setShowingAnswer(true);
-    
-    const selectedOption = q.options[optionIndex];
-    const newAnswers = { ...answers, [q.id]: optionIndex };
-    setAnswers(newAnswers);
-    
-    const newScores = { ...scores };
-    Object.entries(selectedOption.weight).forEach(([key, value]) => {
-      newScores[key] = (newScores[key] || 0) + value;
-    });
-    setScores(newScores);
-    
-    // ステージアップチェック（newScoresを渡す）
-    checkStageUp(Object.keys(newAnswers).length, newScores);
-    
-    setTimeout(() => {
-      setShowingAnswer(false);
-      goToNext(newAnswers, newScores);
-    }, 250);
-  };
-  
   const handleSkip = () => {
     const q = questions[currentIndex];
     const newSkipped = new Set([...skipped, q.id]);
@@ -1764,22 +1676,13 @@ export default function App() {
     const newScores = { typeA: 0, typeB: 0, num1: 0, num2: 0, high: 0, low: 0, open: 0, forward: 0, aggressive: 0, steady: 0, solo: 0, team: 0 };
     Object.entries(newAnswers).forEach(([qId, ans]) => {
       const q = questions.find(q => q.id === qId);
-      if (!q) return;
+      if (!q || !q.weight) return;
       
-      if (q.type === "quad" && typeof ans === "number") {
-        const opt = q.options[ans];
-        if (opt?.weight) {
-          Object.entries(opt.weight).forEach(([key, val]) => {
-            if (newScores[key] !== undefined) newScores[key] += val;
-          });
+      Object.entries(q.weight).forEach(([key, val]) => {
+        if (Array.isArray(val)) {
+          newScores[key] += val[ans === "a" ? 0 : 1];
         }
-      } else if (q.weight) {
-        Object.entries(q.weight).forEach(([key, val]) => {
-          if (Array.isArray(val)) {
-            newScores[key] += val[ans === "a" ? 0 : 1];
-          }
-        });
-      }
+      });
     });
     setScores(newScores);
     
@@ -2331,12 +2234,7 @@ export default function App() {
               <div style={{ display: "flex", flexDirection: "column", gap: 8, maxHeight: 200, overflowY: "auto" }}>
                 {questions.filter(q => answers[q.id] !== undefined).map((q, i) => {
                   const ans = answers[q.id];
-                  let answerText = "";
-                  if (q.type === "quad" && typeof ans === "number") {
-                    answerText = q.options[ans]?.label || "";
-                  } else {
-                    answerText = ans === "a" ? q.a : q.b;
-                  }
+                  const answerText = ans === "a" ? q.a : q.b;
                   return (
                     <div 
                       key={q.id}
@@ -2424,51 +2322,7 @@ export default function App() {
               )}
             </div>
             
-            {/* 4択質問 */}
-            {q.type === "quad" && q.options && (
-              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                {q.options.map((opt, idx) => {
-                  const colors = [C.accent, C.pink, C.cyan, C.orange];
-                  const labels = ["A", "B", "C", "D"];
-                  return (
-                    <button
-                      key={idx}
-                      onClick={() => handleQuadAnswer(idx)}
-                      disabled={showingAnswer}
-                      style={{
-                        width: "100%", padding: "14px 18px", borderRadius: 14,
-                        border: "none", 
-                        background: C.bg,
-                        color: C.text, fontSize: 14, fontWeight: 500, 
-                        cursor: showingAnswer ? "default" : "pointer",
-                        textAlign: "left", transition: "all 0.15s",
-                        opacity: showingAnswer ? 0.6 : 1,
-                        ...neu.raised,
-                      }}
-                    >
-                      <span style={{ color: colors[idx], fontWeight: 700, marginRight: 10 }}>
-                        {labels[idx]}.
-                      </span>
-                      {opt.label}
-                    </button>
-                  );
-                })}
-                <button
-                  onClick={handleSkip}
-                  disabled={showingAnswer}
-                  style={{
-                    width: "100%", padding: "12px", borderRadius: 10, border: "none",
-                    background: "transparent", color: C.textDim, fontSize: 12, 
-                    cursor: showingAnswer ? "default" : "pointer", marginTop: 8
-                  }}
-                >
-                  ピンとこない、スキップ →
-                </button>
-              </div>
-            )}
-            
             {/* テキスト2択（通常・体験型） */}
-            {(q.type === "text" || q.type === "action" || !q.type) && (
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {["a", "b"].map((choice) => (
                 <button
@@ -2505,7 +2359,6 @@ export default function App() {
                 ピンとこない、スキップ →
               </button>
             </div>
-            )}
           </Card>
           
           {/* 結果を見るボタン */}
