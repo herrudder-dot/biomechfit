@@ -2805,7 +2805,7 @@ export default function App() {
                 </div>
               </div>
               <span style={{ background: typeInfo.color, color: "#fff", fontSize: 10, fontWeight: 700, padding: "5px 10px", borderRadius: 20 }}>
-                {type}
+                {typeInfo.name.split("（")[0]}
               </span>
             </div>
             
@@ -3129,7 +3129,7 @@ export default function App() {
                 <p style={{ color: C.text, fontSize: 16, fontWeight: 700, margin: 0 }}>フィッティング計算機</p>
               </div>
               <span style={{ background: `${typeInfo.color}22`, color: typeInfo.color, fontSize: 10, fontWeight: 700, padding: "4px 8px", borderRadius: 12 }}>
-                {type}タイプ
+                {typeInfo.name}
               </span>
             </div>
             
@@ -3297,7 +3297,7 @@ export default function App() {
                 return (
                 <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                   <p style={{ color: C.text, fontSize: 13, fontWeight: 700, margin: 0 }}>
-                    Tip: {type}タイプへの調整アドバイス
+                    Tip: {typeInfo.name}への調整アドバイス
                   </p>
                   
                   {/* サドル高 */}
@@ -3307,7 +3307,7 @@ export default function App() {
                       <span style={{ color: typeInfo.color, fontSize: 14, fontWeight: 800 }}>{adv.saddleAdj}</span>
                     </div>
                     <p style={{ color: C.textMuted, fontSize: 11, margin: 0 }}>
-                      現在 {currentSaddle}mm → {type}タイプは{adv.saddle}がおすすめ
+                      現在 {currentSaddle}mm → {typeInfo.name}は{adv.saddle}がおすすめ
                     </p>
                   </div>
                   
@@ -3335,7 +3335,7 @@ export default function App() {
                       <span style={{ color: typeInfo.color, fontSize: 14, fontWeight: 800 }}>{adv.setbackAdj}</span>
                     </div>
                     <p style={{ color: C.textMuted, fontSize: 11, margin: 0 }}>
-                      {type}タイプは{adv.setback}がおすすめ
+                      {typeInfo.name}は{adv.setback}がおすすめ
                     </p>
                   </div>
                   
@@ -3346,7 +3346,7 @@ export default function App() {
                       <span style={{ color: typeInfo.color, fontSize: 14, fontWeight: 800 }}>{adv.crankAdj}</span>
                     </div>
                     <p style={{ color: C.textMuted, fontSize: 11, margin: 0 }}>
-                      現在 {currentCrank}mm → {type}タイプは{adv.crank}
+                      現在 {currentCrank}mm → {typeInfo.name}は{adv.crank}
                     </p>
                   </div>
                   
@@ -3367,7 +3367,7 @@ export default function App() {
               {!bodyMetrics.currentSaddleHeight && (
                 <div style={{ textAlign: "center", padding: "20px 0" }}>
                   <p style={{ color: C.textMuted, fontSize: 13, margin: 0 }}>
-                    ↑ 現在のサドル高を入力すると<br/>{type}タイプ向けの調整アドバイスを表示
+                    ↑ 現在のサドル高を入力すると<br/>{typeInfo.name}向けの調整アドバイスを表示
                   </p>
                 </div>
               )}
@@ -3670,7 +3670,7 @@ export default function App() {
               {!(bodyMetrics.inseam || (bodyMetrics.height && bodyMetrics.bodyType)) && (
                 <div style={{ textAlign: "center", padding: "20px 0" }}>
                   <p style={{ color: C.textMuted, fontSize: 13, margin: 0 }}>
-                    ↑ 身長と体型タイプを選択すると<br/>{type}タイプに最適なフィッティング数値を計算します
+                    ↑ 身長と体型タイプを選択すると<br/>{typeInfo.name}に最適なフィッティング数値を計算します
                   </p>
                 </div>
               )}
