@@ -2,7 +2,7 @@
  * STANCE CORE - Cycling Body Mechanics Analysis App
  * 
  * APAに基づいた身体タイプ診断アプリ
- * 4つのStance Type（F-I / F-O / R-I / R-O）を判定し、
+ * 8つのStance Type（F/R × I/O × X/II）を判定し、
  * 最適なフィッティングと機材を提案
  * 
  * @version 2.0.0
@@ -73,12 +73,16 @@ const THEMES = {
     accentLight: "#34D399",
     accentDark: "#059669",
     
-    // タイプ別カラー（洗練されたトーン）
+    // タイプ別カラー（8タイプ対応）
     typeColors: {
-      A1: { main: "#F59E0B", gradient: "linear-gradient(135deg, #F59E0B, #D97706)", glow: "rgba(245, 158, 11, 0.15)" },
-      A2: { main: "#10B981", gradient: "linear-gradient(135deg, #10B981, #059669)", glow: "rgba(16, 185, 129, 0.15)" },
-      B1: { main: "#8B5CF6", gradient: "linear-gradient(135deg, #8B5CF6, #7C3AED)", glow: "rgba(139, 92, 246, 0.15)" },
-      B2: { main: "#EC4899", gradient: "linear-gradient(135deg, #EC4899, #DB2777)", glow: "rgba(236, 72, 153, 0.15)" },
+      FIX:  { main: "#F59E0B", gradient: "linear-gradient(135deg, #F59E0B, #D97706)", glow: "rgba(245, 158, 11, 0.15)" },
+      FIII: { main: "#06B6D4", gradient: "linear-gradient(135deg, #06B6D4, #0891B2)", glow: "rgba(6, 182, 212, 0.15)" },
+      FOX:  { main: "#EF4444", gradient: "linear-gradient(135deg, #EF4444, #DC2626)", glow: "rgba(239, 68, 68, 0.15)" },
+      FOII: { main: "#10B981", gradient: "linear-gradient(135deg, #10B981, #059669)", glow: "rgba(16, 185, 129, 0.15)" },
+      RIX:  { main: "#8B5CF6", gradient: "linear-gradient(135deg, #8B5CF6, #7C3AED)", glow: "rgba(139, 92, 246, 0.15)" },
+      RIII: { main: "#6366F1", gradient: "linear-gradient(135deg, #6366F1, #4F46E5)", glow: "rgba(99, 102, 241, 0.15)" },
+      ROX:  { main: "#EC4899", gradient: "linear-gradient(135deg, #EC4899, #DB2777)", glow: "rgba(236, 72, 153, 0.15)" },
+      ROII: { main: "#64748B", gradient: "linear-gradient(135deg, #64748B, #475569)", glow: "rgba(100, 116, 139, 0.15)" },
     },
     
     // セマンティック
@@ -120,10 +124,14 @@ const THEMES = {
     accentDark: "#059669",
     
     typeColors: {
-      A1: { main: "#F59E0B", gradient: "linear-gradient(135deg, #F59E0B, #D97706)", glow: "rgba(245, 158, 11, 0.3)" },
-      A2: { main: "#10B981", gradient: "linear-gradient(135deg, #10B981, #059669)", glow: "rgba(16, 185, 129, 0.3)" },
-      B1: { main: "#8B5CF6", gradient: "linear-gradient(135deg, #8B5CF6, #7C3AED)", glow: "rgba(139, 92, 246, 0.3)" },
-      B2: { main: "#EC4899", gradient: "linear-gradient(135deg, #EC4899, #DB2777)", glow: "rgba(236, 72, 153, 0.3)" },
+      FIX:  { main: "#F59E0B", gradient: "linear-gradient(135deg, #F59E0B, #D97706)", glow: "rgba(245, 158, 11, 0.3)" },
+      FIII: { main: "#06B6D4", gradient: "linear-gradient(135deg, #06B6D4, #0891B2)", glow: "rgba(6, 182, 212, 0.3)" },
+      FOX:  { main: "#EF4444", gradient: "linear-gradient(135deg, #EF4444, #DC2626)", glow: "rgba(239, 68, 68, 0.3)" },
+      FOII: { main: "#10B981", gradient: "linear-gradient(135deg, #10B981, #059669)", glow: "rgba(16, 185, 129, 0.3)" },
+      RIX:  { main: "#8B5CF6", gradient: "linear-gradient(135deg, #8B5CF6, #7C3AED)", glow: "rgba(139, 92, 246, 0.3)" },
+      RIII: { main: "#6366F1", gradient: "linear-gradient(135deg, #6366F1, #4F46E5)", glow: "rgba(99, 102, 241, 0.3)" },
+      ROX:  { main: "#EC4899", gradient: "linear-gradient(135deg, #EC4899, #DB2777)", glow: "rgba(236, 72, 153, 0.3)" },
+      ROII: { main: "#64748B", gradient: "linear-gradient(135deg, #64748B, #475569)", glow: "rgba(100, 116, 139, 0.3)" },
     },
     
     pink: "#EC4899",
@@ -1128,24 +1136,33 @@ const ACCURACY_LEVELS = [
 
 // タイプ定義（サイクリング用）
 // ============================================
-// 内部キー → 表示名 対応表:
-//   A1 = F-I (Front-Inner)  前体幹 × 内側荷重 → クロス
-//   A2 = F-O (Front-Outer)  前体幹 × 外側荷重 → パラレル
-//   B1 = R-I (Rear-Inner)   後体幹 × 内側荷重 → パラレル
-//   B2 = R-O (Rear-Outer)   後体幹 × 外側荷重 → クロス
+// 8タイプ構成（3軸独立）:
+//   体幹: F (Front/前) / R (Rear/後)
+//   荷重: I (Inner/内) / O (Outer/外)
+//   連動: X (Cross/クロス) / II (Parallel/パラレル)
+// 
+// 内部キー → 表示名:
+//   FIX  = F-I-X   前体幹 × 内側荷重 × クロス
+//   FIII = F-I-II  前体幹 × 内側荷重 × パラレル
+//   FOX  = F-O-X   前体幹 × 外側荷重 × クロス
+//   FOII = F-O-II  前体幹 × 外側荷重 × パラレル
+//   RIX  = R-I-X   後体幹 × 内側荷重 × クロス
+//   RIII = R-I-II  後体幹 × 内側荷重 × パラレル
+//   ROX  = R-O-X   後体幹 × 外側荷重 × クロス
+//   ROII = R-O-II  後体幹 × 外側荷重 × パラレル
 // ============================================
 const TYPE_INFO_CYCLING = {
-  A1: {
-    name: "F-I（Front-Inner）",
-    sub: "前体幹 × 内側荷重",
+  FIX: {
+    name: "F-I-X",
+    sub: "前体幹 × 内側 × クロス",
     icon: "zap",
     color: "#f59e0b",
     gradient: "linear-gradient(135deg, #f59e0b, #ea580c)",
-    traits: ["捻りながら前に踏み込む", "みぞおちと股関節がエンジン", "つま先でリズムを取る"],
-    description: "身体を捻じりながら前方向にパワーを出すタイプ。高回転でスパッと加速。",
-    strengths: ["スプリント", "アタック", "短い登り"],
-    weaknesses: ["長時間の一定ペース", "向かい風"],
-    radarData: [95, 45, 60, 55, 50],
+    traits: ["捻りながら内側で踏む", "みぞおち主導で対角連動", "ダンシングでバイクを振る"],
+    description: "身体を捻じりながら内側で踏み込むタイプ。瞬発力とキレのある加速が武器。",
+    strengths: ["スプリント", "アタック", "ダンシング"],
+    weaknesses: ["長時間の一定ペース"],
+    radarData: [95, 50, 60, 55, 50],
     bodyMechanics: {
       trunk: { type: "Fタイプ（前体幹）", description: "みぞおち・股関節主導", detail: "身体を「折る」ように使うのが得意。" },
       movement: { 
@@ -1153,158 +1170,331 @@ const TYPE_INFO_CYCLING = {
         description: "捻じりの動きが自然", 
         detail: "右腕と左脚、左腕と右脚が連動する。",
         感覚: [
-          "ペダリング中、踏み込みで腰が自然と少し回る",
+          "ペダリング中、踏み込みで腰が自然と回る",
           "ダンシングではバイクを左右に振る方が力が入る",
-          "コーナーでは内側の肩を落として曲がると安定",
-          "階段を駆け上がるとき、自然と身体が捻れる"
+          "コーナーでは内側の肩を落として曲がる"
         ],
         荷重バランス: {
-          ペダル: "母指球中心、内側で踏む感覚",
-          ハンドル: "下ハンドルで引きつけると力が伝わる",
-          サドル: "座面の前側、ノーズ寄りに座る"
+          ペダル: "母指球中心、内側で踏む",
+          ハンドル: "下ハンで引きつける",
+          サドル: "前寄りに座る"
         }
       },
-      balance: { type: "内側荷重（Inner）", description: "母指球・内側で踏む", detail: "膝がまっすぐ〜やや内向き。内転筋を使いやすい。" }
+      balance: { type: "内側荷重（Inner）", description: "母指球・内側で踏む", detail: "膝がまっすぐ〜やや内向き。" }
     },
-    // フィッティング詳細
     fitting: {
       saddle: {
         height: { formula: "股下 × 0.875〜0.885", detail: "やや高めで股関節を使いやすく" },
-        setback: { position: "前寄り（0〜-10mm）", detail: "膝がペダル軸より前に出るセッティング" },
-        tilt: { angle: "水平〜やや前下がり", detail: "骨盤を前傾させやすくする" },
+        setback: { position: "前寄り（0〜-10mm）", detail: "前乗りセッティング" },
+        tilt: { angle: "水平〜やや前下がり", detail: "骨盤前傾を促す" },
       },
       handlebar: {
-        drop: { range: "大きめ（-40〜-60mm）", detail: "深い前傾で空気抵抗を減らす" },
-        reach: { range: "やや長め", detail: "前乗りポジションに合わせる" },
-        width: { guide: "肩幅と同じ〜やや狭め", detail: "エアロ効果を高める" },
+        drop: { range: "大きめ（-40〜-60mm）", detail: "深い前傾" },
+        reach: { range: "やや長め", detail: "前乗りに合わせる" },
+        width: { guide: "肩幅〜やや狭め", detail: "エアロ効果" },
       },
       cleat: {
-        position: { fore_aft: "深め（前寄り）", detail: "母指球より後ろにクリート" },
-        angle: { rotation: "浅め（つま先まっすぐ〜やや内向き）", detail: "内股気味でOK" },
-        float: { degree: "少なめ（0〜4.5°）", detail: "ダイレクトなパワー伝達" },
-        qFactor: { guide: "狭め（146〜150mm）", detail: "膝がまっすぐ上下する位置" },
+        position: { fore_aft: "深め（前寄り）", detail: "母指球より後ろ" },
+        angle: { rotation: "浅め（つま先まっすぐ）", detail: "内股気味OK" },
+        float: { degree: "少なめ（0〜4.5°）", detail: "ダイレクト感" },
+        qFactor: { guide: "狭め（146〜150mm）", detail: "膝まっすぐ" },
       },
-      crank: {
-        length: { guide: "股下 × 0.20〜0.205", detail: "やや短めで高回転向き" },
-      },
+      crank: { length: { guide: "股下 × 0.20〜0.205", detail: "短めで高回転" } },
     },
     selfCheck: [
-      { name: "股関節屈曲テスト", method: "仰向けで膝を胸に引き寄せる", good: "楽に120°以上曲がる", action: "深い前傾OK" },
-      { name: "つま先立ちバランス", method: "目を閉じてつま先立ち10秒", good: "安定している", action: "前重心確定" },
+      { name: "股関節屈曲", method: "仰向けで膝を胸に", good: "120°以上", action: "深い前傾OK" },
     ],
-    shoes: {
-      type: { name: "カーボン高剛性フレーム + エアロロード", reason: "瞬発的なパワー伝達に最適" },
-      drop: { name: "サドル高め / 前乗りセッティング", reason: "ダンシングで踏みやすい" },
-      cushion: { name: "50mm〜ディープリム", reason: "加速後の巡航速度維持に有利" },
-      examples: ["Specialized S-Works Tarmac", "Cervélo S5", "Giant Propel"]
-    },
     products: [
-      { name: "Specialized Tarmac SL8", price: "550,000〜", reason: "高剛性カーボン。スプリントでのパワー伝達が最強。", amazonQuery: "Specialized+Tarmac", rakutenQuery: "Specialized%20Tarmac", image: "" },
-      { name: "Zipp 404 Firecrest", price: "280,000", reason: "58mmディープリム。エアロ性能と加速のバランス◎", amazonQuery: "Zipp+404+Firecrest", rakutenQuery: "Zipp%20404%20Firecrest", image: "" },
-      { name: "Shimano Dura-Ace ペダル", price: "32,000", reason: "軽量×高剛性。ダンシングでのパワー伝達に。", amazonQuery: "Shimano+Dura-Ace+PD-R9100", rakutenQuery: "Shimano%20Dura-Ace%20ペダル", image: "" },
+      { name: "Specialized Tarmac SL8", price: "550,000〜", reason: "高剛性。スプリント向き。", amazonQuery: "Specialized+Tarmac", rakutenQuery: "Specialized%20Tarmac", image: "" },
     ],
     form: {
-      landing: { title: "ペダリング", type: "高回転型（90rpm+）", detail: "軽いギアでクルクル回す。踏み込みより回転重視。" },
-      posture: { title: "ポジション", type: "やや前乗り", detail: "サドル前方に座り、ハンドルに体重をかけやすく。" },
-      armSwing: { title: "ダンシング", type: "積極的に使う", detail: "30秒〜1分ごとにダンシングを入れてパワーを出す。" },
-      cadence: { title: "ケイデンス", type: "80-95rpm", detail: "高回転を維持して脚を温存。" }
+      landing: { title: "ペダリング", type: "高回転型（90rpm+）", detail: "軽いギアで回す" },
+      posture: { title: "ポジション", type: "前乗り", detail: "サドル前方" },
+      armSwing: { title: "ダンシング", type: "積極的", detail: "バイクを振る" },
+      cadence: { title: "ケイデンス", type: "85-100rpm", detail: "高回転維持" }
     },
     guide: {
-      fiveK: { title: "ヒルクライムの走り方", tips: ["序盤は抑えめ、後半ビルドアップ", "ダンシングを積極的に", "勾配キツい区間でアタック"], avoid: "序盤から飛ばしすぎない。" },
-      half: { title: "ロングライドの走り方", tips: ["平坦はドラフティング活用", "定期的にダンシングでほぐす", "補給は早めに"], avoid: "前半で脚を使い切らない。" },
-      full: { title: "レースでの走り方", tips: ["勝負所まで脚を温存", "ラスト1kmでスプリント", "逃げには乗らない"], avoid: "長い逃げは不利。" },
-      training: { title: "おすすめトレーニング", tips: ["インターバル", "スプリント練習", "坂道ダッシュ"], avoid: "LSDばかりだと鈍る。" }
+      fiveK: { title: "ヒルクライム", tips: ["後半ビルドアップ", "ダンシング活用"], avoid: "序盤飛ばしすぎ" },
+      training: { title: "トレーニング", tips: ["インターバル", "スプリント"], avoid: "LSDのみ" }
     }
   },
-  A2: {
-    name: "F-O（Front-Outer）",
-    sub: "前体幹 × 外側荷重",
+  
+  FIII: {
+    name: "F-I-II",
+    sub: "前体幹 × 内側 × パラレル",
+    icon: "activity",
+    color: "#06b6d4",
+    gradient: "linear-gradient(135deg, #06b6d4, #0891b2)",
+    traits: ["安定して内側で踏む", "みぞおち主導で同側連動", "効率的なペダリング"],
+    description: "前体幹を使いながら内側で安定して踏む。効率重視のスムーズな走り。",
+    strengths: ["ペダリング効率", "平地巡航", "TTポジション"],
+    weaknesses: ["急なダンシング", "テクニカルコース"],
+    radarData: [60, 70, 95, 65, 75],
+    bodyMechanics: {
+      trunk: { type: "Fタイプ（前体幹）", description: "みぞおち・股関節主導", detail: "身体を「折る」ように使う。" },
+      movement: { 
+        type: "パラレル（同側連動）", 
+        description: "平行の動きが自然", 
+        detail: "上半身固定で脚を回す。",
+        感覚: [
+          "ペダリング中、腰は固定して脚だけ回す",
+          "ダンシングではバイクをまっすぐ保つ",
+          "コーナーではバイクと一体で傾く"
+        ],
+        荷重バランス: {
+          ペダル: "母指球中心、まっすぐ踏む",
+          ハンドル: "ブラケットで安定",
+          サドル: "前寄り〜中央"
+        }
+      },
+      balance: { type: "内側荷重（Inner）", description: "母指球・内側で踏む", detail: "膝がまっすぐ。" }
+    },
+    fitting: {
+      saddle: {
+        height: { formula: "股下 × 0.875〜0.885", detail: "やや高め" },
+        setback: { position: "前寄り〜中央（-5〜+5mm）", detail: "効率重視" },
+        tilt: { angle: "水平", detail: "安定性重視" },
+      },
+      handlebar: {
+        drop: { range: "中程度（-30〜-50mm）", detail: "効率と快適性" },
+        reach: { range: "標準〜やや長め", detail: "前乗り気味" },
+        width: { guide: "肩幅", detail: "自然な幅" },
+      },
+      cleat: {
+        position: { fore_aft: "標準〜深め", detail: "母指球下" },
+        angle: { rotation: "浅め", detail: "まっすぐ" },
+        float: { degree: "標準（4.5°）", detail: "適度な自由度" },
+        qFactor: { guide: "狭め（146〜150mm）", detail: "内側荷重に合わせる" },
+      },
+      crank: { length: { guide: "股下 × 0.20〜0.205", detail: "標準〜短め" } },
+    },
+    selfCheck: [
+      { name: "片足ペダリング", method: "30秒スムーズに", good: "カクつかない", action: "効率型" },
+    ],
+    products: [
+      { name: "Canyon Aeroad", price: "450,000〜", reason: "エアロ効率。TT向き。", amazonQuery: "Canyon+Aeroad", rakutenQuery: "Canyon%20Aeroad", image: "" },
+    ],
+    form: {
+      landing: { title: "ペダリング", type: "効率型（85-95rpm）", detail: "円運動を意識" },
+      posture: { title: "ポジション", type: "前乗り", detail: "エアロ姿勢" },
+      armSwing: { title: "ダンシング", type: "控えめ", detail: "シッティング中心" },
+      cadence: { title: "ケイデンス", type: "85-95rpm", detail: "一定リズム" }
+    },
+    guide: {
+      fiveK: { title: "ヒルクライム", tips: ["シッティング中心", "一定ペース"], avoid: "無駄なダンシング" },
+      training: { title: "トレーニング", tips: ["ペダリングドリル", "テンポ走"], avoid: "フォーム崩す追い込み" }
+    }
+  },
+  
+  FOX: {
+    name: "F-O-X",
+    sub: "前体幹 × 外側 × クロス",
+    icon: "flame",
+    color: "#ef4444",
+    gradient: "linear-gradient(135deg, #ef4444, #dc2626)",
+    traits: ["捻りながら外側で踏む", "みぞおち主導で対角連動", "パワフルなダンシング"],
+    description: "前体幹と外側荷重でパワーを出しながら、クロス連動でダイナミックに走る。",
+    strengths: ["パワー系クライム", "アタック", "独走"],
+    weaknesses: ["集団走行", "一定ペース維持"],
+    radarData: [85, 75, 55, 70, 55],
+    bodyMechanics: {
+      trunk: { type: "Fタイプ（前体幹）", description: "みぞおち・股関節主導", detail: "身体を「折る」ように使う。" },
+      movement: { 
+        type: "クロス（対角連動）", 
+        description: "捻じりの動きが自然", 
+        detail: "対角で連動、ダイナミック。",
+        感覚: [
+          "ペダリング中、腰が左右に動く",
+          "ダンシングでバイクを大きく振る",
+          "コーナーで肩を入れる"
+        ],
+        荷重バランス: {
+          ペダル: "足裏全体〜外側",
+          ハンドル: "下ハンで引く",
+          サドル: "前寄り"
+        }
+      },
+      balance: { type: "外側荷重（Outer）", description: "足裏全体・外側", detail: "膝やや外向き。" }
+    },
+    fitting: {
+      saddle: {
+        height: { formula: "股下 × 0.870〜0.880", detail: "標準〜やや低め" },
+        setback: { position: "前寄り〜中央（-5〜+5mm）", detail: "パワー重視" },
+        tilt: { angle: "水平", detail: "安定性" },
+      },
+      handlebar: {
+        drop: { range: "中〜大（-35〜-55mm）", detail: "攻撃的ポジション" },
+        reach: { range: "やや長め", detail: "前乗り" },
+        width: { guide: "肩幅〜やや広め", detail: "パワー伝達" },
+      },
+      cleat: {
+        position: { fore_aft: "標準〜深め", detail: "パワー重視" },
+        angle: { rotation: "深め（外向き）", detail: "ガニ股OK" },
+        float: { degree: "多め（6°）", detail: "膝の自由度" },
+        qFactor: { guide: "広め（150〜156mm）", detail: "外側荷重に対応" },
+      },
+      crank: { length: { guide: "股下 × 0.205〜0.21", detail: "標準〜やや長め" } },
+    },
+    selfCheck: [
+      { name: "ダンシングテスト", method: "1分全力", good: "バイク振れる", action: "クロス型確定" },
+    ],
+    products: [
+      { name: "Pinarello Dogma F", price: "800,000〜", reason: "剛性とエアロ。アタック向き。", amazonQuery: "Pinarello+Dogma", rakutenQuery: "Pinarello%20Dogma", image: "" },
+    ],
+    form: {
+      landing: { title: "ペダリング", type: "トルク型（75-90rpm）", detail: "力強く踏む" },
+      posture: { title: "ポジション", type: "前乗り", detail: "攻撃的姿勢" },
+      armSwing: { title: "ダンシング", type: "積極的", detail: "大きく振る" },
+      cadence: { title: "ケイデンス", type: "75-90rpm", detail: "トルク重視" }
+    },
+    guide: {
+      fiveK: { title: "ヒルクライム", tips: ["ダンシングでアタック", "独走で逃げる"], avoid: "集団待機" },
+      training: { title: "トレーニング", tips: ["SFR", "坂道ダンシング"], avoid: "軽すぎるギア" }
+    }
+  },
+  
+  FOII: {
+    name: "F-O-II",
+    sub: "前体幹 × 外側 × パラレル",
     icon: "mountain",
     color: "#10b981",
     gradient: "linear-gradient(135deg, #10b981, #059669)",
-    traits: ["前体幹で外側荷重", "みぞおしと股関節がエンジン", "足裏全体で安定"],
-    description: "前体幹を使いながら外側で安定するタイプ。粘り強く登れる。",
-    strengths: ["ロングライド", "ヒルクライム", "一定ペース維持"],
-    weaknesses: ["急加速", "スプリント勝負"],
+    traits: ["安定して外側で踏む", "みぞおち主導で同側連動", "粘り強いクライム"],
+    description: "前体幹を使いながら外側で安定。パラレル連動で効率よく登る。",
+    strengths: ["ヒルクライム", "ロングライド", "一定ペース"],
+    weaknesses: ["スプリント", "急加速"],
     radarData: [50, 95, 70, 65, 85],
     bodyMechanics: {
       trunk: { type: "Fタイプ（前体幹）", description: "みぞおち・股関節主導", detail: "身体を「折る」ように使う。" },
       movement: { 
         type: "パラレル（同側連動）", 
         description: "平行の動きが自然", 
-        detail: "同じ側の腕と脚が連動する。",
+        detail: "腰を固定して脚を回す。",
         感覚: [
-          "ペダリング中、腰は固定して脚だけ回す感覚",
-          "ダンシングではバイクをまっすぐ保つ方が安定",
-          "コーナーではバイクと一体で傾く方が曲がりやすい",
-          "階段を駆け上がるとき、身体はまっすぐのまま"
+          "ペダリング中、腰は固定",
+          "ダンシングではバイクをまっすぐ",
+          "コーナーでバイクと一体で傾く"
         ],
         荷重バランス: {
-          ペダル: "足裏全体〜外側、小指球側も使う",
-          ハンドル: "ブラケット握りで押す感覚が合う",
-          サドル: "座面全体を使って安定させる"
+          ペダル: "足裏全体で安定",
+          ハンドル: "ブラケットで押す",
+          サドル: "座面全体を使う"
         }
       },
-      balance: { type: "外側荷重（Outer）", description: "小指球・外側も使う", detail: "膝がやや外向き。外側広筋を使いやすい。" }
+      balance: { type: "外側荷重（Outer）", description: "足裏全体・外側", detail: "膝やや外向き。" }
     },
-    // フィッティング詳細
     fitting: {
       saddle: {
-        height: { formula: "股下 × 0.870〜0.880", detail: "標準〜やや低めで踏み込みやすく" },
-        setback: { position: "後ろ寄り（+10〜+20mm）", detail: "膝がペダル軸より後ろ、トルク重視" },
-        tilt: { angle: "水平〜やや後ろ上がり", detail: "骨盤を安定させる" },
+        height: { formula: "股下 × 0.870〜0.880", detail: "標準〜やや低め" },
+        setback: { position: "後ろ寄り（+10〜+20mm）", detail: "トルク重視" },
+        tilt: { angle: "水平〜やや後ろ上がり", detail: "安定性" },
       },
       handlebar: {
-        drop: { range: "控えめ（-20〜-40mm）", detail: "上体を起こして呼吸しやすく" },
-        reach: { range: "標準〜やや短め", detail: "後ろ乗りとのバランス" },
-        width: { guide: "肩幅と同じ〜やや広め", detail: "安定感を重視" },
+        drop: { range: "控えめ（-20〜-40mm）", detail: "上体起こす" },
+        reach: { range: "標準〜やや短め", detail: "後ろ乗りバランス" },
+        width: { guide: "肩幅〜やや広め", detail: "安定感" },
       },
       cleat: {
-        position: { fore_aft: "浅め（後ろ寄り）", detail: "母指球の真下〜やや前にクリート" },
-        angle: { rotation: "深め（つま先外向き）", detail: "ガニ股気味でOK" },
-        float: { degree: "多め（6°）", detail: "長時間のペダリングで膝を守る" },
-        qFactor: { guide: "広め（150〜156mm）", detail: "膝が外に開く軌道を確保" },
+        position: { fore_aft: "浅め（後ろ寄り）", detail: "踏み込み重視" },
+        angle: { rotation: "深め（外向き）", detail: "ガニ股OK" },
+        float: { degree: "多め（6°）", detail: "長時間の快適性" },
+        qFactor: { guide: "広め（150〜156mm）", detail: "外側荷重に対応" },
       },
-      crank: {
-        length: { guide: "股下 × 0.205〜0.215", detail: "やや長めでトルクをかけやすく" },
-      },
+      crank: { length: { guide: "股下 × 0.205〜0.215", detail: "やや長めでトルク" } },
     },
     selfCheck: [
-      { name: "踵立ちバランス", method: "目を閉じて踵立ち10秒", good: "安定している", action: "後重心確定" },
-      { name: "ハムストリング柔軟性", method: "立位体前屈", good: "指先が床につく", action: "深い前傾も可能" },
+      { name: "踵立ちバランス", method: "10秒", good: "安定", action: "後重心確定" },
     ],
-    shoes: {
-      type: { name: "軽量クライミングフレーム", reason: "登りでの軽さを重視" },
-      drop: { name: "サドルやや後ろ / 標準セッティング", reason: "トルクをかけやすい" },
-      cushion: { name: "30-40mmミドルハイト", reason: "軽さと空力のバランス" },
-      examples: ["Trek Émonda", "Specialized Aethos", "Scott Addict RC"]
-    },
     products: [
-      { name: "Trek Émonda SLR", price: "650,000〜", reason: "超軽量フレーム。ヒルクライムに最適。", amazonQuery: "Trek+Emonda", rakutenQuery: "Trek%20Emonda", image: "" },
-      { name: "Roval Alpinist CLX", price: "380,000", reason: "1,250g超軽量ホイール。登りで圧倒的優位。", amazonQuery: "Roval+Alpinist+CLX", rakutenQuery: "Roval%20Alpinist", image: "" },
-      { name: "fi'zi:k Antares サドル", price: "28,000", reason: "後ろ乗りに最適な形状。長時間でも快適。", amazonQuery: "fizik+Antares", rakutenQuery: "fizik%20Antares", image: "" },
+      { name: "Trek Émonda SLR", price: "650,000〜", reason: "軽量。ヒルクライム向き。", amazonQuery: "Trek+Emonda", rakutenQuery: "Trek%20Emonda", image: "" },
     ],
     form: {
-      landing: { title: "ペダリング", type: "トルク型（70-85rpm）", detail: "重いギアでグイグイ踏む。" },
-      posture: { title: "ポジション", type: "やや後ろ乗り", detail: "サドル後方でしっかり踏み込む。" },
-      armSwing: { title: "ダンシング", type: "控えめに", detail: "シッティング中心で体力温存。" },
-      cadence: { title: "ケイデンス", type: "70-80rpm", detail: "低めでトルクをかける。" }
+      landing: { title: "ペダリング", type: "トルク型（70-85rpm）", detail: "重めギアでグイグイ" },
+      posture: { title: "ポジション", type: "やや後ろ乗り", detail: "トルク重視" },
+      armSwing: { title: "ダンシング", type: "控えめ", detail: "シッティング中心" },
+      cadence: { title: "ケイデンス", type: "70-85rpm", detail: "低めでトルク" }
     },
     guide: {
-      fiveK: { title: "ヒルクライムの走り方", tips: ["最初から自分のペース", "重めギアでトルク", "シッティング中心"], avoid: "周りに惑わされない。" },
-      half: { title: "ロングライドの走り方", tips: ["イーブンペース維持", "向かい風では先頭を引く"], avoid: "速い人についていきすぎない。" },
-      full: { title: "レースでの走り方", tips: ["長い登りで勝負", "早めに仕掛けて独走"], avoid: "ゴール前スプリントは不利。" },
-      training: { title: "おすすめトレーニング", tips: ["LSD", "峠走", "ペース走"], avoid: "スピード練習も忘れずに。" }
+      fiveK: { title: "ヒルクライム", tips: ["自分のペース維持", "シッティング中心"], avoid: "周りに惑わされない" },
+      training: { title: "トレーニング", tips: ["LSD", "峠走"], avoid: "スピード練も忘れず" }
     }
   },
-  B1: {
-    name: "R-I（Rear-Inner）",
-    sub: "後体幹 × 内側荷重",
+  
+  RIX: {
+    name: "R-I-X",
+    sub: "後体幹 × 内側 × クロス",
+    icon: "shuffle",
+    color: "#8b5cf6",
+    gradient: "linear-gradient(135deg, #8b5cf6, #7c3aed)",
+    traits: ["捻りながら内側で踏む", "肩甲骨・腰主導で対角連動", "リズミカルな走り"],
+    description: "後体幹で身体を一体に使いながら、クロス連動でリズムよく走る。",
+    strengths: ["リズム感", "テクニカルコース", "変化への対応"],
+    weaknesses: ["単調な平地", "TTポジション"],
+    radarData: [70, 60, 70, 85, 70],
+    bodyMechanics: {
+      trunk: { type: "Rタイプ（後体幹）", description: "首・肩甲骨・腰主導", detail: "身体を「一体」で使う。" },
+      movement: { 
+        type: "クロス（対角連動）", 
+        description: "捻じりの動きが自然", 
+        detail: "対角線の連動が得意。",
+        感覚: [
+          "ペダリング中、自然と腰が動く",
+          "ダンシングでバイクを振る",
+          "歩くとき腕振りが大きい"
+        ],
+        荷重バランス: {
+          ペダル: "母指球中心",
+          ハンドル: "下ハンも使える",
+          サドル: "中央〜後ろ"
+        }
+      },
+      balance: { type: "内側荷重（Inner）", description: "母指球・内側", detail: "膝まっすぐ。" }
+    },
+    fitting: {
+      saddle: {
+        height: { formula: "股下 × 0.870〜0.880", detail: "標準" },
+        setback: { position: "中央（0〜+10mm）", detail: "バランス重視" },
+        tilt: { angle: "水平", detail: "安定性" },
+      },
+      handlebar: {
+        drop: { range: "中程度（-25〜-45mm）", detail: "バランス" },
+        reach: { range: "標準", detail: "自然な位置" },
+        width: { guide: "肩幅", detail: "自然な幅" },
+      },
+      cleat: {
+        position: { fore_aft: "標準", detail: "母指球下" },
+        angle: { rotation: "浅め", detail: "まっすぐ" },
+        float: { degree: "標準（4.5°）", detail: "適度な自由度" },
+        qFactor: { guide: "狭め（146〜150mm）", detail: "内側荷重" },
+      },
+      crank: { length: { guide: "股下 × 0.205", detail: "標準" } },
+    },
+    selfCheck: [
+      { name: "腰回旋", method: "座って左右に捻る", good: "スムーズ", action: "クロス型" },
+    ],
+    products: [
+      { name: "Cervélo R5", price: "550,000〜", reason: "バランス型。オールラウンド。", amazonQuery: "Cervelo+R5", rakutenQuery: "Cervelo%20R5", image: "" },
+    ],
+    form: {
+      landing: { title: "ペダリング", type: "リズム型（80-95rpm）", detail: "リズムよく回す" },
+      posture: { title: "ポジション", type: "ニュートラル", detail: "状況に応じて" },
+      armSwing: { title: "ダンシング", type: "適度に", detail: "リズムに合わせて" },
+      cadence: { title: "ケイデンス", type: "80-95rpm", detail: "リズム重視" }
+    },
+    guide: {
+      fiveK: { title: "ヒルクライム", tips: ["リズムを崩さない", "ダンシング活用"], avoid: "単調になりすぎ" },
+      training: { title: "トレーニング", tips: ["変化のあるコース", "テンポ走"], avoid: "同じ練習ばかり" }
+    }
+  },
+  
+  RIII: {
+    name: "R-I-II",
+    sub: "後体幹 × 内側 × パラレル",
     icon: "wave",
     color: "#6366f1",
     gradient: "linear-gradient(135deg, #6366f1, #4f46e5)",
-    traits: ["後体幹で内側荷重", "首・肩甲骨・腰が連動", "内側で安定して進む"],
-    description: "身体全体を一体で使い、流れるように前へ進むタイプ。効率的。",
+    traits: ["安定して内側で踏む", "肩甲骨・腰主導で同側連動", "効率的で滑らか"],
+    description: "身体全体を一体で使い、流れるように前へ進む。効率的。",
     strengths: ["ペダリング効率", "平地巡航", "集団走行"],
     weaknesses: ["ダンシング", "急な地形変化"],
     radarData: [55, 70, 95, 75, 70],
@@ -1313,79 +1503,66 @@ const TYPE_INFO_CYCLING = {
       movement: { 
         type: "パラレル（同側連動）", 
         description: "平行の動きが自然", 
-        detail: "捻じらず安定したフォーム。",
+        detail: "捻じらず安定。",
         感覚: [
-          "ペダリング中、上半身は固定して脚だけ動かす",
-          "ダンシングではバイクを立てたまま真上に立つ",
-          "コーナーではバイクと身体が一体で傾く",
-          "走るとき腕振りは控えめ、身体の軸がブレない"
+          "ペダリング中、上半身固定",
+          "ダンシングではバイク立てたまま",
+          "腕振り控えめ"
         ],
         荷重バランス: {
-          ペダル: "母指球中心、まっすぐ踏み下ろす",
-          ハンドル: "ブラケットに手を添える感覚",
-          サドル: "座面中央にどっしり座る"
+          ペダル: "母指球中心、まっすぐ",
+          ハンドル: "ブラケットに添える",
+          サドル: "中央にどっしり"
         }
       },
-      balance: { type: "内側荷重（Inner）", description: "母指球・内側で踏む", detail: "膝がまっすぐ〜やや内向き。内転筋を使いやすい。" }
+      balance: { type: "内側荷重（Inner）", description: "母指球・内側", detail: "膝まっすぐ。" }
     },
-    // フィッティング詳細
     fitting: {
       saddle: {
-        height: { formula: "股下 × 0.875〜0.885", detail: "効率重視のやや高めセッティング" },
-        setback: { position: "ニュートラル（0mm前後）", detail: "膝がペダル軸の真上" },
-        tilt: { angle: "完全水平", detail: "骨盤の安定を最優先" },
+        height: { formula: "股下 × 0.875〜0.885", detail: "やや高めで効率" },
+        setback: { position: "ニュートラル（0mm前後）", detail: "膝がペダル軸真上" },
+        tilt: { angle: "完全水平", detail: "骨盤安定" },
       },
       handlebar: {
-        drop: { range: "中程度（-30〜-50mm）", detail: "効率と快適性のバランス" },
-        reach: { range: "標準", detail: "自然な肘の曲がりを維持" },
-        width: { guide: "肩幅と同じ", detail: "自然な姿勢を維持" },
+        drop: { range: "中程度（-30〜-50mm）", detail: "効率と快適性" },
+        reach: { range: "標準", detail: "自然な肘曲がり" },
+        width: { guide: "肩幅", detail: "自然な姿勢" },
       },
       cleat: {
-        position: { fore_aft: "標準（母指球の真下）", detail: "バランスの取れた位置" },
-        angle: { rotation: "浅め（つま先まっすぐ）", detail: "膝がまっすぐ上下する" },
-        float: { degree: "標準（4.5°）", detail: "適度な自由度" },
-        qFactor: { guide: "狭め（146〜150mm）", detail: "内側荷重に合わせた幅" },
+        position: { fore_aft: "標準", detail: "バランス" },
+        angle: { rotation: "浅め", detail: "まっすぐ" },
+        float: { degree: "標準（4.5°）", detail: "適度" },
+        qFactor: { guide: "狭め（146〜150mm）", detail: "内側荷重" },
       },
-      crank: {
-        length: { guide: "股下 × 0.205", detail: "標準的な長さで効率重視" },
-      },
+      crank: { length: { guide: "股下 × 0.205", detail: "標準で効率" } },
     },
     selfCheck: [
-      { name: "片足立ちバランス", method: "目を閉じて30秒片足立ち", good: "ほぼ動かない", action: "体幹が安定している" },
-      { name: "スムーズペダリング", method: "片足ペダリング30秒", good: "カクつかない", action: "効率型確定" },
+      { name: "片足立ち", method: "30秒", good: "ほぼ動かない", action: "体幹安定" },
+      { name: "スムーズペダリング", method: "片足30秒", good: "カクつかない", action: "効率型" },
     ],
-    shoes: {
-      type: { name: "オールラウンドフレーム", reason: "効率的なペダリングを活かす" },
-      drop: { name: "標準セッティング", reason: "バランス重視" },
-      cushion: { name: "40-50mmミドルディープ", reason: "巡航効率を最大化" },
-      examples: ["Canyon Ultimate", "Cannondale SuperSix", "BMC Teammachine"]
-    },
     products: [
-      { name: "Canyon Ultimate CF SLX", price: "450,000〜", reason: "コスパ最強のオールラウンダー。効率重視のライダーに。", amazonQuery: "Canyon+Ultimate", rakutenQuery: "Canyon%20Ultimate", image: "" },
-      { name: "DT Swiss ARC 1400", price: "350,000", reason: "50mmディープ。巡航効率と軽さのバランス◎", amazonQuery: "DT+Swiss+ARC+1400", rakutenQuery: "DT%20Swiss%20ARC%201400", image: "" },
-      { name: "Wahoo KICKR", price: "180,000", reason: "スマートローラー。効率的なペダリング練習に最適。", amazonQuery: "Wahoo+KICKR", rakutenQuery: "Wahoo%20KICKR", image: "" },
+      { name: "Canyon Ultimate CF SLX", price: "450,000〜", reason: "コスパ最強オールラウンダー。", amazonQuery: "Canyon+Ultimate", rakutenQuery: "Canyon%20Ultimate", image: "" },
     ],
     form: {
-      landing: { title: "ペダリング", type: "高効率型", detail: "綺麗な円運動でロスなく回す。" },
-      posture: { title: "ポジション", type: "ニュートラル", detail: "標準的なポジションで効率重視。" },
-      armSwing: { title: "ダンシング", type: "あまり使わない", detail: "シッティングで効率よく。" },
-      cadence: { title: "ケイデンス", type: "90rpm前後", detail: "一定リズムを維持。" }
+      landing: { title: "ペダリング", type: "高効率型（85-95rpm）", detail: "綺麗な円運動" },
+      posture: { title: "ポジション", type: "ニュートラル", detail: "効率重視" },
+      armSwing: { title: "ダンシング", type: "あまり使わない", detail: "シッティング中心" },
+      cadence: { title: "ケイデンス", type: "90rpm前後", detail: "一定リズム" }
     },
     guide: {
-      fiveK: { title: "ヒルクライムの走り方", tips: ["シッティングメイン", "高回転（90rpm+）維持", "同じリズムキープ"], avoid: "無理にダンシングしない。" },
-      half: { title: "ロングライドの走り方", tips: ["一定ケイデンス維持", "ドラフティング最大活用"], avoid: "ペースの上げ下げに付き合わない。" },
-      full: { title: "レースでの走り方", tips: ["集団内で脚を溜める", "効率で消耗を抑える"], avoid: "単独逃げは不向き。" },
-      training: { title: "おすすめトレーニング", tips: ["テンポ走", "ペダリングドリル", "ローラー台"], avoid: "フォームを崩す追い込みは逆効果。" }
+      fiveK: { title: "ヒルクライム", tips: ["一定ペース", "シッティング"], avoid: "無駄なダンシング" },
+      training: { title: "トレーニング", tips: ["テンポ走", "ペダリングドリル"], avoid: "フォーム崩す追い込み" }
     }
   },
-  B2: {
-    name: "R-O（Rear-Outer）",
-    sub: "後体幹 × 外側荷重",
+  
+  ROX: {
+    name: "R-O-X",
+    sub: "後体幹 × 外側 × クロス",
     icon: "crosshair",
     color: "#ec4899",
     gradient: "linear-gradient(135deg, #ec4899, #db2777)",
-    traits: ["後体幹で外側荷重", "首・肩甲骨・腰が連動", "外側でどっしり安定"],
-    description: "身体全体を一体で使い、安定感を持って進むタイプ。適応力が高い。",
+    traits: ["捻りながら外側で踏む", "肩甲骨・腰主導で対角連動", "適応力が高い"],
+    description: "身体全体を使いながらクロス連動。あらゆる状況に対応できる。",
     strengths: ["適応力", "安定感", "レース全般"],
     weaknesses: ["突出した武器がない（逆に強み）"],
     radarData: [70, 75, 75, 95, 80],
@@ -1396,67 +1573,119 @@ const TYPE_INFO_CYCLING = {
         description: "捻じりの動きが自然", 
         detail: "対角線の動きが得意。",
         感覚: [
-          "ペダリング中、自然と腰が左右に動く",
-          "ダンシングではバイクを振りながら登る",
-          "コーナーでは内側の肩を入れて曲がる",
-          "歩くとき腕と脚が対角で大きく連動"
+          "ペダリング中、腰が左右に動く",
+          "ダンシングでバイクを振る",
+          "歩くとき腕脚が対角で連動"
         ],
         荷重バランス: {
-          ペダル: "足裏外側、踏み込みで腰が回る",
-          ハンドル: "下ハンを引くと身体が連動",
-          サドル: "座面後方、左右に体重移動しながら"
+          ペダル: "足裏外側も使う",
+          ハンドル: "下ハンで引く",
+          サドル: "後方、左右に動く"
         }
       },
-      balance: { type: "外側荷重（Outer）", description: "小指球・外側も使う", detail: "膝がやや外向き。外側広筋を使いやすい。" }
+      balance: { type: "外側荷重（Outer）", description: "足裏全体・外側", detail: "膝やや外向き。" }
     },
-    // フィッティング詳細
     fitting: {
       saddle: {
-        height: { formula: "股下 × 0.865〜0.875", detail: "やや低めで安定感重視" },
-        setback: { position: "やや後ろ（+5〜+15mm）", detail: "安定した踏み込みのため" },
-        tilt: { angle: "水平〜やや後ろ上がり", detail: "長時間でも快適に" },
+        height: { formula: "股下 × 0.865〜0.875", detail: "やや低めで安定" },
+        setback: { position: "やや後ろ（+5〜+15mm）", detail: "安定した踏み込み" },
+        tilt: { angle: "水平〜やや後ろ上がり", detail: "長時間快適" },
       },
       handlebar: {
-        drop: { range: "控えめ（-10〜-30mm）", detail: "アップライト気味で快適性重視" },
-        reach: { range: "やや短め", detail: "リラックスしたポジション" },
-        width: { guide: "肩幅〜やや広め", detail: "安定感とコントロール性" },
+        drop: { range: "控えめ（-10〜-30mm）", detail: "アップライト" },
+        reach: { range: "やや短め", detail: "リラックス" },
+        width: { guide: "肩幅〜やや広め", detail: "安定とコントロール" },
       },
       cleat: {
-        position: { fore_aft: "やや浅め（後ろ寄り）", detail: "安定したペダリングのため" },
-        angle: { rotation: "深め（つま先外向き）", detail: "外側荷重に合わせて開く" },
-        float: { degree: "多め（6°）", detail: "膝への負担軽減と腰の回旋を許容" },
-        qFactor: { guide: "広め（150〜156mm）", detail: "外側荷重とクロス動作に対応" },
+        position: { fore_aft: "やや浅め", detail: "安定" },
+        angle: { rotation: "深め（外向き）", detail: "外側荷重" },
+        float: { degree: "多め（6°）", detail: "膝保護と腰の回旋" },
+        qFactor: { guide: "広め（150〜156mm）", detail: "外側荷重とクロス" },
       },
-      crank: {
-        length: { guide: "股下 × 0.205〜0.21", detail: "標準〜やや長めで安定感" },
-      },
+      crank: { length: { guide: "股下 × 0.205〜0.21", detail: "標準〜やや長め" } },
     },
     selfCheck: [
-      { name: "両足スクワット", method: "ゆっくり10回、膝の向きを確認", good: "膝がつま先と同じ方向", action: "安定型のペダリングが合う" },
-      { name: "腰回旋チェック", method: "座って上体だけ左右に捻る", good: "左右差が少ない", action: "パラレルタイプ確定" },
+      { name: "スクワット", method: "ゆっくり10回", good: "膝がつま先方向", action: "安定型" },
     ],
-    shoes: {
-      type: { name: "オールラウンドレースフレーム", reason: "あらゆる状況に対応" },
-      drop: { name: "標準〜やや後ろ乗り", reason: "安定重視" },
-      cushion: { name: "40-50mm汎用性重視", reason: "状況を選ばない" },
-      examples: ["Pinarello Dogma F", "Colnago V4Rs", "Factor O2"]
-    },
     products: [
-      { name: "Pinarello Dogma F", price: "800,000〜", reason: "最高峰のオールラウンドフレーム。プロも愛用。", amazonQuery: "Pinarello+Dogma", rakutenQuery: "Pinarello%20Dogma", image: "" },
-      { name: "Campagnolo Bora WTO 45", price: "400,000", reason: "45mmオールラウンドホイール。どんな状況にも対応。", amazonQuery: "Campagnolo+Bora+WTO", rakutenQuery: "Campagnolo%20Bora%20WTO", image: "" },
-      { name: "Garmin Edge 840", price: "60,000", reason: "高機能サイコン。データ分析で走りを改善。", amazonQuery: "Garmin+Edge+840", rakutenQuery: "Garmin%20Edge%20840", image: "" },
+      { name: "Pinarello Dogma F", price: "800,000〜", reason: "あらゆる状況対応。", amazonQuery: "Pinarello+Dogma", rakutenQuery: "Pinarello%20Dogma", image: "" },
     ],
     form: {
-      landing: { title: "ペダリング", type: "臨機応変型", detail: "状況に応じてペダリングを変える。" },
-      posture: { title: "ポジション", type: "ニュートラル〜やや後ろ", detail: "安定感重視。" },
-      armSwing: { title: "ダンシング", type: "状況に応じて", detail: "使い分けられる。" },
-      cadence: { title: "ケイデンス", type: "75-90rpm", detail: "状況に応じて変える。" }
+      landing: { title: "ペダリング", type: "適応型（75-90rpm）", detail: "状況に応じて" },
+      posture: { title: "ポジション", type: "やや後ろ乗り", detail: "安定重視" },
+      armSwing: { title: "ダンシング", type: "適度に", detail: "バイクを振る" },
+      cadence: { title: "ケイデンス", type: "75-90rpm", detail: "適応的" }
     },
     guide: {
-      fiveK: { title: "ヒルクライムの走り方", tips: ["シッティングとダンシング使い分け", "周りを見ながら対応"], avoid: "どっちつかずにならない。" },
-      half: { title: "ロングライドの走り方", tips: ["臨機応変に動く", "先頭交代にも参加"], avoid: "周りに合わせすぎない。" },
-      full: { title: "レースでの走り方", tips: ["展開を見ながら動く", "逃げも集団戦もOK"], avoid: "戦略にこだわりすぎない。" },
-      training: { title: "おすすめトレーニング", tips: ["バランスよく色々", "弱点を補う練習"], avoid: "偏りすぎない。" }
+      fiveK: { title: "ヒルクライム", tips: ["ペース配分", "ダンシング活用"], avoid: "得意に頼りすぎ" },
+      training: { title: "トレーニング", tips: ["様々なメニュー", "弱点克服"], avoid: "得意ばかり" }
+    }
+  },
+  
+  ROII: {
+    name: "R-O-II",
+    sub: "後体幹 × 外側 × パラレル",
+    icon: "anchor",
+    color: "#64748b",
+    gradient: "linear-gradient(135deg, #64748b, #475569)",
+    traits: ["安定して外側で踏む", "肩甲骨・腰主導で同側連動", "どっしり安定"],
+    description: "後体幹と外側荷重でどっしり安定。パラレル連動で効率よく走る。",
+    strengths: ["安定感", "ロングライド", "悪条件"],
+    weaknesses: ["瞬発力", "急なペース変化"],
+    radarData: [45, 85, 80, 80, 95],
+    bodyMechanics: {
+      trunk: { type: "Rタイプ（後体幹）", description: "首・肩甲骨・腰主導", detail: "身体を「一体」で使う。" },
+      movement: { 
+        type: "パラレル（同側連動）", 
+        description: "平行の動きが自然", 
+        detail: "捻じらず安定。",
+        感覚: [
+          "ペダリング中、上半身固定",
+          "ダンシングはバイクまっすぐ",
+          "腕振り控えめ"
+        ],
+        荷重バランス: {
+          ペダル: "足裏全体でどっしり",
+          ハンドル: "ブラケットで安定",
+          サドル: "後方にどっしり"
+        }
+      },
+      balance: { type: "外側荷重（Outer）", description: "足裏全体・外側", detail: "膝やや外向き。" }
+    },
+    fitting: {
+      saddle: {
+        height: { formula: "股下 × 0.860〜0.870", detail: "低めで安定" },
+        setback: { position: "後ろ寄り（+10〜+20mm）", detail: "どっしり" },
+        tilt: { angle: "やや後ろ上がり", detail: "快適性" },
+      },
+      handlebar: {
+        drop: { range: "控えめ（-5〜-25mm）", detail: "アップライト" },
+        reach: { range: "短め", detail: "快適性重視" },
+        width: { guide: "肩幅〜やや広め", detail: "安定" },
+      },
+      cleat: {
+        position: { fore_aft: "浅め", detail: "安定重視" },
+        angle: { rotation: "深め（外向き）", detail: "ガニ股OK" },
+        float: { degree: "多め（6°）", detail: "快適性" },
+        qFactor: { guide: "広め（150〜156mm）", detail: "外側荷重" },
+      },
+      crank: { length: { guide: "股下 × 0.205〜0.215", detail: "やや長め" } },
+    },
+    selfCheck: [
+      { name: "長時間立ち", method: "5分", good: "楽に立てる", action: "安定型" },
+    ],
+    products: [
+      { name: "Trek Domane", price: "400,000〜", reason: "快適性重視。ロングライド向き。", amazonQuery: "Trek+Domane", rakutenQuery: "Trek%20Domane", image: "" },
+    ],
+    form: {
+      landing: { title: "ペダリング", type: "安定型（70-85rpm）", detail: "どっしり踏む" },
+      posture: { title: "ポジション", type: "後ろ乗り", detail: "安定重視" },
+      armSwing: { title: "ダンシング", type: "控えめ", detail: "シッティング中心" },
+      cadence: { title: "ケイデンス", type: "70-85rpm", detail: "低め安定" }
+    },
+    guide: {
+      fiveK: { title: "ヒルクライム", tips: ["マイペース", "シッティング"], avoid: "無理なアタック" },
+      training: { title: "トレーニング", tips: ["ロングライド", "耐久走"], avoid: "短時間高強度のみ" }
     }
   },
 };
@@ -1746,55 +1975,56 @@ export default function App() {
     const currentScores = latestScores || scores;
     const unanswered = questions.filter(q => !currentAnswers[q.id] && !skipped.has(q.id));
     
-    // 僅差チェック
-    const typeABDiff = Math.abs(currentScores.typeA - currentScores.typeB);
-    const num12Diff = Math.abs(currentScores.num1 - currentScores.num2);
-    const typeABClose = typeABDiff <= 2;
-    const num12Close = num12Diff <= 2;
+    // 3軸それぞれの僅差チェック
+    const frDiff = Math.abs(currentScores.typeA - currentScores.typeB);
+    const ioDiff = Math.abs(currentScores.num1 - currentScores.num2);
+    const xpDiff = Math.abs(currentScores.cross - currentScores.parallel);
+    const frClose = frDiff <= 2;
+    const ioClose = ioDiff <= 2;
+    const xpClose = xpDiff <= 2;
     
     // 質問が残っていない＆僅差 → 追加質問を投入
-    if (unanswered.length === 0 && (typeABClose || num12Close) && extraQuestionPool.length > 0) {
+    if (unanswered.length === 0 && (frClose || ioClose || xpClose) && extraQuestionPool.length > 0) {
       const extraToAdd = [];
       
-      if (typeABClose) {
-        // 体幹タイプが僅差 → trunkカテゴリから追加
+      if (frClose) {
+        // 体幹(F/R)が僅差 → trunkカテゴリから追加
         const trunkExtras = extraQuestionPool.filter(q => q.cat === "trunk" && !currentAnswers[q.id]);
         extraToAdd.push(...trunkExtras.slice(0, EXTRA_ON_TIE));
       }
       
-      if (num12Close) {
-        // 荷重タイプが僅差 → balanceカテゴリから追加
+      if (ioClose) {
+        // 荷重(I/O)が僅差 → balanceカテゴリから追加
         const balanceExtras = extraQuestionPool.filter(q => q.cat === "balance" && !currentAnswers[q.id]);
         extraToAdd.push(...balanceExtras.slice(0, EXTRA_ON_TIE));
       }
       
+      if (xpClose) {
+        // 連動(X/II)が僅差 → movementカテゴリから追加
+        const movementExtras = extraQuestionPool.filter(q => q.cat === "movement" && !currentAnswers[q.id]);
+        extraToAdd.push(...movementExtras.slice(0, EXTRA_ON_TIE));
+      }
+      
       if (extraToAdd.length > 0) {
-        // 追加質問を現在の質問リストに追加
         setQuestions(prev => [...prev, ...extraToAdd]);
-        // 追加質問プールから除外
         setExtraQuestionPool(prev => prev.filter(q => !extraToAdd.find(e => e.id === q.id)));
-        // 最初の追加質問へ移動
-        setCurrentIndex(questions.length); // 次の質問へ
+        setCurrentIndex(questions.length);
         return;
       }
     }
     
     if (unanswered.length === 0) return;
     
-    // 優先すべきカテゴリを決定
+    // 優先すべきカテゴリを決定（僅差の軸から優先）
     let priorityCat = null;
-    if (typeABClose && num12Close) {
-      priorityCat = "trunk"; // 両方僅差 → 体幹優先
-    } else if (typeABClose) {
-      priorityCat = "trunk";
-    } else if (num12Close) {
-      priorityCat = "balance";
-    }
+    if (frClose) priorityCat = "trunk";
+    else if (ioClose) priorityCat = "balance";
+    else if (xpClose) priorityCat = "movement";
     
     // 優先カテゴリの質問を探す
     let nextQuestion = null;
     if (priorityCat) {
-      nextQuestion = unanswered.find(q => q.cat === priorityCat || q.cat === "both");
+      nextQuestion = unanswered.find(q => q.cat === priorityCat);
     }
     
     // なければ順番通り
@@ -1815,41 +2045,26 @@ export default function App() {
   
 
   const calculateResult = () => {
-    const isA = scores.typeA >= scores.typeB;
-    const is1 = scores.num1 >= scores.num2;
-    const isCross = scores.cross >= scores.parallel;
+    // 3軸それぞれ独立判定
+    const isF = scores.typeA >= scores.typeB;  // F(前) or R(後)
+    const isI = scores.num1 >= scores.num2;    // I(内) or O(外)
+    const isX = scores.cross >= scores.parallel; // X(クロス) or II(パラレル)
     
-    // 僅差判定（同点または差が2以下）
-    const typeABDiff = Math.abs(scores.typeA - scores.typeB);
-    const num12Diff = Math.abs(scores.num1 - scores.num2);
-    const isTypeABClose = typeABDiff <= 2;
-    const isNum12Close = num12Diff <= 2;
+    // 僅差判定
+    const frDiff = Math.abs(scores.typeA - scores.typeB);
+    const ioDiff = Math.abs(scores.num1 - scores.num2);
+    const xpDiff = Math.abs(scores.cross - scores.parallel);
     
-    // 基本判定（A/Bと1/2）
-    let baseType;
-    if (isA && is1) baseType = "A1";
-    else if (isA && !is1) baseType = "A2";
-    else if (!isA && is1) baseType = "B1";
-    else baseType = "B2";
-    
-    // クロス/パラレルによる補正
-    // F-I/R-Oはクロス派、F-O/R-Iはパラレル派が理論的に整合
-    // 矛盾がある場合は、クロス/パラレルのスコア差が大きければ補正
-    let type = baseType;
-    const crossDiff = Math.abs(scores.cross - scores.parallel);
-    
-    // クロス/パラレルが明確で、A/Bまたは1/2が僅差の場合に補正
-    if (crossDiff > 3) {
-      if (isCross) {
-        // クロス派 → F-IかR-Oが自然
-        if (baseType === "A2" && num12Diff < 3) type = "A1";
-        if (baseType === "B1" && num12Diff < 3) type = "B2";
-      } else {
-        // パラレル派 → F-OかR-Iが自然
-        if (baseType === "A1" && num12Diff < 3) type = "A2";
-        if (baseType === "B2" && num12Diff < 3) type = "B1";
-      }
-    }
+    // 8タイプ判定
+    let type;
+    if (isF && isI && isX) type = "FIX";
+    else if (isF && isI && !isX) type = "FIII";
+    else if (isF && !isI && isX) type = "FOX";
+    else if (isF && !isI && !isX) type = "FOII";
+    else if (!isF && isI && isX) type = "RIX";
+    else if (!isF && isI && !isX) type = "RIII";
+    else if (!isF && !isI && isX) type = "ROX";
+    else type = "ROII";
     
     const cadence = scores.high > scores.low ? "high" : "low";
     const posture = scores.open > scores.forward ? "open" : "forward";
@@ -1865,21 +2080,23 @@ export default function App() {
       scores: { ...scores },
       answerCount: Object.keys(answers).length,
       savedAt: new Date().toISOString(),
-      // 僅差フラグ
+      // 僅差フラグ（3軸それぞれ）
       isClose: {
-        typeAB: isTypeABClose,
-        num12: isNum12Close,
-        any: isTypeABClose || isNum12Close,
+        fr: frDiff <= 2,
+        io: ioDiff <= 2,
+        xp: xpDiff <= 2,
+        any: frDiff <= 2 || ioDiff <= 2 || xpDiff <= 2,
       },
       scoreDiff: {
-        typeAB: typeABDiff,
-        num12: num12Diff,
+        fr: frDiff,
+        io: ioDiff,
+        xp: xpDiff,
       }
     };
     
     setResult(resultData);
     
-    // LocalStorageに保存（スポーツ共通）
+    // LocalStorageに保存
     try {
       localStorage.setItem("stancecore_result", JSON.stringify(resultData));
       setSavedResult(resultData);
@@ -2663,10 +2880,10 @@ export default function App() {
                   こう言われて困惑したことは？
                 </p>
                 <p style={{ color: C.text, fontSize: 14, margin: 0, lineHeight: 1.7 }}>
-                  {type === "A1" && "「もっと腰を安定させて」「後ろ体重で粘って」と言われても、なんかしっくりこなかった"}
-                  {type === "A2" && "「もっと前に突っ込んで」「軽やかに動いて」と言われても、逆に力が入らなかった"}
-                  {type === "B1" && "「腰をもっと回して」「捻りを使え」と言われても、動きがギクシャクした"}
-                  {type === "B2" && "「前傾でアグレッシブに」「つま先で軽く」と言われても、バランスを崩しやすかった"}
+                  {(type === "FIX" || type === "FOX") && "「もっと腰を安定させて」「後ろ体重で粘って」と言われても、なんかしっくりこなかった"}
+                  {(type === "FIII" || type === "FOII") && "「腰をもっと回して」「捻りを使え」と言われても、動きがギクシャクした"}
+                  {(type === "RIX" || type === "ROX") && "「前傾でアグレッシブに」「軽やかに」と言われても、バランスを崩しやすかった"}
+                  {(type === "RIII" || type === "ROII") && "「もっとダイナミックに」「捻りを使え」と言われても、動きがぎこちなかった"}
                 </p>
               </div>
               
@@ -2681,10 +2898,14 @@ export default function App() {
                   ✓ それは、あなたの身体に合わなかっただけ
                 </p>
                 <p style={{ color: C.text, fontSize: 14, margin: 0, lineHeight: 1.7 }}>
-                  {type === "A1" && "あなたは「捻りながら前へ」が自然。指導者と身体の使い方が違っただけです。"}
-                  {type === "A2" && "あなたは「捻りながら溜める」が自然。前傾より後ろで力を溜める方が合っています。"}
-                  {type === "B1" && "あなたは「一体で前へ」が自然。捻りより身体全体で動く方が力が出ます。"}
-                  {type === "B2" && "あなたは「一体で安定」が自然。前傾より後ろでどっしり構える方が安定します。"}
+                  {type === "FIX" && "あなたは「捻りながら内側で踏む」のが自然。対角連動で加速するタイプ。"}
+                  {type === "FIII" && "あなたは「安定して内側で踏む」のが自然。効率的なペダリングが武器。"}
+                  {type === "FOX" && "あなたは「捻りながら外側で踏む」のが自然。パワフルなダンシングが得意。"}
+                  {type === "FOII" && "あなたは「安定して外側で踏む」のが自然。粘り強いクライムが持ち味。"}
+                  {type === "RIX" && "あなたは「後体幹でクロス連動」が自然。リズミカルな走りが武器。"}
+                  {type === "RIII" && "あなたは「後体幹で安定」が自然。効率的でスムーズな走りが得意。"}
+                  {type === "ROX" && "あなたは「後体幹でクロス連動」が自然。あらゆる状況に適応できる。"}
+                  {type === "ROII" && "あなたは「後体幹で安定」が自然。どっしりした安定感が持ち味。"}
                 </p>
               </div>
               
@@ -2698,10 +2919,14 @@ export default function App() {
                   これからのアドバイス
                 </p>
                 <p style={{ color: C.text, fontSize: 14, margin: 0, lineHeight: 1.7 }}>
-                  {type === "A1" && "「前に踏み込め」「高回転で」「瞬発力で勝負」というアドバイスを積極的に取り入れてみて。"}
-                  {type === "A2" && "「後ろで溜めろ」「じっくり粘れ」「重いギアでグイグイ」が合うはず。"}
-                  {type === "B1" && "「滑らかに」「一定ペースで」「効率重視」を意識すると本来の力が出せます。"}
-                  {type === "B2" && "「安定感を活かして」「リズムを大切に」「適応力で勝負」がおすすめ。"}
+                  {type === "FIX" && "「高回転で」「瞬発力で勝負」「ダンシングでバイクを振る」を意識して。"}
+                  {type === "FIII" && "「滑らかに」「一定ペースで」「効率重視」を意識すると力が出せます。"}
+                  {type === "FOX" && "「ダンシングでアタック」「独走で逃げる」「パワー勝負」が合うはず。"}
+                  {type === "FOII" && "「じっくり粘れ」「重いギアでグイグイ」「マイペース」が合うはず。"}
+                  {type === "RIX" && "「リズムを大切に」「変化に対応」「ダンシングも活用」がおすすめ。"}
+                  {type === "RIII" && "「滑らかに」「一定ペースで」「効率重視」を意識すると本来の力が出せます。"}
+                  {type === "ROX" && "「適応力を活かして」「状況判断」「バランスよく」がおすすめ。"}
+                  {type === "ROII" && "「安定感を活かして」「マイペース」「ロングで力を発揮」がおすすめ。"}
                 </p>
               </div>
             </div>
@@ -2960,10 +3185,14 @@ export default function App() {
             <div style={{ background: `${typeInfo.color}08`, border: `1px solid ${typeInfo.color}20`, borderRadius: 12, padding: 14, marginBottom: 16, marginLeft: 24, marginRight: 24 }}>
               <p style={{ color: C.textMuted, fontSize: 11, margin: "0 0 4px", fontWeight: 600 }}>あなたに合うスタイル</p>
               <p style={{ color: typeInfo.color, fontSize: 13, fontWeight: 600, margin: 0 }}>
-                {type === "A1" && "高剛性・前乗り・ダイレクト感重視"}
-                {type === "A2" && "軽量・後ろ乗り・快適性重視"}
-                {type === "B1" && "バランス・効率重視・オールラウンド"}
-                {type === "B2" && "快適性・安定感・ロングライド向け"}
+                {type === "FIX" && "高剛性・前乗り・ダイレクト感重視"}
+                {type === "FIII" && "効率・前乗り・エアロ重視"}
+                {type === "FOX" && "高剛性・パワー・攻撃的ポジション"}
+                {type === "FOII" && "軽量・後ろ乗り・ヒルクライム向け"}
+                {type === "RIX" && "バランス・適応力・リズム重視"}
+                {type === "RIII" && "バランス・効率重視・オールラウンド"}
+                {type === "ROX" && "適応力・安定感・レース全般"}
+                {type === "ROII" && "快適性・安定感・ロングライド向け"}
               </p>
             </div>
             
@@ -3402,41 +3631,69 @@ export default function App() {
                 const currentCrank = parseFloat(bodyMetrics.currentCrank) || 170;
                 const currentDrop = parseFloat(bodyMetrics.currentDrop) || -30;
                 
-                // タイプ別の推奨傾向
+                // 8タイプ別の推奨傾向
                 const advice = {
-                  A1: { 
+                  FIX: { 
                     saddle: "高め", saddleAdj: "+5〜15mm", 
                     drop: "深め", dropRange: "-40〜-60mm",
                     setback: "前寄り", setbackAdj: "-5〜10mm前へ",
                     crank: "短め", crankAdj: "165〜170mm推奨",
                   },
-                  A2: { 
-                    saddle: "標準〜やや低め", saddleAdj: "±5mm", 
+                  FIII: { 
+                    saddle: "高め", saddleAdj: "+5〜10mm", 
+                    drop: "中〜深め", dropRange: "-30〜-50mm",
+                    setback: "前寄り〜中央", setbackAdj: "-5〜+5mm",
+                    crank: "短め", crankAdj: "165〜170mm推奨",
+                  },
+                  FOX: { 
+                    saddle: "標準", saddleAdj: "±5mm", 
+                    drop: "中〜深め", dropRange: "-35〜-55mm",
+                    setback: "前寄り〜中央", setbackAdj: "-5〜+5mm",
+                    crank: "標準", crankAdj: "170〜172.5mm推奨",
+                  },
+                  FOII: { 
+                    saddle: "標準〜低め", saddleAdj: "±5mm", 
                     drop: "控えめ", dropRange: "-20〜-40mm",
                     setback: "後ろ寄り", setbackAdj: "+10〜20mm後ろへ",
                     crank: "長め", crankAdj: "170〜175mm推奨",
                   },
-                  B1: { 
+                  RIX: { 
+                    saddle: "標準", saddleAdj: "±5mm", 
+                    drop: "中程度", dropRange: "-25〜-45mm",
+                    setback: "中央", setbackAdj: "0〜+10mm",
+                    crank: "標準", crankAdj: "170mm推奨",
+                  },
+                  RIII: { 
                     saddle: "高め", saddleAdj: "+5〜10mm", 
                     drop: "中程度", dropRange: "-30〜-50mm",
                     setback: "ニュートラル", setbackAdj: "±5mm",
-                    crank: "短め〜標準", crankAdj: "165〜170mm推奨",
+                    crank: "標準", crankAdj: "170mm推奨",
                   },
-                  B2: { 
+                  ROX: { 
                     saddle: "低め", saddleAdj: "-5〜10mm", 
                     drop: "控えめ", dropRange: "-10〜-30mm",
                     setback: "やや後ろ", setbackAdj: "+5〜15mm後ろへ",
                     crank: "標準〜長め", crankAdj: "170〜172.5mm推奨",
+                  },
+                  ROII: { 
+                    saddle: "低め", saddleAdj: "-5〜15mm", 
+                    drop: "控えめ", dropRange: "-5〜-25mm",
+                    setback: "後ろ寄り", setbackAdj: "+10〜20mm後ろへ",
+                    crank: "長め", crankAdj: "172.5〜175mm推奨",
                   },
                 };
                 const adv = advice[type];
                 
                 // 落差の判定
                 const dropRanges = {
-                  A1: { min: -60, max: -40 },
-                  A2: { min: -40, max: -20 },
-                  B1: { min: -50, max: -30 },
-                  B2: { min: -30, max: -10 },
+                  FIX:  { min: -60, max: -40 },
+                  FIII: { min: -50, max: -30 },
+                  FOX:  { min: -55, max: -35 },
+                  FOII: { min: -40, max: -20 },
+                  RIX:  { min: -45, max: -25 },
+                  RIII: { min: -50, max: -30 },
+                  ROX:  { min: -30, max: -10 },
+                  ROII: { min: -25, max: -5 },
                 };
                 const dropRange = dropRanges[type];
                 const dropStatus = currentDrop < dropRange.min ? "深すぎ" : currentDrop > dropRange.max ? "浅すぎ" : "適正";
@@ -3677,10 +3934,14 @@ export default function App() {
                 const adj = bodyTypeAdj[bodyMetrics.bodyType] || -0.003;
                 
                 const coefficients = {
-                  A1: { saddleMin: 0.875 + adj, saddleMax: 0.885 + adj, crankMin: 0.200, crankMax: 0.205, dropMin: -60, dropMax: -40 },
-                  A2: { saddleMin: 0.870 + adj, saddleMax: 0.880 + adj, crankMin: 0.205, crankMax: 0.215, dropMin: -40, dropMax: -20 },
-                  B1: { saddleMin: 0.875 + adj, saddleMax: 0.885 + adj, crankMin: 0.200, crankMax: 0.205, dropMin: -50, dropMax: -30 },
-                  B2: { saddleMin: 0.865 + adj, saddleMax: 0.875 + adj, crankMin: 0.205, crankMax: 0.210, dropMin: -30, dropMax: -10 },
+                  FIX:  { saddleMin: 0.875 + adj, saddleMax: 0.885 + adj, crankMin: 0.200, crankMax: 0.205, dropMin: -60, dropMax: -40 },
+                  FIII: { saddleMin: 0.875 + adj, saddleMax: 0.885 + adj, crankMin: 0.200, crankMax: 0.205, dropMin: -50, dropMax: -30 },
+                  FOX:  { saddleMin: 0.870 + adj, saddleMax: 0.880 + adj, crankMin: 0.205, crankMax: 0.210, dropMin: -55, dropMax: -35 },
+                  FOII: { saddleMin: 0.870 + adj, saddleMax: 0.880 + adj, crankMin: 0.205, crankMax: 0.215, dropMin: -40, dropMax: -20 },
+                  RIX:  { saddleMin: 0.870 + adj, saddleMax: 0.880 + adj, crankMin: 0.205, crankMax: 0.205, dropMin: -45, dropMax: -25 },
+                  RIII: { saddleMin: 0.875 + adj, saddleMax: 0.885 + adj, crankMin: 0.200, crankMax: 0.205, dropMin: -50, dropMax: -30 },
+                  ROX:  { saddleMin: 0.865 + adj, saddleMax: 0.875 + adj, crankMin: 0.205, crankMax: 0.210, dropMin: -30, dropMax: -10 },
+                  ROII: { saddleMin: 0.860 + adj, saddleMax: 0.870 + adj, crankMin: 0.205, crankMax: 0.215, dropMin: -25, dropMax: -5 },
                 };
                 const coef = coefficients[type];
                 
@@ -4088,10 +4349,14 @@ export default function App() {
               
               <button
                 onClick={() => {
-                  const bodyStyle = type === "A1" ? "捻りながら前に踏み込む" 
-                    : type === "A2" ? "捻りながら後ろで溜める"
-                    : type === "B1" ? "身体を一体で前に押し出す"
-                    : "身体を一体で安定させる";
+                  const bodyStyle = type === "FIX" ? "捻りながら内側で踏み込む" 
+                    : type === "FIII" ? "安定して内側で効率よく回す"
+                    : type === "FOX" ? "捻りながら外側でパワーを出す"
+                    : type === "FOII" ? "安定して外側で粘る"
+                    : type === "RIX" ? "後体幹でリズミカルに走る"
+                    : type === "RIII" ? "後体幹で効率よく滑らかに"
+                    : type === "ROX" ? "後体幹であらゆる状況に適応"
+                    : "後体幹でどっしり安定";
                   const text = `「コーチの言うことがしっくりこない」の正体がわかった。
 
 私は "${typeInfo.name}" タイプ。
@@ -4201,7 +4466,7 @@ https://stancecore.vercel.app
                   4つのStance Type
                 </p>
                 <p style={{ margin: 0, color: C.textMuted }}>
-                  STANCE COREでは、これらの傾向から4つのStance Type（F-I / F-O / R-I / R-O）に分類。
+                  STANCE COREでは、これらの傾向から8つのStance Type（3軸の組み合わせ）に分類。
                   それぞれに適した身体の使い方、機材選びがある。
                 </p>
               </div>
