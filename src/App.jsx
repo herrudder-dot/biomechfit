@@ -1,3 +1,14 @@
+/**
+ * STANCE CORE - Cycling Body Mechanics Analysis App
+ * 
+ * APAに基づいた身体タイプ診断アプリ
+ * 4つのStance Type（F-I / F-O / R-I / R-O）を判定し、
+ * 最適なフィッティングと機材を提案
+ * 
+ * @version 2.0.0
+ * @license MIT
+ */
+
 import { useState, useEffect } from "react";
 
 // グローバルスタイル（アニメーション）
