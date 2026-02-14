@@ -3,73 +3,71 @@ import { useState, useEffect } from "react";
 // グローバルスタイル（アニメーション）
 const GlobalStyles = () => (
   <style>{`
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
     @keyframes slideUp {
-      from { opacity: 0; transform: translateY(30px) scale(0.95); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-    @keyframes glow {
-      0%, 100% { box-shadow: 0 0 20px currentColor; }
-      50% { box-shadow: 0 0 40px currentColor; }
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); }
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 1; }
     }
-    @keyframes aurora {
-      0%, 100% { 
-        background-position: 0% 50%, 100% 50%, 50% 100%, 0% 0%, 0% 0%;
-      }
-      50% { 
-        background-position: 100% 50%, 0% 50%, 50% 0%, 100% 100%, 0% 0%;
-      }
+    @keyframes glow {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
     }
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
+    * { 
+      box-sizing: border-box;
+      font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
     }
-    * { box-sizing: border-box; }
-    body { margin: 0; background: #F0F5F9; }
+    body { 
+      margin: 0; 
+      background: #FAFAFA;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+    }
   `}</style>
 );
 
 // ========================================
-// テーマ設定（ここを変更するだけでデザイン切替可能）
+// テーマ設定（STANCE CORE Premium Design）
 // ========================================
 const THEMES = {
-  // 新: クリーンライト（参考画像風）
-  cleanLight: {
-    name: "cleanLight",
+  // Premium: ミニマル＆高級感（メインテーマ）
+  premium: {
+    name: "premium",
     // ベース
-    bg: "#F0F5F9",
-    bgSolid: "#F0F5F9",
-    aurora: null, // ライトモードではオーロラなし
+    bg: "#FAFAFA",
+    bgSolid: "#FAFAFA",
+    aurora: null,
     
     // カード
     card: "#FFFFFF",
-    cardBorder: "rgba(0, 0, 0, 0.04)",
-    cardHover: "#FAFBFC",
+    cardBorder: "#E8E8E8",
+    cardHover: "#FFFFFF",
     
     // テキスト
-    text: "#1F2937",
-    textMuted: "#6B7280",
-    textDim: "#9CA3AF",
+    text: "#1a1a1a",
+    textMuted: "#666666",
+    textDim: "#999999",
     
-    // アクセント（ティール）
-    accent: "#14B8A6",
-    accentGradient: "linear-gradient(135deg, #14B8A6, #0D9488)",
-    accentLight: "#5EEAD4",
-    accentDark: "#0D9488",
+    // アクセント（STANCE COREのグリーン）
+    accent: "#10B981",
+    accentGradient: "linear-gradient(135deg, #10B981, #059669)",
+    accentLight: "#34D399",
+    accentDark: "#059669",
     
-    // タイプ別カラー
+    // タイプ別カラー（洗練されたトーン）
     typeColors: {
-      A1: { main: "#F59E0B", gradient: "linear-gradient(135deg, #F59E0B, #D97706)", glow: "rgba(245, 158, 11, 0.2)" },
-      A2: { main: "#10B981", gradient: "linear-gradient(135deg, #10B981, #059669)", glow: "rgba(16, 185, 129, 0.2)" },
-      B1: { main: "#8B5CF6", gradient: "linear-gradient(135deg, #8B5CF6, #7C3AED)", glow: "rgba(139, 92, 246, 0.2)" },
-      B2: { main: "#EC4899", gradient: "linear-gradient(135deg, #EC4899, #DB2777)", glow: "rgba(236, 72, 153, 0.2)" },
+      A1: { main: "#F59E0B", gradient: "linear-gradient(135deg, #F59E0B, #D97706)", glow: "rgba(245, 158, 11, 0.15)" },
+      A2: { main: "#10B981", gradient: "linear-gradient(135deg, #10B981, #059669)", glow: "rgba(16, 185, 129, 0.15)" },
+      B1: { main: "#8B5CF6", gradient: "linear-gradient(135deg, #8B5CF6, #7C3AED)", glow: "rgba(139, 92, 246, 0.15)" },
+      B2: { main: "#EC4899", gradient: "linear-gradient(135deg, #EC4899, #DB2777)", glow: "rgba(236, 72, 153, 0.15)" },
     },
     
     // セマンティック
@@ -77,113 +75,68 @@ const THEMES = {
     green: "#10B981",
     orange: "#F59E0B",
     red: "#EF4444",
-    cyan: "#14B8A6",
-    yellow: "#EAB308",
+    cyan: "#10B981",
+    yellow: "#F59E0B",
     
-    // エフェクト
-    shadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
-    shadowLg: "0 8px 30px rgba(0, 0, 0, 0.12)",
-    shadowCard: "0 2px 12px rgba(0, 0, 0, 0.06)",
-    glow: (color) => `0 4px 14px ${color}30`,
-    glassBg: "rgba(255, 255, 255, 0.8)",
-    glassBorder: "rgba(0, 0, 0, 0.05)",
-    blur: "backdrop-filter: blur(10px)",
+    // エフェクト（控えめなシャドウ）
+    shadow: "none",
+    shadowLg: "0 20px 40px rgba(0, 0, 0, 0.08)",
+    shadowCard: "none",
+    glow: (color) => `0 0 30px ${color}20`,
+    glassBg: "#FFFFFF",
+    glassBorder: "#E8E8E8",
+    blur: "none",
   },
   
-  // C案: グラデーションリッチ + Aurora（ダークモード）
-  gradientRich: {
-    name: "gradientRich",
-    // ベース（Aurora Gradients）
-    bg: "#0a0a12",
-    bgSolid: "#0a0a12",
-    // オーロラグラデーション（複数レイヤー）
-    aurora: `
-      radial-gradient(ellipse 80% 50% at 20% 40%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
-      radial-gradient(ellipse 60% 40% at 80% 20%, rgba(236, 72, 153, 0.12) 0%, transparent 50%),
-      radial-gradient(ellipse 50% 60% at 60% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
-      radial-gradient(ellipse 40% 30% at 10% 90%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
-      linear-gradient(180deg, #0a0a12 0%, #0f1219 50%, #0a0a12 100%)
-    `,
-    card: "rgba(255, 255, 255, 0.03)",
-    cardBorder: "rgba(255, 255, 255, 0.08)",
-    cardHover: "rgba(255, 255, 255, 0.06)",
-    
-    // テキスト
-    text: "#FFFFFF",
-    textMuted: "rgba(255, 255, 255, 0.7)",
-    textDim: "rgba(255, 255, 255, 0.5)",
-    
-    // アクセント（グラデーション対応）
-    accent: "#818CF8",
-    accentGradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-    accentLight: "#A5B4FC",
-    accentDark: "#6366F1",
-    
-    // タイプ別カラー（より鮮やか）
-    typeColors: {
-      A1: { main: "#F59E0B", gradient: "linear-gradient(135deg, #F59E0B, #EF4444)", glow: "rgba(245, 158, 11, 0.4)" },
-      A2: { main: "#10B981", gradient: "linear-gradient(135deg, #10B981, #06B6D4)", glow: "rgba(16, 185, 129, 0.4)" },
-      B1: { main: "#8B5CF6", gradient: "linear-gradient(135deg, #8B5CF6, #EC4899)", glow: "rgba(139, 92, 246, 0.4)" },
-      B2: { main: "#EC4899", gradient: "linear-gradient(135deg, #EC4899, #F43F5E)", glow: "rgba(236, 72, 153, 0.4)" },
-    },
-    
-    // セマンティック
-    pink: "#EC4899",
-    green: "#10B981",
-    orange: "#F59E0B",
-    red: "#EF4444",
-    cyan: "#06B6D4",
-    yellow: "#EAB308",
-    
-    // エフェクト
-    shadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
-    shadowLg: "0 16px 48px rgba(0, 0, 0, 0.4)",
-    glow: (color) => `0 0 20px ${color}40, 0 0 40px ${color}20`,
-    glassBg: "rgba(255, 255, 255, 0.05)",
-    glassBorder: "rgba(255, 255, 255, 0.1)",
-    blur: "backdrop-filter: blur(10px)",
-  },
-  
-  // A案: ニューモーフィズム（元のデザイン）
-  neumorphism: {
-    name: "neumorphism",
-    bg: "#E4E9F2",
-    bgSolid: "#E4E9F2",
+  // Premium Dark
+  premiumDark: {
+    name: "premiumDark",
+    bg: "#0a0a0a",
+    bgSolid: "#0a0a0a",
     aurora: null,
-    card: "#E4E9F2",
-    cardBorder: "transparent",
-    text: "#2D3748",
-    textMuted: "#4A5568",
-    textDim: "#718096",
-    accent: "#6366F1",
-    accentGradient: "linear-gradient(135deg, #6366F1, #4F46E5)",
-    accentLight: "#818CF8",
-    accentDark: "#4F46E5",
+    
+    card: "#141414",
+    cardBorder: "#2a2a2a",
+    cardHover: "#1a1a1a",
+    
+    text: "#FFFFFF",
+    textMuted: "#999999",
+    textDim: "#666666",
+    
+    accent: "#10B981",
+    accentGradient: "linear-gradient(135deg, #10B981, #059669)",
+    accentLight: "#34D399",
+    accentDark: "#059669",
+    
     typeColors: {
-      A1: { main: "#F59E0B", gradient: "linear-gradient(135deg, #F59E0B, #EA580C)", glow: "none" },
-      A2: { main: "#10B981", gradient: "linear-gradient(135deg, #10B981, #059669)", glow: "none" },
-      B1: { main: "#6366F1", gradient: "linear-gradient(135deg, #6366F1, #4F46E5)", glow: "none" },
-      B2: { main: "#EC4899", gradient: "linear-gradient(135deg, #EC4899, #DB2777)", glow: "none" },
+      A1: { main: "#F59E0B", gradient: "linear-gradient(135deg, #F59E0B, #D97706)", glow: "rgba(245, 158, 11, 0.3)" },
+      A2: { main: "#10B981", gradient: "linear-gradient(135deg, #10B981, #059669)", glow: "rgba(16, 185, 129, 0.3)" },
+      B1: { main: "#8B5CF6", gradient: "linear-gradient(135deg, #8B5CF6, #7C3AED)", glow: "rgba(139, 92, 246, 0.3)" },
+      B2: { main: "#EC4899", gradient: "linear-gradient(135deg, #EC4899, #DB2777)", glow: "rgba(236, 72, 153, 0.3)" },
     },
+    
     pink: "#EC4899",
     green: "#10B981",
     orange: "#F59E0B",
     red: "#EF4444",
-    cyan: "#06B6D4",
-    yellow: "#EAB308",
-    shadow: "6px 6px 12px #C8CDD8, -6px -6px 12px #FFFFFF",
-    shadowLg: "10px 10px 20px #C8CDD8, -10px -10px 20px #FFFFFF",
-    glow: () => "none",
-    glassBg: "#E4E9F2",
-    glassBorder: "transparent",
+    cyan: "#10B981",
+    yellow: "#F59E0B",
+    
+    shadow: "none",
+    shadowLg: "0 20px 40px rgba(0, 0, 0, 0.3)",
+    shadowCard: "none",
+    glow: (color) => `0 0 30px ${color}40`,
+    glassBg: "#141414",
+    glassBorder: "#2a2a2a",
+    blur: "none",
   },
 };
 
-// 現在のテーマを選択（ここを変えるだけでテーマ切替）
-const CURRENT_THEME = "cleanLight";
+// 現在のテーマを選択
+const CURRENT_THEME = "premium";
 const theme = THEMES[CURRENT_THEME];
 
-// テーマからカラーを取得（後方互換のため C としてもエクスポート）
+// テーマからカラーを取得
 const C = {
   bg: theme.bgSolid,
   card: theme.card,
@@ -201,66 +154,63 @@ const C = {
   cyan: theme.cyan,
   yellow: theme.yellow,
   shadowLight: "#FFFFFF",
-  shadowDark: "#C8CDD8",
+  shadowDark: "#E8E8E8",
 };
 
-// スタイルヘルパー
+// スタイルヘルパー（Premiumデザイン）
 const styles = {
-  // カード
   card: {
     background: theme.card,
-    borderRadius: 20,
-    padding: 24,
+    borderRadius: 0,
+    padding: 32,
     border: `1px solid ${theme.cardBorder}`,
-    boxShadow: theme.shadow,
-    backdropFilter: "blur(10px)",
+    boxShadow: "none",
   },
   cardPressed: {
     background: theme.glassBg,
-    borderRadius: 16,
-    padding: 16,
+    borderRadius: 0,
+    padding: 24,
     border: `1px solid ${theme.glassBorder}`,
-    boxShadow: "inset 0 2px 4px rgba(0,0,0,0.2)",
+    boxShadow: "none",
   },
-  // ボタン
   buttonPrimary: {
-    background: theme.accentGradient,
+    background: theme.accent,
     border: "none",
-    borderRadius: 14,
-    padding: "14px 24px",
+    borderRadius: 0,
+    padding: "16px 32px",
     color: "#fff",
-    fontWeight: 700,
+    fontWeight: 500,
+    fontSize: 14,
+    letterSpacing: "2px",
+    textTransform: "uppercase",
     cursor: "pointer",
-    boxShadow: theme.glow(theme.accent),
     transition: "all 0.3s ease",
   },
   buttonSecondary: {
     background: "transparent",
     border: `1px solid ${theme.cardBorder}`,
-    borderRadius: 12,
-    padding: "12px 20px",
+    borderRadius: 0,
+    padding: "14px 28px",
     color: theme.textMuted,
-    fontWeight: 600,
+    fontWeight: 500,
+    fontSize: 13,
+    letterSpacing: "1px",
     cursor: "pointer",
     transition: "all 0.3s ease",
   },
-  // グロー効果（タイプ別）
   typeGlow: (type) => ({
-    boxShadow: theme.typeColors[type]?.glow ? `0 0 30px ${theme.typeColors[type].glow}` : "none",
+    boxShadow: theme.typeColors[type]?.glow ? `0 0 40px ${theme.typeColors[type].glow}` : "none",
   }),
-  // Aurora グラデーション背景
   auroraBg: {
-    background: theme.aurora || theme.bg,
+    background: theme.bg,
     backgroundColor: theme.bgSolid,
     minHeight: "100vh",
   },
-  // グラデーション背景（後方互換）
   gradientBg: {
-    background: theme.aurora || theme.bg,
+    background: theme.bg,
     backgroundColor: theme.bgSolid,
     minHeight: "100vh",
   },
-  // アニメーション用
   fadeIn: {
     animation: "fadeIn 0.5s ease-out",
   },
@@ -269,15 +219,16 @@ const styles = {
   },
 };
 
-// 後方互換のための neu オブジェクト
+// フラットスタイル（ニューモーフィズムを廃止）
 const neu = {
-  raised: { boxShadow: theme.shadow },
-  raisedLg: { boxShadow: theme.shadowLg },
-  pressed: { boxShadow: "inset 0 2px 4px rgba(0,0,0,0.2)" },
-  pressedSm: { boxShadow: "inset 0 1px 2px rgba(0,0,0,0.15)" },
+  raised: { boxShadow: "none", border: `1px solid ${theme.cardBorder}` },
+  raisedLg: { boxShadow: "0 10px 30px rgba(0,0,0,0.08)" },
+  pressed: { boxShadow: "none", background: "#F5F5F5" },
+  pressedSm: { boxShadow: "none", background: "#F5F5F5" },
   flat: { boxShadow: "none" },
   accentRaised: (color) => ({
-    boxShadow: `${theme.shadow}, inset 0 0 0 2px ${color}20`,
+    boxShadow: "none",
+    border: `1.5px solid ${color}`,
   }),
 };
 
@@ -387,87 +338,79 @@ const CYCLING_CATEGORIES = [
 const CYCLING_BRANDS = ["Shimano", "Specialized", "fi'zi:k", "Selle Italia", "Look", "Supacaz", "Lizard Skins", "Brooks"];
 
 
-// カスタムSVGアイコン
+// カスタムSVGアイコン（Premium Minimal Style - strokeWidth: 1.5）
 const Icons = {
-  // BiomechFit ロゴ（カエル博士）
-  frogDoctor: (color = C.accent, size = 24) => (
+  // STANCE CORE ロゴ（同心円デザイン）
+  stanceCore: (color = C.accent, size = 24) => (
     <svg width={size} height={size} viewBox="0 0 64 64" fill="none">
-      {/* 白衣 */}
-      <path d="M20 44 L32 54 L44 44 L44 62 L20 62 Z" fill="#fff" stroke={color} strokeWidth="2"/>
-      <path d="M32 54 L32 62" stroke={color} strokeWidth="2"/>
-      
-      {/* 蝶ネクタイ */}
-      <path d="M26 50 L32 47 L38 50 L32 53 Z" fill="#E74C3C"/>
-      <circle cx="32" cy="50" r="2" fill="#C0392B"/>
-      
-      {/* カエルの顔 */}
-      <ellipse cx="32" cy="28" rx="16" ry="14" fill={color}/>
-      
-      {/* メガネ */}
-      <circle cx="24" cy="22" r="6" fill="none" stroke="#333" strokeWidth="2"/>
-      <circle cx="40" cy="22" r="6" fill="none" stroke="#333" strokeWidth="2"/>
-      <path d="M30 22 L34 22" stroke="#333" strokeWidth="2"/>
-      <path d="M18 20 L18 22" stroke="#333" strokeWidth="1.5"/>
-      <path d="M46 20 L46 22" stroke="#333" strokeWidth="1.5"/>
-      
-      {/* 目（メガネの奥） */}
-      <circle cx="24" cy="22" r="4" fill="#fff"/>
-      <circle cx="40" cy="22" r="4" fill="#fff"/>
-      <circle cx="25" cy="22" r="2.5" fill="#333"/>
-      <circle cx="41" cy="22" r="2.5" fill="#333"/>
-      <circle cx="26" cy="21" r="1" fill="#fff"/>
-      <circle cx="42" cy="21" r="1" fill="#fff"/>
-      
-      {/* 口（にっこり） */}
-      <path d="M24 34 Q32 40 40 34" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round"/>
-      
-      {/* 頬 */}
-      <circle cx="18" cy="30" r="2.5" fill={color} opacity="0.5"/>
-      <circle cx="46" cy="30" r="2.5" fill={color} opacity="0.5"/>
+      <defs>
+        <radialGradient id="coreGrad">
+          <stop offset="0%" stopColor={color} stopOpacity="0.3" />
+          <stop offset="100%" stopColor={color} stopOpacity="0" />
+        </radialGradient>
+      </defs>
+      <circle cx="32" cy="32" r="20" fill="url(#coreGrad)"/>
+      <circle cx="32" cy="32" r="24" fill="none" stroke={color} strokeWidth="1.5" opacity="0.6"/>
+      <circle cx="32" cy="32" r="17" fill="none" stroke={color} strokeWidth="1" opacity="0.4"/>
+      <circle cx="32" cy="32" r="10" fill="none" stroke={color} strokeWidth="0.75" opacity="0.3"/>
+      <circle cx="32" cy="32" r="4" fill={color} opacity="0.9"/>
+    </svg>
+  ),
+  
+  // STANCE CORE ロゴ（テキスト付きフル版）
+  stanceCoreFull: (color = C.accent, size = 120) => (
+    <svg width={size} height={size * 0.8} viewBox="0 0 350 280" fill="none">
+      <defs>
+        <radialGradient id="coreGradFull">
+          <stop offset="0%" stopColor={color} stopOpacity="0.3" />
+          <stop offset="100%" stopColor={color} stopOpacity="0" />
+        </radialGradient>
+      </defs>
+      <circle cx="175" cy="110" r="60" fill="url(#coreGradFull)"/>
+      <circle cx="175" cy="110" r="70" fill="none" stroke={color} strokeWidth="2" opacity="0.6"/>
+      <circle cx="175" cy="110" r="85" fill="none" stroke={color} strokeWidth="1.5" opacity="0.4"/>
+      <circle cx="175" cy="110" r="100" fill="none" stroke={color} strokeWidth="1" opacity="0.25"/>
+      <circle cx="175" cy="110" r="10" fill={color} opacity="0.9"/>
+      <text x="175" y="215" fontFamily="Inter, -apple-system, sans-serif" fontSize="28" fontWeight="600" letterSpacing="8" fill={color} textAnchor="middle">STANCE</text>
+      <text x="175" y="245" fontFamily="Inter, -apple-system, sans-serif" fontSize="18" fontWeight="400" letterSpacing="6" fill="#666" textAnchor="middle">CORE</text>
     </svg>
   ),
   
   dna: (color = C.accent, size = 24) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M2 15c6.667-6 13.333 0 20-6"/>
       <path d="M9 22c1.798-1.998 2.518-3.995 2.807-5.993"/>
       <path d="M15 2c-1.798 1.998-2.518 3.995-2.807 5.993"/>
       <path d="M17 6l-2.5-2.5"/>
-      <path d="M14 8l-3-3"/>
       <path d="M7 18l2.5 2.5"/>
-      <path d="M3.5 14.5l.5.5"/>
-      <path d="M20 9l.5.5"/>
-      <path d="M6.5 12.5l1 1"/>
-      <path d="M16.5 10.5l1 1"/>
-      <path d="M10 16l-2 2"/>
     </svg>
   ),
   target: (color = C.accent, size = 24) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="12" r="10"/>
       <circle cx="12" cy="12" r="6"/>
       <circle cx="12" cy="12" r="2"/>
     </svg>
   ),
   zap: (color = C.orange, size = 24) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill={color} stroke="none">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
     </svg>
   ),
   mountain: (color = C.green, size = 24) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="m8 3 4 8 5-5 5 15H2L8 3z"/>
     </svg>
   ),
   wave: (color = C.accent, size = 24) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
       <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
       <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
     </svg>
   ),
   crosshair: (color = C.pink, size = 24) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="12" r="10"/>
       <line x1="22" y1="12" x2="18" y2="12"/>
       <line x1="6" y1="12" x2="2" y2="12"/>
@@ -476,32 +419,30 @@ const Icons = {
     </svg>
   ),
   foot: (color = C.accent, size = 24) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0Z"/>
       <path d="M20 20v-2.38c0-2.12 1.03-3.12 1-5.62-.03-2.72-1.49-6-4.5-6C14.63 6 14 7.8 14 9.5c0 3.11 2 5.66 2 8.68V20a2 2 0 1 0 4 0Z"/>
-      <path d="M16 17h4"/>
-      <path d="M4 13h4"/>
     </svg>
   ),
   rotate: (color = C.cyan, size = 24) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/>
       <path d="M21 3v5h-5"/>
     </svg>
   ),
   activity: (color = C.pink, size = 24) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
     </svg>
   ),
   user: (color = C.green, size = 24) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
       <circle cx="12" cy="7" r="4"/>
     </svg>
   ),
   bike: (color = C.accent, size = 24) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="18.5" cy="17.5" r="3.5"/>
       <circle cx="5.5" cy="17.5" r="3.5"/>
       <circle cx="15" cy="5" r="1"/>
@@ -509,7 +450,7 @@ const Icons = {
     </svg>
   ),
   trophy: (color = C.orange, size = 24) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
       <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
       <path d="M4 22h16"/>
@@ -519,36 +460,35 @@ const Icons = {
     </svg>
   ),
   lock: (color = C.textDim, size = 24) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
       <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
     </svg>
   ),
   check: (color = C.green, size = 24) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <polyline points="20 6 9 17 4 12"/>
     </svg>
   ),
   alertTriangle: (color = C.orange, size = 24) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
       <line x1="12" y1="9" x2="12" y2="13"/>
       <line x1="12" y1="17" x2="12.01" y2="17"/>
     </svg>
   ),
   sparkles: (color = C.accent, size = 24) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
-      <path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/>
     </svg>
   ),
   frame: (color = C.accent, size = 24) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
     </svg>
   ),
   wheel: (color = C.accent, size = 24) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="12" r="10"/>
       <circle cx="12" cy="12" r="4"/>
       <line x1="12" y1="2" x2="12" y2="8"/>
@@ -558,59 +498,59 @@ const Icons = {
     </svg>
   ),
   arrowRight: (color = C.text, size = 24) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <line x1="5" y1="12" x2="19" y2="12"/>
       <polyline points="12 5 19 12 12 19"/>
     </svg>
   ),
   refresh: (color = C.textDim, size = 24) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/>
       <path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/>
     </svg>
   ),
   road: (color = C.accent, size = 24) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M5 2l2 18"/><path d="M19 2l-2 18"/><path d="M12 6v4"/><path d="M12 14v4"/>
     </svg>
   ),
   saddle: (color = C.accent, size = 24) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <ellipse cx="12" cy="10" rx="9" ry="4"/>
       <path d="M12 14v6"/>
       <path d="M8 20h8"/>
     </svg>
   ),
   shoe: (color = C.accent, size = 24) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M3 14h4l3-3 4 1 7 4v2H3z"/>
       <path d="M7 14v4"/>
     </svg>
   ),
   settings: (color = C.accent, size = 24) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="12" r="3"/>
       <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
     </svg>
   ),
   save: (color = C.accent, size = 24) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
       <polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
     </svg>
   ),
   home: (color = C.accent, size = 24) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
     </svg>
   ),
   star: (color = C.accent, size = 24) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill={color} stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
     </svg>
   ),
   link: (color = C.accent, size = 24) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
       <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
     </svg>
@@ -1248,9 +1188,9 @@ const TYPE_INFO_CYCLING = {
       examples: ["Specialized S-Works Tarmac", "Cervélo S5", "Giant Propel"]
     },
     products: [
-      { name: "Specialized Tarmac SL8", price: "550,000〜", reason: "高剛性カーボン。スプリントでのパワー伝達が最強。", amazonQuery: "Specialized+Tarmac", rakutenQuery: "Specialized%20Tarmac", image: "🚴" },
-      { name: "Zipp 404 Firecrest", price: "280,000", reason: "58mmディープリム。エアロ性能と加速のバランス◎", amazonQuery: "Zipp+404+Firecrest", rakutenQuery: "Zipp%20404%20Firecrest", image: "🚴" },
-      { name: "Shimano Dura-Ace ペダル", price: "32,000", reason: "軽量×高剛性。ダンシングでのパワー伝達に。", amazonQuery: "Shimano+Dura-Ace+PD-R9100", rakutenQuery: "Shimano%20Dura-Ace%20ペダル", image: "🚴" },
+      { name: "Specialized Tarmac SL8", price: "550,000〜", reason: "高剛性カーボン。スプリントでのパワー伝達が最強。", amazonQuery: "Specialized+Tarmac", rakutenQuery: "Specialized%20Tarmac", image: "" },
+      { name: "Zipp 404 Firecrest", price: "280,000", reason: "58mmディープリム。エアロ性能と加速のバランス◎", amazonQuery: "Zipp+404+Firecrest", rakutenQuery: "Zipp%20404%20Firecrest", image: "" },
+      { name: "Shimano Dura-Ace ペダル", price: "32,000", reason: "軽量×高剛性。ダンシングでのパワー伝達に。", amazonQuery: "Shimano+Dura-Ace+PD-R9100", rakutenQuery: "Shimano%20Dura-Ace%20ペダル", image: "" },
     ],
     form: {
       landing: { title: "ペダリング", type: "高回転型（90rpm+）", detail: "軽いギアでクルクル回す。踏み込みより回転重視。" },
@@ -1313,9 +1253,9 @@ const TYPE_INFO_CYCLING = {
       examples: ["Trek Émonda", "Specialized Aethos", "Scott Addict RC"]
     },
     products: [
-      { name: "Trek Émonda SLR", price: "650,000〜", reason: "超軽量フレーム。ヒルクライムに最適。", amazonQuery: "Trek+Emonda", rakutenQuery: "Trek%20Emonda", image: "🚴" },
-      { name: "Roval Alpinist CLX", price: "380,000", reason: "1,250g超軽量ホイール。登りで圧倒的優位。", amazonQuery: "Roval+Alpinist+CLX", rakutenQuery: "Roval%20Alpinist", image: "🚴" },
-      { name: "fi'zi:k Antares サドル", price: "28,000", reason: "後ろ乗りに最適な形状。長時間でも快適。", amazonQuery: "fizik+Antares", rakutenQuery: "fizik%20Antares", image: "🚴" },
+      { name: "Trek Émonda SLR", price: "650,000〜", reason: "超軽量フレーム。ヒルクライムに最適。", amazonQuery: "Trek+Emonda", rakutenQuery: "Trek%20Emonda", image: "" },
+      { name: "Roval Alpinist CLX", price: "380,000", reason: "1,250g超軽量ホイール。登りで圧倒的優位。", amazonQuery: "Roval+Alpinist+CLX", rakutenQuery: "Roval%20Alpinist", image: "" },
+      { name: "fi'zi:k Antares サドル", price: "28,000", reason: "後ろ乗りに最適な形状。長時間でも快適。", amazonQuery: "fizik+Antares", rakutenQuery: "fizik%20Antares", image: "" },
     ],
     form: {
       landing: { title: "ペダリング", type: "トルク型（70-85rpm）", detail: "重いギアでグイグイ踏む。" },
@@ -1378,9 +1318,9 @@ const TYPE_INFO_CYCLING = {
       examples: ["Canyon Ultimate", "Cannondale SuperSix", "BMC Teammachine"]
     },
     products: [
-      { name: "Canyon Ultimate CF SLX", price: "450,000〜", reason: "コスパ最強のオールラウンダー。効率重視のライダーに。", amazonQuery: "Canyon+Ultimate", rakutenQuery: "Canyon%20Ultimate", image: "🚴" },
-      { name: "DT Swiss ARC 1400", price: "350,000", reason: "50mmディープ。巡航効率と軽さのバランス◎", amazonQuery: "DT+Swiss+ARC+1400", rakutenQuery: "DT%20Swiss%20ARC%201400", image: "🚴" },
-      { name: "Wahoo KICKR", price: "180,000", reason: "スマートローラー。効率的なペダリング練習に最適。", amazonQuery: "Wahoo+KICKR", rakutenQuery: "Wahoo%20KICKR", image: "🚴" },
+      { name: "Canyon Ultimate CF SLX", price: "450,000〜", reason: "コスパ最強のオールラウンダー。効率重視のライダーに。", amazonQuery: "Canyon+Ultimate", rakutenQuery: "Canyon%20Ultimate", image: "" },
+      { name: "DT Swiss ARC 1400", price: "350,000", reason: "50mmディープ。巡航効率と軽さのバランス◎", amazonQuery: "DT+Swiss+ARC+1400", rakutenQuery: "DT%20Swiss%20ARC%201400", image: "" },
+      { name: "Wahoo KICKR", price: "180,000", reason: "スマートローラー。効率的なペダリング練習に最適。", amazonQuery: "Wahoo+KICKR", rakutenQuery: "Wahoo%20KICKR", image: "" },
     ],
     form: {
       landing: { title: "ペダリング", type: "高効率型", detail: "綺麗な円運動でロスなく回す。" },
@@ -1443,9 +1383,9 @@ const TYPE_INFO_CYCLING = {
       examples: ["Pinarello Dogma F", "Colnago V4Rs", "Factor O2"]
     },
     products: [
-      { name: "Pinarello Dogma F", price: "800,000〜", reason: "最高峰のオールラウンドフレーム。プロも愛用。", amazonQuery: "Pinarello+Dogma", rakutenQuery: "Pinarello%20Dogma", image: "🚴" },
-      { name: "Campagnolo Bora WTO 45", price: "400,000", reason: "45mmオールラウンドホイール。どんな状況にも対応。", amazonQuery: "Campagnolo+Bora+WTO", rakutenQuery: "Campagnolo%20Bora%20WTO", image: "🚴" },
-      { name: "Garmin Edge 840", price: "60,000", reason: "高機能サイコン。データ分析で走りを改善。", amazonQuery: "Garmin+Edge+840", rakutenQuery: "Garmin%20Edge%20840", image: "🚴" },
+      { name: "Pinarello Dogma F", price: "800,000〜", reason: "最高峰のオールラウンドフレーム。プロも愛用。", amazonQuery: "Pinarello+Dogma", rakutenQuery: "Pinarello%20Dogma", image: "" },
+      { name: "Campagnolo Bora WTO 45", price: "400,000", reason: "45mmオールラウンドホイール。どんな状況にも対応。", amazonQuery: "Campagnolo+Bora+WTO", rakutenQuery: "Campagnolo%20Bora%20WTO", image: "" },
+      { name: "Garmin Edge 840", price: "60,000", reason: "高機能サイコン。データ分析で走りを改善。", amazonQuery: "Garmin+Edge+840", rakutenQuery: "Garmin%20Edge%20840", image: "" },
     ],
     form: {
       landing: { title: "ペダリング", type: "臨機応変型", detail: "状況に応じてペダリングを変える。" },
@@ -1468,35 +1408,38 @@ const getTypeInfo = (sport, type) => {
   return sportData[type];
 };
 
-// ニューモーフィズム Cardコンポーネント
+// Premium Card コンポーネント
 const Card = ({ children, style = {}, pressed = false }) => (
   <div style={{ 
     background: theme.card,
-    borderRadius: 24, 
-    padding: 24,
+    borderRadius: 0, 
+    padding: 32,
     border: `1px solid ${theme.cardBorder}`,
-    boxShadow: pressed ? "inset 0 2px 4px rgba(0,0,0,0.1)" : (theme.shadowCard || theme.shadow),
+    boxShadow: "none",
+    transition: "all 0.3s ease",
     ...style 
   }}>
     {children}
   </div>
 );
 
-// ボタン
+// Premium ボタン
 const NeuButton = ({ children, onClick, active = false, color = C.accent, style = {} }) => (
   <button
     onClick={onClick}
     style={{
-      background: active ? `${color}15` : theme.card,
-      border: `1px solid ${active ? color + "30" : theme.cardBorder}`,
-      borderRadius: 16,
-      padding: "14px 24px",
+      background: active ? color : "transparent",
+      border: `1px solid ${active ? color : theme.cardBorder}`,
+      borderRadius: 0,
+      padding: "14px 28px",
       cursor: "pointer",
-      transition: "all 0.2s ease",
-      boxShadow: active ? `0 4px 12px ${color}20` : theme.shadowCard || "none",
-      color: active ? color : C.textMuted,
-      fontWeight: 600,
-      fontSize: 14,
+      transition: "all 0.3s ease",
+      boxShadow: "none",
+      color: active ? "#fff" : C.textMuted,
+      fontWeight: 500,
+      fontSize: 13,
+      letterSpacing: "1px",
+      textTransform: "uppercase",
       ...style
     }}
   >
@@ -1564,13 +1507,13 @@ export default function App() {
     
     // LocalStorageから保存された結果を読み込み
     try {
-      const saved = localStorage.getItem("biomechfit_result");
+      const saved = localStorage.getItem("stancecore_result");
       if (saved) {
         const parsed = JSON.parse(saved);
         setSavedResult(parsed);
       }
       // フィッティングデータも読み込み
-      const savedMetrics = localStorage.getItem("biomechfit_metrics");
+      const savedMetrics = localStorage.getItem("stancecore_metrics");
       if (savedMetrics) {
         const parsedMetrics = JSON.parse(savedMetrics);
         setBodyMetrics(prev => ({ ...prev, ...parsedMetrics }));
@@ -1584,7 +1527,7 @@ export default function App() {
   useEffect(() => {
     if (bodyMetrics.height || bodyMetrics.inseam) {
       try {
-        localStorage.setItem("biomechfit_metrics", JSON.stringify(bodyMetrics));
+        localStorage.setItem("stancecore_metrics", JSON.stringify(bodyMetrics));
       } catch (e) {
         console.log("Failed to save metrics");
       }
@@ -1602,10 +1545,10 @@ export default function App() {
   
   // ステージアップチェック
   const STAGE_THRESHOLDS = [
-    { min: 5, level: 1, label: "基本解析", emoji: "🔍", message: "基本解析モード突入！" },
-    { min: 10, level: 2, label: "標準解析", emoji: "📊", message: "標準解析モードへ！" },
-    { min: 20, level: 3, label: "高精度", emoji: "🎯", message: "高精度モードへ！" },
-    { min: 30, level: 4, label: "完全解析", emoji: "🏆", message: "完全解析達成！！" },
+    { min: 5, level: 1, label: "基本解析", message: "基本解析モード突入" },
+    { min: 10, level: 2, label: "標準解析", message: "標準解析モードへ" },
+    { min: 20, level: 3, label: "高精度", message: "高精度モードへ" },
+    { min: 30, level: 4, label: "完全解析", message: "完全解析達成" },
   ];
   
   const checkStageUp = (answerCount, newScores) => {
@@ -1827,7 +1770,7 @@ export default function App() {
     
     // LocalStorageに保存（スポーツ共通）
     try {
-      localStorage.setItem("biomechfit_result", JSON.stringify(resultData));
+      localStorage.setItem("stancecore_result", JSON.stringify(resultData));
       setSavedResult(resultData);
     } catch (e) {
       console.log("Failed to save result");
@@ -1862,12 +1805,15 @@ export default function App() {
               boxShadow: `0 8px 24px ${theme.accent}15`,
               marginBottom: 20 
             }}>
-              {Icons.frogDoctor(theme.accent, 64)}
+              {Icons.stanceCore(theme.accent, 64)}
             </div>
-            <h1 style={{ color: C.text, fontSize: 32, fontWeight: 800, margin: "0 0 8px", letterSpacing: "-0.5px" }}>
-              BiomechFit
+            <h1 style={{ color: theme.accent, fontSize: 28, fontWeight: 600, margin: "0 0 4px", letterSpacing: "6px", textTransform: "uppercase" }}>
+              STANCE
             </h1>
-            <p style={{ color: theme.accent, fontSize: 13, fontWeight: 700, margin: 0, letterSpacing: "2px", textTransform: "uppercase" }}>
+            <p style={{ color: C.text, fontSize: 18, fontWeight: 500, margin: "0 0 8px", letterSpacing: "4px" }}>
+              CORE
+            </p>
+            <p style={{ color: C.textMuted, fontSize: 11, fontWeight: 500, margin: 0, letterSpacing: "2px", textTransform: "uppercase" }}>
               Body Type Diagnosis
             </p>
           </div>
@@ -2134,31 +2080,32 @@ export default function App() {
               animation: "slideUp 0.5s ease-out",
             }}>
               <div style={{
-                fontSize: 80,
-                marginBottom: 20,
-                animation: "pulse 1s ease-in-out infinite",
+                marginBottom: 24,
+                opacity: 0.9,
               }}>
-                {stageUp.emoji}
+                {Icons.stanceCore(stageUp.level === 4 ? (stageUp.isClose ? C.orange : C.green) : C.accent, 80)}
               </div>
               <h2 style={{
                 color: "#fff",
-                fontSize: 28,
-                fontWeight: 800,
+                fontSize: 24,
+                fontWeight: 600,
+                letterSpacing: "2px",
                 margin: "0 0 12px",
-                textShadow: `0 0 30px ${stageUp.level === 4 ? (stageUp.isClose ? C.orange : C.green) : C.accent}`,
+                textTransform: "uppercase",
               }}>
                 {stageUp.message}
               </h2>
               <p style={{
                 color: C.textMuted,
-                fontSize: 16,
+                fontSize: 14,
                 margin: 0,
+                letterSpacing: "1px",
               }}>
                 {stageUp.level === 4 
                   ? (stageUp.isClose 
-                      ? "より正確な診断のため、追加質問に回答してください" 
-                      : "診断精度が最大になりました！結果を表示します...")
-                  : `精度レベル: ${stageUp.label}`
+                      ? "追加質問で精度を上げられます" 
+                      : "診断精度が最大になりました")
+                  : `LEVEL ${stageUp.level} — ${stageUp.label}`
                 }
               </p>
               {stageUp.level === 4 && !stageUp.isClose && (
@@ -2481,15 +2428,15 @@ export default function App() {
             </div>
           </Card>
           
-          {/* 僅差警告 */}
+          {/* 僅差警告（残り質問あり） */}
           {result.isClose?.any && remainingQuestions > 0 && (
             <Card style={{ 
               marginTop: 16, 
               background: `${C.orange}08`,
-              border: `2px solid ${C.orange}`,
+              border: `1px solid ${C.orange}`,
             }}>
               <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
-                <span style={{ fontSize: 24 }}>⚠️</span>
+                {Icons.alertTriangle(C.orange, 20)}
                 <div style={{ flex: 1 }}>
                   <p style={{ color: C.orange, fontSize: 14, fontWeight: 700, margin: "0 0 8px" }}>
                     判定が僅差です
@@ -2506,17 +2453,18 @@ export default function App() {
                     onClick={() => {
                       setMode("quiz");
                       setStageUp(null);
-                      setPrevAccuracyLevel(Math.min(3, prevAccuracyLevel)); // 完全解析をリセット
+                      setPrevAccuracyLevel(Math.min(3, prevAccuracyLevel));
                     }}
                     style={{
                       width: "100%",
                       padding: "12px 16px",
-                      borderRadius: 12,
+                      borderRadius: 0,
                       border: "none",
                       background: C.orange,
                       color: "#fff",
                       fontSize: 13,
-                      fontWeight: 700,
+                      fontWeight: 500,
+                      letterSpacing: "1px",
                       cursor: "pointer",
                       display: "flex",
                       alignItems: "center",
@@ -2524,8 +2472,30 @@ export default function App() {
                       gap: 8,
                     }}
                   >
-                    🎯 追加の質問に回答して精度を上げる（残り{remainingQuestions}問）
+                    追加の質問に回答する（残り{remainingQuestions}問）
                   </button>
+                </div>
+              </div>
+            </Card>
+          )}
+          
+          {/* 僅差だが全質問終了 */}
+          {result.isClose?.any && remainingQuestions === 0 && (
+            <Card style={{ 
+              marginTop: 16, 
+              background: `${C.accent}08`,
+              border: `1px solid ${C.accent}`,
+            }}>
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+                {Icons.check(C.accent, 20)}
+                <div style={{ flex: 1 }}>
+                  <p style={{ color: C.accent, fontSize: 14, fontWeight: 600, margin: "0 0 8px", letterSpacing: "1px" }}>
+                    全ての質問に回答しました
+                  </p>
+                  <p style={{ color: C.textMuted, fontSize: 13, margin: 0, lineHeight: 1.6 }}>
+                    判定に僅差がありますが、これ以上の質問はありません。
+                    上記の結果を参考に、実際に試してみてください。
+                  </p>
                 </div>
               </div>
             </Card>
@@ -2534,7 +2504,7 @@ export default function App() {
           {/* だから納得セクション（改善版） */}
           <Card style={{ marginTop: 16 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
-              <span style={{ fontSize: 20 }}>💡</span>
+              {Icons.sparkles(typeInfo.color, 18)}
               <p style={{ color: C.text, fontSize: 16, fontWeight: 700, margin: 0 }}>だから納得</p>
             </div>
             
@@ -2551,7 +2521,7 @@ export default function App() {
                 border: `1px solid ${typeInfo.color}25`,
               }}>
                 <p style={{ color: typeInfo.color, fontSize: 13, fontWeight: 700, margin: "0 0 10px" }}>
-                  🤔 こう言われて困惑したことは？
+                  こう言われて困惑したことは？
                 </p>
                 <p style={{ color: C.text, fontSize: 14, margin: 0, lineHeight: 1.7 }}>
                   {type === "A1" && "「もっと腰を安定させて」「後ろ体重で粘って」と言われても、なんかしっくりこなかった"}
@@ -3057,7 +3027,7 @@ export default function App() {
                                     {/* 購入リンク（アイコンのみ） */}
                                     <div style={{ display: "flex", gap: 12, justifyContent: "flex-end" }}>
                                       <a
-                                        href={`https://www.amazon.co.jp/s?k=${gear.amazonQuery}&tag=biomechfit-22`}
+                                        href={`https://www.amazon.co.jp/s?k=${gear.amazonQuery}&tag=stancecore-22`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         title="Amazonで見る"
@@ -3172,7 +3142,7 @@ export default function App() {
                   fontWeight: 700,
                 }}
               >
-                📏 股下から計算
+                股下から計算
               </button>
             </div>
             
@@ -3180,7 +3150,7 @@ export default function App() {
             {showFittingCalc === "simple" && (
             <>
               <div style={{ background: C.bg, borderRadius: 16, padding: 16, marginBottom: 16, ...neu.pressedSm }}>
-                <p style={{ color: C.text, fontSize: 13, fontWeight: 700, margin: "0 0 12px" }}>🚴 現在のセッティング</p>
+                <p style={{ color: C.text, fontSize: 13, fontWeight: 700, margin: "0 0 12px" }}>現在のセッティング</p>
                 <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                   <div>
                     <label style={{ color: C.textDim, fontSize: 11, fontWeight: 600, display: "block", marginBottom: 4 }}>サドル高 (mm)</label>
@@ -3302,13 +3272,13 @@ export default function App() {
                 return (
                 <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                   <p style={{ color: C.text, fontSize: 13, fontWeight: 700, margin: 0 }}>
-                    💡 {type}タイプへの調整アドバイス
+                    Tip: {type}タイプへの調整アドバイス
                   </p>
                   
                   {/* サドル高 */}
                   <div style={{ background: C.bg, borderRadius: 12, padding: 14, ...neu.raised }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-                      <span style={{ color: C.text, fontSize: 13, fontWeight: 700 }}>🪑 サドル高</span>
+                      <span style={{ color: C.text, fontSize: 13, fontWeight: 700 }}>サドル高</span>
                       <span style={{ color: typeInfo.color, fontSize: 14, fontWeight: 800 }}>{adv.saddleAdj}</span>
                     </div>
                     <p style={{ color: C.textMuted, fontSize: 11, margin: 0 }}>
@@ -3319,7 +3289,7 @@ export default function App() {
                   {/* ハンドル落差 */}
                   <div style={{ background: C.bg, borderRadius: 12, padding: 14, ...neu.raised }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-                      <span style={{ color: C.text, fontSize: 13, fontWeight: 700 }}>📐 ハンドル落差</span>
+                      <span style={{ color: C.text, fontSize: 13, fontWeight: 700 }}>ハンドル落差</span>
                       <span style={{ 
                         color: dropStatus === "適正" ? C.green : C.orange, 
                         fontSize: 14, 
@@ -3336,7 +3306,7 @@ export default function App() {
                   {/* サドル前後 */}
                   <div style={{ background: C.bg, borderRadius: 12, padding: 14, ...neu.raised }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-                      <span style={{ color: C.text, fontSize: 13, fontWeight: 700 }}>↔️ サドル前後</span>
+                      <span style={{ color: C.text, fontSize: 13, fontWeight: 700 }}>サドル前後</span>
                       <span style={{ color: typeInfo.color, fontSize: 14, fontWeight: 800 }}>{adv.setbackAdj}</span>
                     </div>
                     <p style={{ color: C.textMuted, fontSize: 11, margin: 0 }}>
@@ -3347,7 +3317,7 @@ export default function App() {
                   {/* クランク長 */}
                   <div style={{ background: C.bg, borderRadius: 12, padding: 14, ...neu.raised }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-                      <span style={{ color: C.text, fontSize: 13, fontWeight: 700 }}>⚙️ クランク長</span>
+                      <span style={{ color: C.text, fontSize: 13, fontWeight: 700 }}>クランク長</span>
                       <span style={{ color: typeInfo.color, fontSize: 14, fontWeight: 800 }}>{adv.crankAdj}</span>
                     </div>
                     <p style={{ color: C.textMuted, fontSize: 11, margin: 0 }}>
@@ -3358,7 +3328,7 @@ export default function App() {
                   {/* クリート */}
                   <div style={{ background: C.bg, borderRadius: 12, padding: 14, ...neu.raised }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-                      <span style={{ color: C.text, fontSize: 13, fontWeight: 700 }}>👟 クリート</span>
+                      <span style={{ color: C.text, fontSize: 13, fontWeight: 700 }}>クリート</span>
                       <span style={{ color: typeInfo.color, fontSize: 14, fontWeight: 700 }}>{typeInfo.fitting.cleat.position.fore_aft}</span>
                     </div>
                     <p style={{ color: C.textMuted, fontSize: 11, margin: 0 }}>
@@ -3383,7 +3353,7 @@ export default function App() {
             {showFittingCalc === "detail" && (
             <>
               <div style={{ background: C.bg, borderRadius: 16, padding: 16, marginBottom: 16, ...neu.pressedSm }}>
-                <p style={{ color: C.text, fontSize: 13, fontWeight: 700, margin: "0 0 12px" }}>📏 身体データを入力</p>
+                <p style={{ color: C.text, fontSize: 13, fontWeight: 700, margin: "0 0 12px" }}>身体データを入力</p>
                 
                 {/* 身長（必須） */}
                 <div style={{ marginBottom: 12 }}>
@@ -3505,7 +3475,7 @@ export default function App() {
                     }}
                   />
                   <p style={{ color: C.textDim, fontSize: 10, margin: "6px 0 0" }}>
-                    💡 測定方法: 壁に背中をつけて立ち、本を股に挟む
+                    測定方法: 壁に背中をつけて立ち、本を股に挟む
                   </p>
                 </div>
               </div>
@@ -3558,7 +3528,7 @@ export default function App() {
                   {/* 計算条件の表示 */}
                   <div style={{ background: `${typeInfo.color}15`, borderRadius: 10, padding: 10 }}>
                     <p style={{ color: typeInfo.color, fontSize: 11, fontWeight: 600, margin: 0, textAlign: "center" }}>
-                      🎯 脚: {bodyMetrics.bodyType === "long" ? "長め" : bodyMetrics.bodyType === "standard" ? "標準" : "短め"}
+                      脚: {bodyMetrics.bodyType === "long" ? "長め" : bodyMetrics.bodyType === "standard" ? "標準" : "短め"}
                       {" | "}肩: {bodyMetrics.shoulderType === "wide" ? "広め" : bodyMetrics.shoulderType === "narrow" ? "狭め" : "標準"}
                       {" | "}股下 {Math.round(inseam)}cm {isEstimated ? "（推定）" : "（実測）"}
                     </p>
@@ -3567,7 +3537,7 @@ export default function App() {
                   <div style={{ background: C.bg, borderRadius: 12, padding: 14, ...neu.raised }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <span style={{ fontSize: 16 }}>🪑</span>
+                        
                         <span style={{ color: C.text, fontSize: 13, fontWeight: 700 }}>サドル高</span>
                       </div>
                       <span style={{ color: typeInfo.color, fontSize: 18, fontWeight: 800 }}>
@@ -3582,7 +3552,7 @@ export default function App() {
                   <div style={{ background: C.bg, borderRadius: 12, padding: 14, ...neu.raised }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <span style={{ fontSize: 16 }}>↔️</span>
+                        
                         <span style={{ color: C.text, fontSize: 13, fontWeight: 700 }}>サドル前後</span>
                       </div>
                       <span style={{ color: typeInfo.color, fontSize: 18, fontWeight: 800 }}>
@@ -3597,7 +3567,7 @@ export default function App() {
                   <div style={{ background: C.bg, borderRadius: 12, padding: 14, ...neu.raised }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <span style={{ fontSize: 16 }}>⚙️</span>
+                        
                         <span style={{ color: C.text, fontSize: 13, fontWeight: 700 }}>クランク長</span>
                       </div>
                       <span style={{ color: typeInfo.color, fontSize: 18, fontWeight: 800 }}>
@@ -3612,7 +3582,7 @@ export default function App() {
                   <div style={{ background: C.bg, borderRadius: 12, padding: 14, ...neu.raised }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <span style={{ fontSize: 16 }}>📐</span>
+                        
                         <span style={{ color: C.text, fontSize: 13, fontWeight: 700 }}>ハンドル落差</span>
                       </div>
                       <span style={{ color: typeInfo.color, fontSize: 18, fontWeight: 800 }}>
@@ -3627,7 +3597,7 @@ export default function App() {
                   <div style={{ background: C.bg, borderRadius: 12, padding: 14, ...neu.raised }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <span style={{ fontSize: 16 }}>↕️</span>
+                        
                         <span style={{ color: C.text, fontSize: 13, fontWeight: 700 }}>ハンドル幅</span>
                       </div>
                       <span style={{ color: typeInfo.color, fontSize: 18, fontWeight: 800 }}>
@@ -3642,7 +3612,7 @@ export default function App() {
                   <div style={{ background: C.bg, borderRadius: 12, padding: 14, ...neu.raised }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <span style={{ fontSize: 16 }}>👟</span>
+                        
                         <span style={{ color: C.text, fontSize: 13, fontWeight: 700 }}>クリート</span>
                       </div>
                       <span style={{ color: typeInfo.color, fontSize: 14, fontWeight: 700 }}>
@@ -3657,7 +3627,7 @@ export default function App() {
                   <div style={{ background: C.bg, borderRadius: 12, padding: 14, ...neu.raised }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <span style={{ fontSize: 16 }}>📏</span>
+                        
                         <span style={{ color: C.text, fontSize: 13, fontWeight: 700 }}>サドル角度</span>
                       </div>
                       <span style={{ color: typeInfo.color, fontSize: 14, fontWeight: 700 }}>
@@ -3852,7 +3822,7 @@ export default function App() {
                 alignItems: "center",
                 justifyContent: "center",
               }}>
-                {Icons.frogDoctor(typeInfo.color, 28)}
+                {Icons.stanceCore(typeInfo.color, 28)}
               </div>
               <div>
                 <p style={{ color: C.text, fontSize: 16, fontWeight: 700, margin: 0 }}>プロのフィッティング</p>
@@ -3928,7 +3898,7 @@ export default function App() {
           {/* シェア */}
           <Card style={{ marginTop: 20, background: `linear-gradient(135deg, ${C.accent}10, ${C.pink}08)`, border: `1px solid ${C.accent}20` }}>
             <div style={{ textAlign: "center" }}>
-              <p style={{ color: C.text, fontSize: 14, fontWeight: 600, margin: "0 0 12px" }}>🎉 結果をシェアしよう！</p>
+              <p style={{ color: C.text, fontSize: 14, fontWeight: 600, margin: "0 0 12px" }}>結果をシェア</p>
               <p style={{ color: C.textMuted, fontSize: 12, margin: "0 0 16px", lineHeight: 1.6 }}>
                 「私は<span style={{ color: typeInfo.color, fontWeight: 600 }}>{typeInfo.name}</span>タイプ」<br/>
                 友達も診断してみよう！
@@ -3947,10 +3917,10 @@ export default function App() {
 
 合わないアドバイスに悩んでたのは、身体の使い方が違っただけだった。
 
-あなたも自分のタイプ、調べてみて👇
-https://biomechfit.vercel.app
+あなたも自分のタイプ、調べてみて
+https://stancecore.vercel.app
 
-#BiomechFit #4スタンス理論`;
+#STANCECORE #4スタンス理論`;
                   const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
                   window.open(url, '_blank');
                 }}
@@ -3978,9 +3948,9 @@ https://biomechfit.vercel.app
               
               <button
                 onClick={() => {
-                  const text = `自分の身体の使い方がわかった。私は "${typeInfo.name}" タイプ。 https://biomechfit.vercel.app`;
+                  const text = `自分の身体の使い方がわかった。私は "${typeInfo.name}" タイプ。 https://stancecore.vercel.app`;
                   if (navigator.share) {
-                    navigator.share({ title: 'BiomechFit 診断結果', text: text, url: 'https://biomechfit.vercel.app' });
+                    navigator.share({ title: 'STANCE CORE 診断結果', text: text, url: 'https://stancecore.vercel.app' });
                   } else {
                     navigator.clipboard.writeText(text);
                     alert('クリップボードにコピーしました！');
