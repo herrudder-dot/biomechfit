@@ -3197,55 +3197,6 @@ export default function App() {
             </div>
           </Card>
           
-          {/* フィットスタイル */}
-          <Card style={{ marginTop: 16 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
-              {Icons.bike(typeInfo.color, 20)}
-              <p style={{ color: C.text, fontSize: 16, fontWeight: 700, margin: 0 }}>
-                フィットスタイル
-              </p>
-            </div>
-            
-            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              {/* タイプ */}
-              <div style={{ background: "theme.bg", borderRadius: 12, padding: 14 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-                  {sport === "cycling" ? Icons.bike(C.accent, 18) : Icons.shoe(C.accent, 18)}
-                  <p style={{ color: C.textDim, fontSize: 11, fontWeight: 600, margin: 0, textTransform: "uppercase", letterSpacing: 0.5 }}>
-                    {sport === "cycling" ? "フレーム" : "シューズタイプ"}
-                  </p>
-                </div>
-                <p style={{ color: C.text, fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>{typeInfo.shoes.type.name}</p>
-                <p style={{ color: C.textMuted, fontSize: 12, margin: 0 }}>{typeInfo.shoes.type.reason}</p>
-              </div>
-              
-              {/* ポジション/ドロップ */}
-              <div style={{ background: "theme.bg", borderRadius: 12, padding: 14 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-                  {Icons.activity(C.pink, 18)}
-                  <p style={{ color: C.textDim, fontSize: 11, fontWeight: 600, margin: 0, textTransform: "uppercase", letterSpacing: 0.5 }}>
-                    {sport === "cycling" ? "ポジション" : "ドロップ"}
-                  </p>
-                </div>
-                <p style={{ color: C.text, fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>{typeInfo.shoes.drop.name}</p>
-                <p style={{ color: C.textMuted, fontSize: 12, margin: 0 }}>{typeInfo.shoes.drop.reason}</p>
-              </div>
-              
-              {/* ホイール/クッション */}
-              <div style={{ background: "theme.bg", borderRadius: 12, padding: 14 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-                  {sport === "cycling" ? Icons.wheel(C.cyan, 18) : Icons.foot(C.cyan, 18)}
-                  <p style={{ color: C.textDim, fontSize: 11, fontWeight: 600, margin: 0, textTransform: "uppercase", letterSpacing: 0.5 }}>
-                    {sport === "cycling" ? "ホイール" : "クッション"}
-                  </p>
-                </div>
-                <p style={{ color: C.text, fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>{typeInfo.shoes.cushion.name}</p>
-                <p style={{ color: C.textMuted, fontSize: 12, margin: 0 }}>{typeInfo.shoes.cushion.name}</p>
-                <p style={{ color: C.textMuted, fontSize: 12, margin: 0 }}>{typeInfo.shoes.cushion.reason}</p>
-              </div>
-            </div>
-          </Card>
-          
           {/* 機材セレクト */}
           <Card style={{ marginTop: 16, padding: "24px 0" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, padding: "0 24px" }}>
@@ -4228,14 +4179,15 @@ export default function App() {
           <Card style={{ marginTop: 16 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
               {Icons.activity(typeInfo.color, 20)}
-              <p style={{ color: C.text, fontSize: 16, fontWeight: 700, margin: 0 }}>距離別・走り方ガイド</p>
+              <p style={{ color: C.text, fontSize: 16, fontWeight: 700, margin: 0 }}>走り方ガイド</p>
             </div>
             
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              {/* 5K・10K */}
-              <div style={{ background: "theme.bg", borderRadius: 12, padding: 16 }}>
+              {/* ヒルクライム */}
+              {typeInfo.guide?.fiveK && (
+              <div style={{ background: theme.bg, borderRadius: 12, padding: 16 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-                  {Icons.zap(C.accent, 20)}
+                  {Icons.mountain(C.accent, 20)}
                   <p style={{ color: C.text, fontSize: 15, fontWeight: 700, margin: 0 }}>{typeInfo.guide.fiveK.title}</p>
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 12 }}>
@@ -4253,53 +4205,11 @@ export default function App() {
                   </div>
                 </div>
               </div>
-              
-              {/* ハーフ */}
-              <div style={{ background: "theme.bg", borderRadius: 12, padding: 16 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-                  {Icons.road(C.pink, 20)}
-                  <p style={{ color: C.text, fontSize: 15, fontWeight: 700, margin: 0 }}>{typeInfo.guide.half.title}</p>
-                </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 12 }}>
-                  {typeInfo.guide.half.tips.map((tip, i) => (
-                    <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
-                      {Icons.check(C.green, 14)}
-                      <p style={{ color: C.textMuted, fontSize: 13, margin: 0, lineHeight: 1.5 }}>{tip}</p>
-                    </div>
-                  ))}
-                </div>
-                <div style={{ background: `${C.orange}12`, borderRadius: 8, padding: 10 }}>
-                  <div style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
-                    {Icons.alertTriangle(C.orange, 14)}
-                    <p style={{ color: C.orange, fontSize: 12, margin: 0 }}>{typeInfo.guide.half.avoid}</p>
-                  </div>
-                </div>
-              </div>
-              
-              {/* フル */}
-              <div style={{ background: "theme.bg", borderRadius: 12, padding: 16 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-                  {Icons.mountain(C.green, 20)}
-                  <p style={{ color: C.text, fontSize: 15, fontWeight: 700, margin: 0 }}>{typeInfo.guide.full.title}</p>
-                </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 12 }}>
-                  {typeInfo.guide.full.tips.map((tip, i) => (
-                    <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
-                      {Icons.check(C.green, 14)}
-                      <p style={{ color: C.textMuted, fontSize: 13, margin: 0, lineHeight: 1.5 }}>{tip}</p>
-                    </div>
-                  ))}
-                </div>
-                <div style={{ background: `${C.orange}12`, borderRadius: 8, padding: 10 }}>
-                  <div style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
-                    {Icons.alertTriangle(C.orange, 14)}
-                    <p style={{ color: C.orange, fontSize: 12, margin: 0 }}>{typeInfo.guide.full.avoid}</p>
-                  </div>
-                </div>
-              </div>
+              )}
               
               {/* トレーニング */}
-              <div style={{ background: "theme.bg", borderRadius: 12, padding: 16 }}>
+              {typeInfo.guide?.training && (
+              <div style={{ background: theme.bg, borderRadius: 12, padding: 16 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
                   {Icons.target(C.cyan, 20)}
                   <p style={{ color: C.text, fontSize: 15, fontWeight: 700, margin: 0 }}>{typeInfo.guide.training.title}</p>
@@ -4319,6 +4229,7 @@ export default function App() {
                   </div>
                 </div>
               </div>
+              )}
             </div>
           </Card>
           <button
