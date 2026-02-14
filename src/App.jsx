@@ -1550,6 +1550,7 @@ export default function App() {
     armSpan: "", // 腕の長さ(cm) - オプション
     shoulderWidth: "", // 肩幅(cm) - オプション
     bodyType: "", // 体型タイプ: "long" | "standard" | "short" | ""
+    shoulderType: "standard", // 肩幅タイプ: "wide" | "standard" | "narrow"
   });
   const [showFittingCalc, setShowFittingCalc] = useState(false);
   const [showHistory, setShowHistory] = useState(false); // 回答履歴表示
@@ -1568,10 +1569,27 @@ export default function App() {
         const parsed = JSON.parse(saved);
         setSavedResult(parsed);
       }
+      // フィッティングデータも読み込み
+      const savedMetrics = localStorage.getItem("biomechfit_metrics");
+      if (savedMetrics) {
+        const parsedMetrics = JSON.parse(savedMetrics);
+        setBodyMetrics(prev => ({ ...prev, ...parsedMetrics }));
+      }
     } catch (e) {
       console.log("No saved result");
     }
   }, []);
+  
+  // bodyMetricsが変更されたら保存
+  useEffect(() => {
+    if (bodyMetrics.height || bodyMetrics.inseam) {
+      try {
+        localStorage.setItem("biomechfit_metrics", JSON.stringify(bodyMetrics));
+      } catch (e) {
+        console.log("Failed to save metrics");
+      }
+    }
+  }, [bodyMetrics]);
   
   const getAccuracyLevel = () => {
     const count = Object.keys(answers).length;
@@ -3430,6 +3448,39 @@ export default function App() {
                   )}
                 </div>
                 
+                {/* 肩幅タイプ */}
+                <div style={{ borderTop: `1px solid ${C.cardBorder}`, paddingTop: 12 }}>
+                  <label style={{ color: C.textDim, fontSize: 11, fontWeight: 600, display: "block", marginBottom: 8 }}>
+                    肩幅タイプ
+                  </label>
+                  <div style={{ display: "flex", gap: 6 }}>
+                    {[
+                      { value: "wide", label: "広め", adj: 20 },
+                      { value: "standard", label: "標準", adj: 0 },
+                      { value: "narrow", label: "狭め", adj: -20 },
+                    ].map(opt => (
+                      <button
+                        key={opt.value}
+                        onClick={() => setBodyMetrics({...bodyMetrics, shoulderType: opt.value})}
+                        style={{
+                          flex: 1,
+                          padding: "10px 4px",
+                          borderRadius: 8,
+                          border: "none",
+                          background: C.bg,
+                          cursor: "pointer",
+                          ...(bodyMetrics.shoulderType === opt.value ? neu.pressed : neu.raised),
+                          color: bodyMetrics.shoulderType === opt.value ? typeInfo.color : C.textMuted,
+                          fontSize: 11,
+                          fontWeight: 600,
+                        }}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                
                 {/* 股下（任意） */}
                 <div style={{ borderTop: `1px solid ${C.cardBorder}`, paddingTop: 12 }}>
                   <label style={{ color: C.textDim, fontSize: 11, fontWeight: 600, display: "block", marginBottom: 4 }}>
@@ -3490,7 +3541,11 @@ export default function App() {
                 const saddleHeightMax = Math.round(inseam * 10 * coef.saddleMax);
                 const crankLengthMin = Math.round(inseam * 10 * coef.crankMin);
                 const crankLengthMax = Math.round(inseam * 10 * coef.crankMax);
-                const handlebarWidth = Math.round(height * 0.24);
+                
+                // 肩幅タイプによるハンドル幅調整
+                const shoulderAdj = { wide: 20, standard: 0, narrow: -20 };
+                const handlebarBase = Math.round(height * 2.4); // 身長(cm)×2.4 → mm
+                const handlebarWidth = handlebarBase + (shoulderAdj[bodyMetrics.shoulderType] || 0);
                 
                 const standardCranks = [165, 167.5, 170, 172.5, 175];
                 const avgCrank = (crankLengthMin + crankLengthMax) / 2;
@@ -3503,7 +3558,8 @@ export default function App() {
                   {/* 計算条件の表示 */}
                   <div style={{ background: `${typeInfo.color}15`, borderRadius: 10, padding: 10 }}>
                     <p style={{ color: typeInfo.color, fontSize: 11, fontWeight: 600, margin: 0, textAlign: "center" }}>
-                      🎯 {bodyMetrics.bodyType === "long" ? "脚長め" : bodyMetrics.bodyType === "standard" ? "標準" : "脚短め"}タイプ
+                      🎯 脚: {bodyMetrics.bodyType === "long" ? "長め" : bodyMetrics.bodyType === "standard" ? "標準" : "短め"}
+                      {" | "}肩: {bodyMetrics.shoulderType === "wide" ? "広め" : bodyMetrics.shoulderType === "narrow" ? "狭め" : "標準"}
                       {" | "}股下 {Math.round(inseam)}cm {isEstimated ? "（推定）" : "（実測）"}
                     </p>
                   </div>
@@ -3575,7 +3631,7 @@ export default function App() {
                         <span style={{ color: C.text, fontSize: 13, fontWeight: 700 }}>ハンドル幅</span>
                       </div>
                       <span style={{ color: typeInfo.color, fontSize: 18, fontWeight: 800 }}>
-                        {handlebarWidth - 20}〜{handlebarWidth + 20}mm
+                        {handlebarWidth}mm前後
                       </span>
                     </div>
                     <p style={{ color: C.textMuted, fontSize: 11, margin: 0 }}>
