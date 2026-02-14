@@ -238,7 +238,7 @@ const neu = {
 // ========================================
 const CYCLING_GEAR_DB = [
   // === サドル ===
-  // A1向け（前乗り・ショートノーズ）
+  // F-I向け（前乗り・ショートノーズ）
   { id: "power-arc", name: "Specialized Power Arc", brand: "Specialized", price: 28000, category: "saddle",
     style: "forward", type: ["A1", "B1"], 
     reason: "ショートノーズで前乗りに最適。高出力ペダリングをサポート。",
@@ -247,7 +247,7 @@ const CYCLING_GEAR_DB = [
     style: "forward", type: ["A1", "B1"],
     reason: "ショートノーズの入門モデル。前乗りポジションに。",
     amazonQuery: "fizik+Argo+Tempo", rakutenQuery: "fizik%20Argo%20Tempo" },
-  // A2向け（後ろ乗り・ロングノーズ）
+  // F-O向け（後ろ乗り・ロングノーズ）
   { id: "antares-r3", name: "fi'zi:k Antares R3", brand: "fi'zi:k", price: 18000, category: "saddle",
     style: "rear", type: ["A2", "B2"],
     reason: "クラシックな形状で後ろ乗りに最適。ロングライドも快適。",
@@ -256,7 +256,7 @@ const CYCLING_GEAR_DB = [
     style: "rear", type: ["A2"],
     reason: "軽量でクライマー向け。後ろ乗りでトルクをかけやすい。",
     amazonQuery: "Selle+Italia+SLR+Boost", rakutenQuery: "Selle%20Italia%20SLR%20Boost" },
-  // B1/B2向け（バランス型）
+  // R-I/R-O向け（バランス型）
   { id: "romin-evo", name: "Specialized Romin Evo", brand: "Specialized", price: 25000, category: "saddle",
     style: "neutral", type: ["B1", "B2"],
     reason: "オールラウンドな形状。様々なポジションに対応。",
@@ -267,7 +267,7 @@ const CYCLING_GEAR_DB = [
     amazonQuery: "Brooks+Cambium+C17", rakutenQuery: "Brooks%20Cambium%20C17" },
 
   // === ペダル ===
-  // A1向け（高剛性・軽量）
+  // F-I向け（高剛性・軽量）
   { id: "dura-ace-pedal", name: "Shimano Dura-Ace PD-R9200", brand: "Shimano", price: 35000, category: "pedal",
     style: "stiff", type: ["A1"],
     reason: "最高剛性でパワー伝達ロスなし。スプリンター向け。",
@@ -277,7 +277,7 @@ const CYCLING_GEAR_DB = [
     reason: "カーボンブレードで軽量×高剛性。反応の良いペダリングに。",
     image: "https://m.media-amazon.com/images/I/71vZ3mGnURL._AC_SX679_.jpg",
     amazonQuery: "Look+Keo+Blade+Carbon", rakutenQuery: "Look%20Keo%20Blade%20Carbon" },
-  // A2/B2向け（バランス型）
+  // F-O/R-O向け（バランス型）
   { id: "ultegra-pedal", name: "Shimano Ultegra PD-R8000", brand: "Shimano", price: 18000, category: "pedal",
     style: "balanced", type: ["A2", "B1", "B2"],
     reason: "剛性と価格のバランス◎。オールラウンドに使える定番。",
@@ -290,7 +290,7 @@ const CYCLING_GEAR_DB = [
     amazonQuery: "Look+Keo+Classic+3", rakutenQuery: "Look%20Keo%20Classic%203" },
 
   // === シューズ ===
-  // A1向け（高剛性）
+  // F-I向け（高剛性）
   { id: "s-works-torch", name: "Specialized S-Works Torch", brand: "Specialized", price: 55000, category: "shoes",
     style: "stiff", type: ["A1"],
     reason: "最高剛性ソール。スプリントでパワーを逃さない。",
@@ -897,38 +897,18 @@ const RadarChart = ({ data, size = 200, color = C.accent }) => {
 // APA: ケイデンス（高回転/トルク）、姿勢（胸開き/前傾）
 // type: "text"（テキスト2択）, "action"（体験型）, "quad"（4択）
 const QUESTION_POOL = [
-  // === 基本質問（重心・体幹） ===
-  { id: "foot_pressure", cat: "balance", type: "text",
-    q: "👣 立っているとき、足裏のどこに体重を感じる？", 
-    a: "つま先側（前足部）に体重がかかる", 
-    b: "かかと側（後足部）に体重がかかる",
-    weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "stand_balance", cat: "balance", type: "text",
-    q: "🧍 自然に立ったとき、重心はどっち寄り？", 
-    a: "やや前寄り（つま先側）", 
-    b: "真ん中〜後ろ寄り（かかと側）",
-    weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "carry_bag", cat: "trunk", type: "text",
-    q: "🎒 重い荷物を持つとき、楽なのは？", 
+  // === 基本質問（体幹タイプ） ===
+  { id: "carry_bag_basic", cat: "trunk", type: "text",
+    q: "重い荷物を持つとき、楽なのは？", 
     a: "体に近づけて抱えるように持つ", 
     b: "腕を伸ばして体から離して持つ",
     weight: { typeA: [1, 0], typeB: [0, 1] } },
   
   // === 体験型質問 ===
-  { id: "action_stand", cat: "balance", type: "action",
-    q: "今、立ってみてください",
-    instruction: "リラックスして自然に立って、足裏のどこに体重を感じますか？",
-    a: "つま先〜母指球あたり", b: "かかと〜足裏全体",
-    weight: { num1: [1, 0], num2: [0, 1] } },
   { id: "action_push", cat: "trunk", type: "action",
     q: "壁を両手で押してみて",
     instruction: "グッと力を入れるとき、意識が向くのはどこ？",
     a: "お腹・みぞおちに力が入る", b: "背中・肩甲骨に力が入る",
-    weight: { typeA: [1, 0], typeB: [0, 1] } },
-  { id: "action_arm", cat: "trunk", type: "action",
-    q: "腕を組んでみてください",
-    instruction: "自然に組むと、どちらの腕が上にきますか？",
-    a: "右腕が上", b: "左腕が上",
     weight: { typeA: [1, 0], typeB: [0, 1] } },
 
   // === AかBか（体幹タイプ）===
@@ -957,24 +937,24 @@ const QUESTION_POOL = [
   
   // === Inner/Outer（荷重タイプ）===
   // num1 = Inner（内側荷重）, num2 = Outer（外側荷重）
-  { id: "shoe_wear", cat: "balance", q: "靴底の減り方は？", a: "内側が減りやすい", b: "外側が減りやすい", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "knee_direction", cat: "balance", q: "スクワットで膝は？", a: "内に入りやすい", b: "外に開きやすい", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "one_leg_balance", cat: "balance", q: "片足立ちで安定するのは？", a: "母指球（親指側）で踏む", b: "小指球（外側）で踏む", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "sit_legs", cat: "balance", q: "椅子に座るとき、膝は？", a: "閉じる・内向きになる", b: "開く・外向きになる", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "stand_feet", cat: "balance", q: "立つとき、足の向きは？", a: "まっすぐ〜やや内向き", b: "やや外向き（ガニ股気味）", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "walk_line", cat: "balance", q: "歩くとき、足の軌道は？", a: "一直線に近い", b: "やや外側を通る", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "pedal_push", cat: "balance", q: "ペダルを踏むとき、力が入るのは？", a: "親指側・母指球", b: "小指側も含め足裏全体", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "leg_cross", cat: "balance", q: "脚を組むとき", a: "内側に締める感じ", b: "外に開く感じ", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "squat_knee", cat: "balance", q: "しゃがむとき膝は？", a: "つま先より内側", b: "つま先と同じか外側", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "ankle_roll", cat: "balance", q: "足首を捻挫するなら？", a: "内側に捻る（内反）", b: "外側に捻る（外反）", weight: { num1: [0, 1], num2: [1, 0] } },
-  { id: "heel_tilt", cat: "balance", q: "立っているとき、踵の傾きは？", a: "内側に倒れやすい", b: "外側に倒れやすい", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "toe_grip", cat: "balance", q: "足の指で床を掴むとき", a: "親指側が強い", b: "小指側も均等に使う", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "calf_shape", cat: "balance", q: "ふくらはぎの発達は？", a: "内側が発達", b: "外側が発達", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "thigh_shape", cat: "balance", q: "太ももの発達は？", a: "内側（内転筋）が強い", b: "外側（外側広筋）が強い", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "arch_type", cat: "balance", q: "足のアーチ（土踏まず）は？", a: "低め（偏平足気味）", b: "高め（ハイアーチ）", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "stand_sway", cat: "balance", q: "長時間立つとき、体重は？", a: "内側に寄りがち", b: "外側に寄りがち", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "jump_land", cat: "balance", q: "ジャンプの着地は？", a: "内側から着く", b: "外側から着く", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "turn_pivot", cat: "balance", q: "その場で回転するとき", a: "内側の足で軸を作る", b: "外側の足で軸を作る", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "shoe_wear", cat: "balance", q: "靴底の減り、気になるのは？", a: "内側（親指側）が減る", b: "外側（小指側）が減る", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "knee_direction", cat: "balance", q: "スクワットすると膝は？", a: "内側に入りやすい", b: "外に開きやすい", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "one_leg_balance", cat: "balance", q: "片足立ちで踏ん張る場所は？", a: "親指の付け根あたり", b: "小指側〜外側", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "sit_legs", cat: "balance", q: "電車で座ると、膝は自然と…", a: "閉じる", b: "開く", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "stand_feet", cat: "balance", q: "リラックスして立つと、つま先は？", a: "まっすぐ〜やや内向き", b: "やや外向き（ガニ股気味）", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "walk_width", cat: "balance", q: "歩くとき、左右の足の幅は？", a: "狭め（一直線に近い）", b: "広め", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "pedal_push", cat: "balance", q: "ペダルを踏む感覚は？", a: "親指の付け根で踏む", b: "足裏全体で踏む", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "leg_cross", cat: "balance", q: "脚を組むとき、しっくりくるのは？", a: "ギュッと内側に締める", b: "ゆったり外に開く", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "squat_knee", cat: "balance", q: "深くしゃがむと、膝は？", a: "つま先より内側に入る", b: "つま先と同じか外に開く", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "ankle_injury", cat: "balance", q: "足首を捻るとしたら、どっち？", a: "内側にグキッ（よくある捻挫）", b: "外側にグキッ", weight: { num1: [0, 1], num2: [1, 0] } },
+  { id: "heel_wear", cat: "balance", q: "靴の踵、減りやすいのは？", a: "内側", b: "外側", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "toe_power", cat: "balance", q: "地面を蹴るとき、力が入るのは？", a: "親指側", b: "小指側も使う", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "calf_shape", cat: "balance", q: "ふくらはぎ、張ってるのは？", a: "内側", b: "外側", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "thigh_shape", cat: "balance", q: "太もも、発達してるのは？", a: "内もも", b: "外もも", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "arch_height", cat: "balance", q: "土踏まずの高さは？", a: "低め（偏平足気味）", b: "高め（アーチがある）", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "stand_weight", cat: "balance", q: "長時間立つと、体重がかかるのは？", a: "足の内側", b: "足の外側", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "jump_land", cat: "balance", q: "ジャンプして着地、最初に着くのは？", a: "足の内側（親指側）", b: "足の外側（小指側）", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "turn_pivot", cat: "balance", q: "くるっと振り向くとき、軸足は？", a: "内側に体重をかける", b: "外側に体重をかける", weight: { num1: [1, 0], num2: [0, 1] } },
   
   // === APA: テンポ・リズム傾向 ===
   { id: "pedal_pace", cat: "cadence", q: "ペダリングで楽なのは？", a: "ケイデンスを上げて軽く回す", b: "重いギアでゆっくり踏む", weight: { high: [1, 0], low: [0, 1] } },
@@ -1062,7 +1042,7 @@ const QUESTION_POOL = [
     weight: { num1: [1, 0], num2: [0, 1] } },
     
   // === クロス/パラレル判定（横の動き） ===
-  // A1/B2 = クロス派（対角線の動き）、A2/B1 = パラレル派（平行の動き）
+  // F-I/R-O = クロス派（対角連動）、F-O/R-I = パラレル派（同側連動）
   { id: "cross_walk", cat: "movement", q: "歩くとき、腕の振りは？", 
     a: "脚と反対の腕が自然に出る（右足と左腕）", b: "あまり意識しない or 同じ側が出やすい", 
     weight: { cross: [1, 0], parallel: [0, 1] } },
@@ -1131,11 +1111,18 @@ const ACCURACY_LEVELS = [
   { min: 5, label: "おおまか", stars: 1, color: C.textMuted },
   { min: 10, label: "ある程度", stars: 2, color: C.orange },
   { min: 15, label: "かなり正確", stars: 3, color: C.green },
-  { min: 20, label: "高精度", stars: 4, color: C.accent },
-  { min: 30, label: "完全解析", stars: 5, color: C.pink },
+  { min: 18, label: "高精度", stars: 4, color: C.accent },
+  { min: 20, label: "完全解析", stars: 5, color: C.pink },
 ];
 
 // タイプ定義（サイクリング用）
+// ============================================
+// 内部キー → 表示名 対応表:
+//   A1 = F-I (Front-Inner)  前体幹 × 内側荷重 → クロス
+//   A2 = F-O (Front-Outer)  前体幹 × 外側荷重 → パラレル
+//   B1 = R-I (Rear-Inner)   後体幹 × 内側荷重 → パラレル
+//   B2 = R-O (Rear-Outer)   後体幹 × 外側荷重 → クロス
+// ============================================
 const TYPE_INFO_CYCLING = {
   A1: {
     name: "F-I（Front-Inner）",
@@ -1150,7 +1137,22 @@ const TYPE_INFO_CYCLING = {
     radarData: [95, 45, 60, 55, 50],
     bodyMechanics: {
       trunk: { type: "Fタイプ（前体幹）", description: "みぞおち・股関節主導", detail: "身体を「折る」ように使うのが得意。" },
-      movement: { type: "クロス（対角連動）", description: "捻じりの動きが自然", detail: "右腕と左脚、左腕と右脚が連動する。" },
+      movement: { 
+        type: "クロス（対角連動）", 
+        description: "捻じりの動きが自然", 
+        detail: "右腕と左脚、左腕と右脚が連動する。",
+        感覚: [
+          "ペダリング中、踏み込みで腰が自然と少し回る",
+          "ダンシングではバイクを左右に振る方が力が入る",
+          "コーナーでは内側の肩を落として曲がると安定",
+          "階段を駆け上がるとき、自然と身体が捻れる"
+        ],
+        荷重バランス: {
+          ペダル: "母指球中心、内側で踏む感覚",
+          ハンドル: "下ハンドルで引きつけると力が伝わる",
+          サドル: "座面の前側、ノーズ寄りに座る"
+        }
+      },
       balance: { type: "内側荷重（Inner）", description: "母指球・内側で踏む", detail: "膝がまっすぐ〜やや内向き。内転筋を使いやすい。" }
     },
     // フィッティング詳細
@@ -1167,8 +1169,9 @@ const TYPE_INFO_CYCLING = {
       },
       cleat: {
         position: { fore_aft: "深め（前寄り）", detail: "母指球より後ろにクリート" },
-        angle: { rotation: "やや外向き", detail: "股関節の自然な動きに合わせる" },
+        angle: { rotation: "浅め（つま先まっすぐ〜やや内向き）", detail: "内股気味でOK" },
         float: { degree: "少なめ（0〜4.5°）", detail: "ダイレクトなパワー伝達" },
+        qFactor: { guide: "狭め（146〜150mm）", detail: "膝がまっすぐ上下する位置" },
       },
       crank: {
         length: { guide: "股下 × 0.20〜0.205", detail: "やや短めで高回転向き" },
@@ -1215,7 +1218,22 @@ const TYPE_INFO_CYCLING = {
     radarData: [50, 95, 70, 65, 85],
     bodyMechanics: {
       trunk: { type: "Fタイプ（前体幹）", description: "みぞおち・股関節主導", detail: "身体を「折る」ように使う。" },
-      movement: { type: "パラレル（同側連動）", description: "平行の動きが自然", detail: "同じ側の腕と脚が連動する。" },
+      movement: { 
+        type: "パラレル（同側連動）", 
+        description: "平行の動きが自然", 
+        detail: "同じ側の腕と脚が連動する。",
+        感覚: [
+          "ペダリング中、腰は固定して脚だけ回す感覚",
+          "ダンシングではバイクをまっすぐ保つ方が安定",
+          "コーナーではバイクと一体で傾く方が曲がりやすい",
+          "階段を駆け上がるとき、身体はまっすぐのまま"
+        ],
+        荷重バランス: {
+          ペダル: "足裏全体〜外側、小指球側も使う",
+          ハンドル: "ブラケット握りで押す感覚が合う",
+          サドル: "座面全体を使って安定させる"
+        }
+      },
       balance: { type: "外側荷重（Outer）", description: "小指球・外側も使う", detail: "膝がやや外向き。外側広筋を使いやすい。" }
     },
     // フィッティング詳細
@@ -1232,8 +1250,9 @@ const TYPE_INFO_CYCLING = {
       },
       cleat: {
         position: { fore_aft: "浅め（後ろ寄り）", detail: "母指球の真下〜やや前にクリート" },
-        angle: { rotation: "ニュートラル〜やや内向き", detail: "膝の自然な軌道に合わせる" },
+        angle: { rotation: "深め（つま先外向き）", detail: "ガニ股気味でOK" },
         float: { degree: "多め（6°）", detail: "長時間のペダリングで膝を守る" },
+        qFactor: { guide: "広め（150〜156mm）", detail: "膝が外に開く軌道を確保" },
       },
       crank: {
         length: { guide: "股下 × 0.205〜0.215", detail: "やや長めでトルクをかけやすく" },
@@ -1280,7 +1299,22 @@ const TYPE_INFO_CYCLING = {
     radarData: [55, 70, 95, 75, 70],
     bodyMechanics: {
       trunk: { type: "Rタイプ（後体幹）", description: "首・肩甲骨・腰主導", detail: "身体を「一体」で使う。" },
-      movement: { type: "パラレル（同側連動）", description: "平行の動きが自然", detail: "捻じらず安定したフォーム。" },
+      movement: { 
+        type: "パラレル（同側連動）", 
+        description: "平行の動きが自然", 
+        detail: "捻じらず安定したフォーム。",
+        感覚: [
+          "ペダリング中、上半身は固定して脚だけ動かす",
+          "ダンシングではバイクを立てたまま真上に立つ",
+          "コーナーではバイクと身体が一体で傾く",
+          "走るとき腕振りは控えめ、身体の軸がブレない"
+        ],
+        荷重バランス: {
+          ペダル: "母指球中心、まっすぐ踏み下ろす",
+          ハンドル: "ブラケットに手を添える感覚",
+          サドル: "座面中央にどっしり座る"
+        }
+      },
       balance: { type: "内側荷重（Inner）", description: "母指球・内側で踏む", detail: "膝がまっすぐ〜やや内向き。内転筋を使いやすい。" }
     },
     // フィッティング詳細
@@ -1297,8 +1331,9 @@ const TYPE_INFO_CYCLING = {
       },
       cleat: {
         position: { fore_aft: "標準（母指球の真下）", detail: "バランスの取れた位置" },
-        angle: { rotation: "ニュートラル", detail: "自然な足の向き" },
+        angle: { rotation: "浅め（つま先まっすぐ）", detail: "膝がまっすぐ上下する" },
         float: { degree: "標準（4.5°）", detail: "適度な自由度" },
+        qFactor: { guide: "狭め（146〜150mm）", detail: "内側荷重に合わせた幅" },
       },
       crank: {
         length: { guide: "股下 × 0.205", detail: "標準的な長さで効率重視" },
@@ -1345,7 +1380,22 @@ const TYPE_INFO_CYCLING = {
     radarData: [70, 75, 75, 95, 80],
     bodyMechanics: {
       trunk: { type: "Rタイプ（後体幹）", description: "首・肩甲骨・腰主導", detail: "身体を「一体」で使う。" },
-      movement: { type: "クロス（対角連動）", description: "捻じりの動きが自然", detail: "対角線の動きが得意。" },
+      movement: { 
+        type: "クロス（対角連動）", 
+        description: "捻じりの動きが自然", 
+        detail: "対角線の動きが得意。",
+        感覚: [
+          "ペダリング中、自然と腰が左右に動く",
+          "ダンシングではバイクを振りながら登る",
+          "コーナーでは内側の肩を入れて曲がる",
+          "歩くとき腕と脚が対角で大きく連動"
+        ],
+        荷重バランス: {
+          ペダル: "足裏外側、踏み込みで腰が回る",
+          ハンドル: "下ハンを引くと身体が連動",
+          サドル: "座面後方、左右に体重移動しながら"
+        }
+      },
       balance: { type: "外側荷重（Outer）", description: "小指球・外側も使う", detail: "膝がやや外向き。外側広筋を使いやすい。" }
     },
     // フィッティング詳細
@@ -1362,8 +1412,9 @@ const TYPE_INFO_CYCLING = {
       },
       cleat: {
         position: { fore_aft: "やや浅め（後ろ寄り）", detail: "安定したペダリングのため" },
-        angle: { rotation: "自然な足の向き", detail: "無理のない角度" },
-        float: { degree: "多め（6°）", detail: "膝への負担軽減" },
+        angle: { rotation: "深め（つま先外向き）", detail: "外側荷重に合わせて開く" },
+        float: { degree: "多め（6°）", detail: "膝への負担軽減と腰の回旋を許容" },
+        qFactor: { guide: "広め（150〜156mm）", detail: "外側荷重とクロス動作に対応" },
       },
       crank: {
         length: { guide: "股下 × 0.205〜0.21", detail: "標準〜やや長めで安定感" },
@@ -1459,6 +1510,7 @@ export default function App() {
   const [mode, setMode] = useState("start");
   const [sport, setSport] = useState("cycling"); // "cycling" only
   const [questions, setQuestions] = useState([]);
+  const [extraQuestionPool, setExtraQuestionPool] = useState([]); // 僅差時の追加質問用
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState({});
   const [skipped, setSkipped] = useState(new Set());
@@ -1497,10 +1549,36 @@ export default function App() {
   const [stageUp, setStageUp] = useState(null); // ステージアップ演出 { level, message }
   const [prevAccuracyLevel, setPrevAccuracyLevel] = useState(0); // 前回の精度レベル
   
-  // 初期化：質問シャッフル＆保存結果ロード
+  // ============================================
+  // 質問出題設定
+  // - 質問プールは全て維持（やるたびに違う質問が出る楽しみ）
+  // - 各カテゴリから3問ずつ選んで出題 = 約20問で判定
+  // - 僅差時のみ該当カテゴリから追加2問
+  // ============================================
+  const QUESTIONS_PER_CATEGORY = 3;  // 各カテゴリから出す問数
+  const EXTRA_ON_TIE = 2;            // 僅差時に追加する問数
+  
+  // 初期化：カテゴリごとにシャッフルして必要数を選択
   useEffect(() => {
-    const shuffled = [...QUESTION_POOL].sort(() => Math.random() - 0.5);
-    setQuestions(shuffled);
+    // カテゴリごとにグループ化してシャッフル
+    const byCategory = {};
+    QUESTION_POOL.forEach(q => {
+      if (!byCategory[q.cat]) byCategory[q.cat] = [];
+      byCategory[q.cat].push(q);
+    });
+    
+    // 各カテゴリをシャッフルして先頭N問を選択
+    const selected = [];
+    const extra = [];
+    Object.keys(byCategory).forEach(cat => {
+      const shuffled = byCategory[cat].sort(() => Math.random() - 0.5);
+      selected.push(...shuffled.slice(0, QUESTIONS_PER_CATEGORY));
+      extra.push(...shuffled.slice(QUESTIONS_PER_CATEGORY)); // 残りは追加用
+    });
+    
+    // 選択した質問をシャッフルしてセット
+    setQuestions(selected.sort(() => Math.random() - 0.5));
+    setExtraQuestionPool(extra);
     
     // LocalStorageから保存された結果を読み込み
     try {
@@ -1509,7 +1587,6 @@ export default function App() {
         const parsed = JSON.parse(saved);
         setSavedResult(parsed);
       }
-      // フィッティングデータも読み込み
       const savedMetrics = localStorage.getItem("stancecore_metrics");
       if (savedMetrics) {
         const parsedMetrics = JSON.parse(savedMetrics);
@@ -1540,12 +1617,12 @@ export default function App() {
     return { ...level, count };
   };
   
-  // ステージアップチェック
+  // ステージアップチェック（約20問で完了想定）
   const STAGE_THRESHOLDS = [
     { min: 5, level: 1, label: "基本解析", message: "基本解析モード突入" },
     { min: 10, level: 2, label: "標準解析", message: "標準解析モードへ" },
-    { min: 20, level: 3, label: "高精度", message: "高精度モードへ" },
-    { min: 30, level: 4, label: "完全解析", message: "完全解析達成" },
+    { min: 15, level: 3, label: "高精度", message: "高精度モードへ" },
+    { min: 18, level: 4, label: "完全解析", message: "完全解析達成" },
   ];
   
   const checkStageUp = (answerCount, newScores) => {
@@ -1658,22 +1735,48 @@ export default function App() {
     const currentScores = latestScores || scores;
     const unanswered = questions.filter(q => !currentAnswers[q.id] && !skipped.has(q.id));
     
-    if (unanswered.length === 0) return;
+    // 僅差チェック
+    const typeABDiff = Math.abs(currentScores.typeA - currentScores.typeB);
+    const num12Diff = Math.abs(currentScores.num1 - currentScores.num2);
+    const typeABClose = typeABDiff <= 2;
+    const num12Close = num12Diff <= 2;
     
-    // 同点チェック
-    const typeATied = currentScores.typeA === currentScores.typeB;
-    const numTied = currentScores.num1 === currentScores.num2;
+    // 質問が残っていない＆僅差 → 追加質問を投入
+    if (unanswered.length === 0 && (typeABClose || num12Close) && extraQuestionPool.length > 0) {
+      const extraToAdd = [];
+      
+      if (typeABClose) {
+        // 体幹タイプが僅差 → trunkカテゴリから追加
+        const trunkExtras = extraQuestionPool.filter(q => q.cat === "trunk" && !currentAnswers[q.id]);
+        extraToAdd.push(...trunkExtras.slice(0, EXTRA_ON_TIE));
+      }
+      
+      if (num12Close) {
+        // 荷重タイプが僅差 → balanceカテゴリから追加
+        const balanceExtras = extraQuestionPool.filter(q => q.cat === "balance" && !currentAnswers[q.id]);
+        extraToAdd.push(...balanceExtras.slice(0, EXTRA_ON_TIE));
+      }
+      
+      if (extraToAdd.length > 0) {
+        // 追加質問を現在の質問リストに追加
+        setQuestions(prev => [...prev, ...extraToAdd]);
+        // 追加質問プールから除外
+        setExtraQuestionPool(prev => prev.filter(q => !extraToAdd.find(e => e.id === q.id)));
+        // 最初の追加質問へ移動
+        setCurrentIndex(questions.length); // 次の質問へ
+        return;
+      }
+    }
+    
+    if (unanswered.length === 0) return;
     
     // 優先すべきカテゴリを決定
     let priorityCat = null;
-    if (typeATied && numTied) {
-      // 両方同点 → trunk（体幹）を優先
+    if (typeABClose && num12Close) {
+      priorityCat = "trunk"; // 両方僅差 → 体幹優先
+    } else if (typeABClose) {
       priorityCat = "trunk";
-    } else if (typeATied) {
-      // A/B同点 → trunk（体幹）質問を優先
-      priorityCat = "trunk";
-    } else if (numTied) {
-      // 1/2同点 → balance（重心）質問を優先
+    } else if (num12Close) {
       priorityCat = "balance";
     }
     
@@ -1719,7 +1822,7 @@ export default function App() {
     else baseType = "B2";
     
     // クロス/パラレルによる補正
-    // A1/B2はクロス派、A2/B1はパラレル派が理論的に整合
+    // F-I/R-Oはクロス派、F-O/R-Iはパラレル派が理論的に整合
     // 矛盾がある場合は、クロス/パラレルのスコア差が大きければ補正
     let type = baseType;
     const crossDiff = Math.abs(scores.cross - scores.parallel);
@@ -1727,11 +1830,11 @@ export default function App() {
     // クロス/パラレルが明確で、A/Bまたは1/2が僅差の場合に補正
     if (crossDiff > 3) {
       if (isCross) {
-        // クロス派 → A1かB2が自然
+        // クロス派 → F-IかR-Oが自然
         if (baseType === "A2" && num12Diff < 3) type = "A1";
         if (baseType === "B1" && num12Diff < 3) type = "B2";
       } else {
-        // パラレル派 → A2かB1が自然
+        // パラレル派 → F-OかR-Iが自然
         if (baseType === "A1" && num12Diff < 3) type = "A2";
         if (baseType === "B2" && num12Diff < 3) type = "B1";
       }
@@ -2581,7 +2684,7 @@ export default function App() {
                 padding: 16,
               }}>
                 <p style={{ color: C.textMuted, fontSize: 13, fontWeight: 700, margin: "0 0 10px" }}>
-                  📌 これからのアドバイス
+                  これからのアドバイス
                 </p>
                 <p style={{ color: C.text, fontSize: 14, margin: 0, lineHeight: 1.7 }}>
                   {type === "A1" && "「前に踏み込め」「高回転で」「瞬発力で勝負」というアドバイスを積極的に取り入れてみて。"}
@@ -2619,12 +2722,45 @@ export default function App() {
                 </div>
                 <p style={{ color: C.text, fontSize: 14, fontWeight: 600, margin: "0 0 4px" }}>{typeInfo.bodyMechanics.movement.description}</p>
                 <p style={{ color: C.textMuted, fontSize: 12, margin: 0, lineHeight: 1.5 }}>{typeInfo.bodyMechanics.movement.detail}</p>
+                
+                {/* 体感できる特性 */}
+                {typeInfo.bodyMechanics.movement.感覚 && (
+                  <div style={{ marginTop: 12, paddingTop: 12, borderTop: `1px solid ${theme.cardBorder}` }}>
+                    <p style={{ color: C.textDim, fontSize: 10, fontWeight: 600, margin: "0 0 8px", textTransform: "uppercase", letterSpacing: "1px" }}>
+                      こんな感覚に心当たりは？
+                    </p>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                      {typeInfo.bodyMechanics.movement.感覚.map((s, i) => (
+                        <p key={i} style={{ color: C.text, fontSize: 12, margin: 0, lineHeight: 1.6, paddingLeft: 12, borderLeft: `2px solid ${typeInfo.color}30` }}>
+                          {s}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                {/* 荷重バランス */}
+                {typeInfo.bodyMechanics.movement.荷重バランス && (
+                  <div style={{ marginTop: 12, paddingTop: 12, borderTop: `1px solid ${theme.cardBorder}` }}>
+                    <p style={{ color: C.textDim, fontSize: 10, fontWeight: 600, margin: "0 0 8px", textTransform: "uppercase", letterSpacing: "1px" }}>
+                      荷重バランスの傾向
+                    </p>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                      {Object.entries(typeInfo.bodyMechanics.movement.荷重バランス).map(([key, val]) => (
+                        <div key={key} style={{ display: "flex", gap: 8 }}>
+                          <span style={{ color: typeInfo.color, fontSize: 11, fontWeight: 600, minWidth: 60 }}>{key}</span>
+                          <span style={{ color: C.textMuted, fontSize: 12 }}>{val}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
               
-              {/* 重心 */}
+              {/* 荷重タイプ */}
               <div style={{ background: theme.bg, borderRadius: 12, padding: 14 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-                  <p style={{ color: C.textDim, fontSize: 11, fontWeight: 600, margin: 0, textTransform: "uppercase" }}>重心</p>
+                  <p style={{ color: C.textDim, fontSize: 11, fontWeight: 600, margin: 0, textTransform: "uppercase" }}>荷重タイプ</p>
                   <p style={{ color: typeInfo.color, fontSize: 14, fontWeight: 700, margin: 0 }}>{typeInfo.bodyMechanics.balance.type}</p>
                 </div>
                 <p style={{ color: C.text, fontSize: 14, fontWeight: 600, margin: "0 0 4px" }}>{typeInfo.bodyMechanics.balance.description}</p>
@@ -3356,9 +3492,14 @@ export default function App() {
                       <span style={{ color: C.text, fontSize: 13, fontWeight: 700 }}>クリート</span>
                       <span style={{ color: typeInfo.color, fontSize: 14, fontWeight: 700 }}>{typeInfo.fitting.cleat.position.fore_aft}</span>
                     </div>
-                    <p style={{ color: C.textMuted, fontSize: 11, margin: 0 }}>
+                    <p style={{ color: C.textMuted, fontSize: 11, margin: "0 0 6px" }}>
                       フロート: {typeInfo.fitting.cleat.float.degree} | 角度: {typeInfo.fitting.cleat.angle.rotation}
                     </p>
+                    {typeInfo.fitting.cleat.qFactor && (
+                      <p style={{ color: typeInfo.color, fontSize: 12, fontWeight: 600, margin: 0 }}>
+                        Qファクター: {typeInfo.fitting.cleat.qFactor.guide}
+                      </p>
+                    )}
                   </div>
                 </div>
                 );
@@ -3644,9 +3785,14 @@ export default function App() {
                         {typeInfo.fitting.cleat.position.fore_aft}
                       </span>
                     </div>
-                    <p style={{ color: C.textMuted, fontSize: 11, margin: 0 }}>
+                    <p style={{ color: C.textMuted, fontSize: 11, margin: "0 0 6px" }}>
                       フロート: {typeInfo.fitting.cleat.float.degree} | {typeInfo.fitting.cleat.angle.rotation}
                     </p>
+                    {typeInfo.fitting.cleat.qFactor && (
+                      <p style={{ color: typeInfo.color, fontSize: 12, fontWeight: 600, margin: 0 }}>
+                        Qファクター: {typeInfo.fitting.cleat.qFactor.guide}
+                      </p>
+                    )}
                   </div>
                   
                   <div style={{ background: C.bg, borderRadius: 12, padding: 14, ...neu.raised }}>
@@ -4044,7 +4190,7 @@ https://stancecore.vercel.app
                   4つのStance Type
                 </p>
                 <p style={{ margin: 0, color: C.textMuted }}>
-                  STANCE COREでは、これらの傾向から4タイプ（A1/A2/B1/B2）に分類。
+                  STANCE COREでは、これらの傾向から4つのStance Type（F-I / F-O / R-I / R-O）に分類。
                   それぞれに適した身体の使い方、機材選びがある。
                 </p>
               </div>
