@@ -1820,11 +1820,28 @@ export default function App() {
     setQuestions(selected.sort(() => Math.random() - 0.5));
     setExtraQuestionPool(extra);
     
+    // 旧タイプキー → 新タイプキーのマッピング（互換性のため）
+    const migrateTypeKey = (oldKey) => {
+      const mapping = {
+        "A1": "FIX",   // 旧: 前体幹×内側 → 新: クロスをデフォルト
+        "A2": "FOII",  // 旧: 前体幹×外側 → 新: パラレルをデフォルト
+        "B1": "RIII",  // 旧: 後体幹×内側 → 新: パラレルをデフォルト
+        "B2": "ROX",   // 旧: 後体幹×外側 → 新: クロスをデフォルト
+      };
+      return mapping[oldKey] || oldKey;
+    };
+    
     // LocalStorageから保存された結果を読み込み
     try {
       const saved = localStorage.getItem("stancecore_result");
       if (saved) {
         const parsed = JSON.parse(saved);
+        // 旧キーの場合はマイグレーション
+        if (parsed.type && ["A1", "A2", "B1", "B2"].includes(parsed.type)) {
+          parsed.type = migrateTypeKey(parsed.type);
+          // 更新したデータを保存し直す
+          localStorage.setItem("stancecore_result", JSON.stringify(parsed));
+        }
         setSavedResult(parsed);
       }
       const savedMetrics = localStorage.getItem("stancecore_metrics");
@@ -2759,9 +2776,82 @@ export default function App() {
             }}>
               {typeInfo.name}
             </h2>
-            <p style={{ color: C.textMuted, fontSize: 14, margin: "0 0 16px", fontWeight: 600 }}>
-              {typeInfo.sub}
-            </p>
+            
+            {/* 3軸表示 */}
+            {(() => {
+              const isF = type.startsWith("F");
+              const isInner = ["FIX", "FIII", "RIX", "RIII"].includes(type);
+              const isCross = type.endsWith("X");
+              return (
+            <div style={{ 
+              display: "flex", 
+              justifyContent: "center", 
+              gap: 8, 
+              marginBottom: 16,
+              flexWrap: "wrap"
+            }}>
+              {/* 体幹 */}
+              <div style={{ 
+                background: isF ? `${C.orange}15` : `${C.purple}15`,
+                border: `1px solid ${isF ? C.orange : C.purple}30`,
+                borderRadius: 8, 
+                padding: "6px 12px",
+                display: "flex",
+                alignItems: "center",
+                gap: 6
+              }}>
+                <span style={{ color: C.textMuted, fontSize: 11, fontWeight: 600 }}>体幹</span>
+                <span style={{ 
+                  color: isF ? C.orange : C.purple, 
+                  fontSize: 13, 
+                  fontWeight: 700 
+                }}>
+                  {isF ? "Front" : "Rear"}
+                </span>
+              </div>
+              
+              {/* 荷重 */}
+              <div style={{ 
+                background: isInner ? `${C.cyan}15` : `${C.green}15`,
+                border: `1px solid ${isInner ? C.cyan : C.green}30`,
+                borderRadius: 8, 
+                padding: "6px 12px",
+                display: "flex",
+                alignItems: "center",
+                gap: 6
+              }}>
+                <span style={{ color: C.textMuted, fontSize: 11, fontWeight: 600 }}>荷重</span>
+                <span style={{ 
+                  color: isInner ? C.cyan : C.green, 
+                  fontSize: 13, 
+                  fontWeight: 700 
+                }}>
+                  {isInner ? "Inner" : "Outer"}
+                </span>
+              </div>
+              
+              {/* 連動 */}
+              <div style={{ 
+                background: isCross ? `${C.pink}15` : `${"#3B82F6"}15`,
+                border: `1px solid ${isCross ? C.pink : "#3B82F6"}30`,
+                borderRadius: 8, 
+                padding: "6px 12px",
+                display: "flex",
+                alignItems: "center",
+                gap: 6
+              }}>
+                <span style={{ color: C.textMuted, fontSize: 11, fontWeight: 600 }}>連動</span>
+                <span style={{ 
+                  color: isCross ? C.pink : "#3B82F6", 
+                  fontSize: 13, 
+                  fontWeight: 700 
+                }}>
+                  {isCross ? "Cross" : "Parallel"}
+                </span>
+              </div>
+            </div>
+              );
+            })()}
             
             {/* 説明 */}
             <p style={{ color: C.text, fontSize: 14, lineHeight: 1.8, margin: "0 0 24px" }}>
