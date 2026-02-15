@@ -957,22 +957,22 @@ const QUESTION_POOL = [
   // === Inner/Outer（荷重タイプ）===
   // num1 = Inner（内側荷重）, num2 = Outer（外側荷重）
   { id: "shoe_wear", cat: "balance", q: "靴底の減り、気になるのは？", a: "内側（親指側）が減る", b: "外側（小指側）が減る", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "knee_direction", cat: "balance", q: "スクワットすると膝は？", a: "内側に入りやすい", b: "外に開きやすい", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "knee_direction", cat: "balance", q: "スクワットすると膝は？", a: "外に開きやすい", b: "内側に入りやすい", weight: { num1: [0, 1], num2: [1, 0] } },
   { id: "one_leg_balance", cat: "balance", q: "片足立ちで踏ん張る場所は？", a: "親指の付け根あたり", b: "小指側〜外側", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "sit_legs", cat: "balance", q: "電車で座ると、膝は自然と…", a: "閉じる", b: "開く", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "sit_legs", cat: "balance", q: "電車で座ると、膝は自然と…", a: "開く", b: "閉じる", weight: { num1: [0, 1], num2: [1, 0] } },
   { id: "stand_feet", cat: "balance", q: "リラックスして立つと、つま先は？", a: "まっすぐ〜やや内向き", b: "やや外向き（ガニ股気味）", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "walk_width", cat: "balance", q: "歩くとき、左右の足の幅は？", a: "狭め（一直線に近い）", b: "広め", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "walk_width", cat: "balance", q: "歩くとき、左右の足の幅は？", a: "広め", b: "狭め（一直線に近い）", weight: { num1: [0, 1], num2: [1, 0] } },
   { id: "pedal_push", cat: "balance", q: "ペダルを踏む感覚は？", a: "親指の付け根で踏む", b: "足裏全体で踏む", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "leg_cross", cat: "balance", q: "脚を組むとき、しっくりくるのは？", a: "ギュッと内側に締める", b: "ゆったり外に開く", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "leg_cross", cat: "balance", q: "脚を組むとき、しっくりくるのは？", a: "ゆったり外に開く", b: "ギュッと内側に締める", weight: { num1: [0, 1], num2: [1, 0] } },
   { id: "squat_knee", cat: "balance", q: "深くしゃがむと、膝は？", a: "つま先より内側に入る", b: "つま先と同じか外に開く", weight: { num1: [1, 0], num2: [0, 1] } },
   { id: "ankle_injury", cat: "balance", q: "足首を捻るとしたら、どっち？", a: "内側にグキッ（よくある捻挫）", b: "外側にグキッ", weight: { num1: [0, 1], num2: [1, 0] } },
-  { id: "heel_wear", cat: "balance", q: "靴の踵、減りやすいのは？", a: "内側", b: "外側", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "heel_wear", cat: "balance", q: "靴の踵、減りやすいのは？", a: "外側", b: "内側", weight: { num1: [0, 1], num2: [1, 0] } },
   { id: "toe_power", cat: "balance", q: "地面を蹴るとき、力が入るのは？", a: "親指側", b: "小指側も使う", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "calf_shape", cat: "balance", q: "ふくらはぎ、張ってるのは？", a: "内側", b: "外側", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "calf_shape", cat: "balance", q: "ふくらはぎ、張ってるのは？", a: "外側", b: "内側", weight: { num1: [0, 1], num2: [1, 0] } },
   { id: "thigh_shape", cat: "balance", q: "太もも、発達してるのは？", a: "内もも", b: "外もも", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "arch_height", cat: "balance", q: "土踏まずの高さは？", a: "低め（偏平足気味）", b: "高め（アーチがある）", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "arch_height", cat: "balance", q: "土踏まずの高さは？", a: "高め（アーチがある）", b: "低め（偏平足気味）", weight: { num1: [0, 1], num2: [1, 0] } },
   { id: "stand_weight", cat: "balance", q: "長時間立つと、体重がかかるのは？", a: "足の内側", b: "足の外側", weight: { num1: [1, 0], num2: [0, 1] } },
-  { id: "jump_land", cat: "balance", q: "ジャンプして着地、最初に着くのは？", a: "足の内側（親指側）", b: "足の外側（小指側）", weight: { num1: [1, 0], num2: [0, 1] } },
+  { id: "jump_land", cat: "balance", q: "ジャンプして着地、最初に着くのは？", a: "足の外側（小指側）", b: "足の内側（親指側）", weight: { num1: [0, 1], num2: [1, 0] } },
   { id: "turn_pivot", cat: "balance", q: "くるっと振り向くとき、軸足は？", a: "内側に体重をかける", b: "外側に体重をかける", weight: { num1: [1, 0], num2: [0, 1] } },
   
   // === APA: テンポ・リズム傾向 ===
@@ -1066,62 +1066,62 @@ const QUESTION_POOL = [
     a: "脚と反対の腕が自然に出る（右足と左腕）", b: "あまり意識しない or 同じ側が出やすい", 
     weight: { cross: [1, 0], parallel: [0, 1] } },
   { id: "cross_throw", cat: "movement", q: "ボールを投げるとき、体の使い方は？", 
-    a: "腰をひねって対角線に体重移動", b: "体幹を固定して腕中心で投げる", 
-    weight: { cross: [1, 0], parallel: [0, 1] } },
+    a: "体幹を固定して腕中心で投げる", b: "腰をひねって対角線に体重移動", 
+    weight: { cross: [0, 1], parallel: [1, 0] } },
   { id: "cross_kick", cat: "movement", q: "ボールを蹴るとき、自然なのは？", 
     a: "蹴る脚と反対の腕を大きく使う", b: "両腕でバランスを取る程度", 
     weight: { cross: [1, 0], parallel: [0, 1] } },
   { id: "cross_punch", cat: "movement", q: "パンチを打つイメージで近いのは？", 
-    a: "腰を回転させて対角線に体重を乗せる", b: "肩と腕を前に押し出す感じ", 
-    weight: { cross: [1, 0], parallel: [0, 1] } },
+    a: "肩と腕を前に押し出す感じ", b: "腰を回転させて対角線に体重を乗せる", 
+    weight: { cross: [0, 1], parallel: [1, 0] } },
   { id: "cross_twist", cat: "movement", q: "体をひねる動きは？", 
     a: "得意、自然にできる", b: "あまり得意じゃない、硬い感じ", 
     weight: { cross: [1, 0], parallel: [0, 1] } },
   { id: "cross_turn", cat: "movement", q: "後ろを振り向くとき、どう動く？", 
-    a: "腰からひねって振り向く", b: "体全体を回す or 首だけで振り向く", 
-    weight: { cross: [1, 0], parallel: [0, 1] } },
+    a: "体全体を回す or 首だけで振り向く", b: "腰からひねって振り向く", 
+    weight: { cross: [0, 1], parallel: [1, 0] } },
   { id: "cross_swing", cat: "movement", q: "ゴルフや野球のスイングをイメージすると？", 
     a: "腰の回転が先で、腕がついてくる感じ", b: "腕と体が一緒に動く感じ", 
     weight: { cross: [1, 0], parallel: [0, 1] } },
   { id: "cross_dance", cat: "movement", q: "踊るとき、得意な動きは？", 
-    a: "ツイスト、ひねりを使った動き", b: "ステップ、左右対称の動き", 
-    weight: { cross: [1, 0], parallel: [0, 1] } },
+    a: "ステップ、左右対称の動き", b: "ツイスト、ひねりを使った動き", 
+    weight: { cross: [0, 1], parallel: [1, 0] } },
   { id: "parallel_squat", cat: "movement", q: "スクワットするとき、自然なのは？", 
     a: "少し体をひねりながら", b: "まっすぐ上下に動く", 
     weight: { cross: [1, 0], parallel: [0, 1] } },
   { id: "parallel_push", cat: "movement", q: "壁を両手で押すとき、力の入れ方は？", 
-    a: "左右交互に押す感じ", b: "両手同時に押す感じ", 
-    weight: { cross: [1, 0], parallel: [0, 1] } },
+    a: "両手同時に押す感じ", b: "左右交互に押す感じ", 
+    weight: { cross: [0, 1], parallel: [1, 0] } },
   { id: "parallel_swim", cat: "movement", q: "泳ぎで得意（または得意そう）なのは？", 
     a: "クロール（左右交互）", b: "平泳ぎ・バタフライ（左右対称）", 
     weight: { cross: [1, 0], parallel: [0, 1] } },
   { id: "parallel_climb", cat: "movement", q: "はしごを登るイメージで近いのは？", 
-    a: "手と足が対角線で交互に動く", b: "同じ側の手足が一緒に動きやすい", 
-    weight: { cross: [1, 0], parallel: [0, 1] } },
+    a: "同じ側の手足が一緒に動きやすい", b: "手と足が対角線で交互に動く", 
+    weight: { cross: [0, 1], parallel: [1, 0] } },
   { id: "cross_reach", cat: "movement", q: "右側のものを取るとき、自然なのは？", 
     a: "右手を伸ばしながら左足に体重を乗せる", b: "右手と右足側に体重を乗せる", 
     weight: { cross: [1, 0], parallel: [0, 1] } },
   { id: "cross_run", cat: "movement", q: "走るとき、腕と脚の連動は？", 
-    a: "対角線（右脚と左腕）が自然に連動", b: "あまり意識しない、腕は添える程度", 
-    weight: { cross: [1, 0], parallel: [0, 1] } },
+    a: "あまり意識しない、腕は添える程度", b: "対角線（右脚と左腕）が自然に連動", 
+    weight: { cross: [0, 1], parallel: [1, 0] } },
   { id: "parallel_jump", cat: "movement", q: "その場でジャンプするとき、腕は？", 
     a: "左右バラバラに振り上げることもある", b: "両腕一緒に振り上げる", 
     weight: { cross: [1, 0], parallel: [0, 1] } },
   { id: "cross_bike_stand", cat: "movement", q: "自転車でダンシングするとき、近いのは？", 
-    a: "バイクを左右に振りながら体をひねる", b: "バイクをあまり振らず体幹で踏む", 
-    weight: { cross: [1, 0], parallel: [0, 1] } },
+    a: "バイクをあまり振らず体幹で踏む", b: "バイクを左右に振りながら体をひねる", 
+    weight: { cross: [0, 1], parallel: [1, 0] } },
   { id: "cross_pedal", cat: "movement", q: "ペダリングの感覚で近いのは？", 
     a: "腰のひねりを使って回す感じ", b: "上下に踏み込む感じ", 
     weight: { cross: [1, 0], parallel: [0, 1] } },
   { id: "parallel_cornering", cat: "movement", q: "コーナリングで自然なのは？", 
-    a: "内側の肩を落として体をひねる", b: "バイクと一緒に傾く", 
-    weight: { cross: [1, 0], parallel: [0, 1] } },
+    a: "バイクと一緒に傾く", b: "内側の肩を落として体をひねる", 
+    weight: { cross: [0, 1], parallel: [1, 0] } },
   { id: "cross_sprint", cat: "movement", q: "スプリントで全力を出すとき？", 
     a: "腕を引くと反対の脚に力が入る感じ", b: "両脚で交互に踏み下ろす感じ", 
     weight: { cross: [1, 0], parallel: [0, 1] } },
   { id: "parallel_climb_bike", cat: "movement", q: "ヒルクライムでシッティングのとき？", 
-    a: "微妙に体をひねりながらペダリング", b: "体幹を固定してまっすぐ踏む", 
-    weight: { cross: [1, 0], parallel: [0, 1] } },
+    a: "体幹を固定してまっすぐ踏む", b: "微妙に体をひねりながらペダリング", 
+    weight: { cross: [0, 1], parallel: [1, 0] } },
 ];
 
 // 精度レベル
@@ -1378,45 +1378,45 @@ const TYPE_INFO_CYCLING = {
         荷重バランス: {
           ペダル: "足裏全体で安定",
           ハンドル: "ブラケットで押す",
-          サドル: "座面全体を使う"
+          サドル: "前寄り〜中央"
         }
       },
       balance: { type: "外側荷重（Outer）", description: "足裏全体・外側", detail: "膝やや外向き。" }
     },
     fitting: {
       saddle: {
-        height: { formula: "股下 × 0.870〜0.880", detail: "標準〜やや低め" },
-        setback: { position: "後ろ寄り（+10〜+20mm）", detail: "トルク重視" },
-        tilt: { angle: "水平〜やや後ろ上がり", detail: "安定性" },
+        height: { formula: "股下 × 0.870〜0.880", detail: "標準" },
+        setback: { position: "前寄り〜中央（-5〜+10mm）", detail: "前乗り寄り" },
+        tilt: { angle: "水平", detail: "安定性" },
       },
       handlebar: {
-        drop: { range: "控えめ（-20〜-40mm）", detail: "上体起こす" },
-        reach: { range: "標準〜やや短め", detail: "後ろ乗りバランス" },
+        drop: { range: "中程度（-25〜-45mm）", detail: "バランス" },
+        reach: { range: "標準", detail: "自然なポジション" },
         width: { guide: "肩幅〜やや広め", detail: "安定感" },
       },
       cleat: {
-        position: { fore_aft: "浅め（後ろ寄り）", detail: "踏み込み重視" },
+        position: { fore_aft: "標準", detail: "バランス" },
         angle: { rotation: "深め（外向き）", detail: "ガニ股OK" },
         float: { degree: "多め（6°）", detail: "長時間の快適性" },
         qFactor: { guide: "広め（150〜156mm）", detail: "外側荷重に対応" },
       },
-      crank: { length: { guide: "股下 × 0.205〜0.215", detail: "やや長めでトルク" } },
+      crank: { length: { guide: "股下 × 0.205〜0.215", detail: "標準〜長め" } },
     },
     selfCheck: [
-      { name: "踵立ちバランス", method: "10秒", good: "安定", action: "後重心確定" },
+      { name: "片足ペダリング", method: "30秒", good: "スムーズ", action: "効率型" },
     ],
     products: [
       { name: "Trek Émonda SLR", price: "650,000〜", reason: "軽量。ヒルクライム向き。", amazonQuery: "Trek+Emonda", rakutenQuery: "Trek%20Emonda", image: "" },
     ],
     form: {
-      landing: { title: "ペダリング", type: "トルク型（70-85rpm）", detail: "重めギアでグイグイ" },
-      posture: { title: "ポジション", type: "やや後ろ乗り", detail: "トルク重視" },
+      landing: { title: "ペダリング", type: "効率型（80-90rpm）", detail: "安定して回す" },
+      posture: { title: "ポジション", type: "前乗り〜中央", detail: "効率重視" },
       armSwing: { title: "ダンシング", type: "控えめ", detail: "シッティング中心" },
-      cadence: { title: "ケイデンス", type: "70-85rpm", detail: "低めでトルク" }
+      cadence: { title: "ケイデンス", type: "80-90rpm", detail: "安定リズム" }
     },
     guide: {
       fiveK: { title: "ヒルクライム", tips: ["自分のペース維持", "シッティング中心"], avoid: "周りに惑わされない" },
-      training: { title: "トレーニング", tips: ["LSD", "峠走"], avoid: "スピード練も忘れず" }
+      training: { title: "トレーニング", tips: ["テンポ走", "ロングライド"], avoid: "スピード練も忘れず" }
     }
   },
   
@@ -1791,29 +1791,49 @@ export default function App() {
   
   // ============================================
   // 質問出題設定
-  // - 質問プールは全て維持（やるたびに違う質問が出る楽しみ）
-  // - 各カテゴリから3問ずつ選んで出題 = 約20問で判定
+  // - コア質問は必ず出題（判定に重要な質問）
+  // - それ以外からランダムに追加 = 約25問で判定
   // - 僅差時のみ該当カテゴリから追加2問
   // ============================================
-  const QUESTIONS_PER_CATEGORY = 3;  // 各カテゴリから出す問数
-  const EXTRA_ON_TIE = 2;            // 僅差時に追加する問数
+  const RANDOM_PER_CATEGORY = 1;  // コア以外からランダム追加する数
+  const EXTRA_ON_TIE = 2;         // 僅差時に追加する問数
   
-  // 初期化：カテゴリごとにシャッフルして必要数を選択
+  // コア質問ID（必ず出題する質問）
+  const CORE_QUESTIONS = {
+    trunk: ["lift_heavy", "power_source", "push_wall"],  // 体幹判定
+    balance: ["shoe_wear", "knee_direction", "stand_feet"],  // 荷重判定
+    movement: ["cross_walk", "cross_throw", "parallel_swim"],  // 連動判定
+    cadence: ["pedal_pace", "ride_style"],  // ケイデンス
+    posture: ["desk_posture", "breath_feel"],  // 姿勢
+    mental_agg: ["game_style", "risk_take"],  // メンタル攻撃性
+    mental_team: ["travel_style", "work_focus"],  // チーム性
+  };
+  
+  // 初期化：コア質問 + ランダム追加
   useEffect(() => {
-    // カテゴリごとにグループ化してシャッフル
+    // カテゴリごとにグループ化
     const byCategory = {};
     QUESTION_POOL.forEach(q => {
       if (!byCategory[q.cat]) byCategory[q.cat] = [];
       byCategory[q.cat].push(q);
     });
     
-    // 各カテゴリをシャッフルして先頭N問を選択
     const selected = [];
     const extra = [];
+    
     Object.keys(byCategory).forEach(cat => {
-      const shuffled = byCategory[cat].sort(() => Math.random() - 0.5);
-      selected.push(...shuffled.slice(0, QUESTIONS_PER_CATEGORY));
-      extra.push(...shuffled.slice(QUESTIONS_PER_CATEGORY)); // 残りは追加用
+      const coreIds = CORE_QUESTIONS[cat] || [];
+      const catQuestions = byCategory[cat];
+      
+      // コア質問を選択
+      const coreQuestions = catQuestions.filter(q => coreIds.includes(q.id));
+      selected.push(...coreQuestions);
+      
+      // 残りをシャッフルしてランダム追加
+      const nonCore = catQuestions.filter(q => !coreIds.includes(q.id));
+      const shuffled = nonCore.sort(() => Math.random() - 0.5);
+      selected.push(...shuffled.slice(0, RANDOM_PER_CATEGORY));
+      extra.push(...shuffled.slice(RANDOM_PER_CATEGORY));
     });
     
     // 選択した質問をシャッフルしてセット
@@ -1954,7 +1974,12 @@ export default function App() {
     setShowingAnswer(true);
     setTimeout(() => {
       setShowingAnswer(false);
-      goToNext();
+      // newSkippedを使って次の質問を探す
+      const unanswered = questions.filter(qu => !answers[qu.id] && !newSkipped.has(qu.id));
+      if (unanswered.length > 0) {
+        const nextIndex = questions.findIndex(qu => qu.id === unanswered[0].id);
+        if (nextIndex >= 0) setCurrentIndex(nextIndex);
+      }
     }, 200);
   };
   
@@ -2023,8 +2048,11 @@ export default function App() {
       }
       
       if (extraToAdd.length > 0) {
-        setQuestions(prev => [...prev, ...extraToAdd]);
+        // 追加質問を現在の質問リストに追加
+        const newQuestions = [...questions, ...extraToAdd];
+        setQuestions(newQuestions);
         setExtraQuestionPool(prev => prev.filter(q => !extraToAdd.find(e => e.id === q.id)));
+        // 追加した最初の質問のインデックスへ移動
         setCurrentIndex(questions.length);
         return;
       }
@@ -2570,8 +2598,9 @@ export default function App() {
                 📋 回答履歴（タップで修正）
               </p>
               <div style={{ display: "flex", flexDirection: "column", gap: 8, maxHeight: 200, overflowY: "auto" }}>
-                {questions.filter(q => answers[q.id] !== undefined).map((q, i) => {
-                  const ans = answers[q.id];
+                {Object.entries(answers).map(([qId, ans]) => {
+                  const q = QUESTIONS_CYCLING.find(qu => qu.id === qId);
+                  if (!q) return null;
                   const answerText = ans === "a" ? q.a : q.b;
                   return (
                     <div 
@@ -2595,7 +2624,7 @@ export default function App() {
                           textOverflow: "ellipsis",
                           whiteSpace: "nowrap",
                         }}>
-                          {q.q.replace(/^[^\s]+\s/, "")}
+                          {q.q}
                         </p>
                         <p style={{ 
                           color: C.text, 
@@ -3300,9 +3329,25 @@ export default function App() {
             
             {/* フィルター結果 */}
             {(() => {
+              // 8タイプ → 旧4タイプへのマッピング（機材DBは旧キーのまま）
+              // 8タイプ → 旧4タイプへのマッピング
+              // 前後乗りは体幹(F/R)で決まる: F=前乗り(A1), R=後乗り(B2)
+              // 荷重(I/O)で剛性・スタイルを分ける
+              const typeToLegacy = {
+                "FIX": ["A1"],           // 前乗り・高剛性
+                "FIII": ["A1"],          // 前乗り・効率型
+                "FOX": ["A1"],           // 前乗り・パワー型
+                "FOII": ["A1", "A2"],    // 前乗り〜中間
+                "RIX": ["B1", "B2"],     // 後乗り・バランス
+                "RIII": ["B1"],          // 後乗り・効率型
+                "ROX": ["B2"],           // 後乗り・適応型
+                "ROII": ["B2"],          // 後乗り・安定型
+              };
+              const legacyTypes = typeToLegacy[type] || [];
+              
               const filtered = CYCLING_GEAR_DB.filter(gear => {
-                // タイプ条件
-                if (!gear.type.includes(type)) return false;
+                // タイプ条件（旧キーでマッチング）
+                if (!legacyTypes.some(lt => gear.type.includes(lt))) return false;
                 // カテゴリ
                 if (shoeFilters.category && gear.category !== shoeFilters.category) return false;
                 // ブランド
@@ -3693,10 +3738,10 @@ export default function App() {
                     crank: "標準", crankAdj: "170〜172.5mm推奨",
                   },
                   FOII: { 
-                    saddle: "標準〜低め", saddleAdj: "±5mm", 
-                    drop: "控えめ", dropRange: "-20〜-40mm",
-                    setback: "後ろ寄り", setbackAdj: "+10〜20mm後ろへ",
-                    crank: "長め", crankAdj: "170〜175mm推奨",
+                    saddle: "標準", saddleAdj: "±5mm", 
+                    drop: "中程度", dropRange: "-25〜-45mm",
+                    setback: "前寄り〜中央", setbackAdj: "-5〜+10mm",
+                    crank: "標準〜長め", crankAdj: "170〜175mm推奨",
                   },
                   RIX: { 
                     saddle: "標準", saddleAdj: "±5mm", 
@@ -3730,7 +3775,7 @@ export default function App() {
                   FIX:  { min: -60, max: -40 },
                   FIII: { min: -50, max: -30 },
                   FOX:  { min: -55, max: -35 },
-                  FOII: { min: -40, max: -20 },
+                  FOII: { min: -45, max: -25 },
                   RIX:  { min: -45, max: -25 },
                   RIII: { min: -50, max: -30 },
                   ROX:  { min: -30, max: -10 },
@@ -3978,7 +4023,7 @@ export default function App() {
                   FIX:  { saddleMin: 0.875 + adj, saddleMax: 0.885 + adj, crankMin: 0.200, crankMax: 0.205, dropMin: -60, dropMax: -40 },
                   FIII: { saddleMin: 0.875 + adj, saddleMax: 0.885 + adj, crankMin: 0.200, crankMax: 0.205, dropMin: -50, dropMax: -30 },
                   FOX:  { saddleMin: 0.870 + adj, saddleMax: 0.880 + adj, crankMin: 0.205, crankMax: 0.210, dropMin: -55, dropMax: -35 },
-                  FOII: { saddleMin: 0.870 + adj, saddleMax: 0.880 + adj, crankMin: 0.205, crankMax: 0.215, dropMin: -40, dropMax: -20 },
+                  FOII: { saddleMin: 0.870 + adj, saddleMax: 0.880 + adj, crankMin: 0.205, crankMax: 0.215, dropMin: -45, dropMax: -25 },
                   RIX:  { saddleMin: 0.870 + adj, saddleMax: 0.880 + adj, crankMin: 0.205, crankMax: 0.205, dropMin: -45, dropMax: -25 },
                   RIII: { saddleMin: 0.875 + adj, saddleMax: 0.885 + adj, crankMin: 0.200, crankMax: 0.205, dropMin: -50, dropMax: -30 },
                   ROX:  { saddleMin: 0.865 + adj, saddleMax: 0.875 + adj, crankMin: 0.205, crankMax: 0.210, dropMin: -30, dropMax: -10 },
