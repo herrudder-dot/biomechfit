@@ -1264,7 +1264,7 @@ const TYPE_TROUBLESHOOT = {
   FIII: { issue: "すぐ疲れる", try: ["落差を10mm減らす", "お腹に力を入れる", "ケイデンスを5rpm上げる"] },
   FOX: { issue: "パワーが出ない", try: ["サドルを5mm前へ", "クリートを外寄りに", "重いギアでダンシング練習"] },
   FOII: { issue: "長距離で垂れる", try: ["最初の1時間を抑える", "落差を10mm減らす", "ケイデンスを80rpmに"] },
-  RIX: { issue: "リズムに乗れない", try: ["変化のあるコースを選ぶ", "ギアチェンジを増やす", "音楽を聴きながら走る"] },
+  RIX: { issue: "リズムに乗れない", try: ["変化のあるコースを選ぶ", "ギアチェンジを増やす", "音楽を聴きながらライドする"] },
   RIII: { issue: "集団についていけない", try: ["前方を見て変化を予測", "ギアを1枚軽めに", "ダンシングの練習を追加"] },
   ROX: { issue: "特徴がなくて物足りない", try: ["それが強み。状況判断を磨く", "弱い部分を少しずつ強化", "レースは終盤勝負"] },
   ROII: { issue: "スピードが出ない", try: ["後半勝負に持ち込む", "長い登りで差をつける", "インターバル練習を追加"] },
@@ -1380,7 +1380,7 @@ const QUESTION_POOL = [
   { id: "qfactor_pref", cat: "balance", q: "ペダルの幅（Qファクター）、好みは？", a: "狭め（脚がまっすぐ）", b: "広め（自然に開く）", weight: { num1: [1, 0], num2: [0, 1] } },
   { id: "pedal_pace", cat: "cadence", q: "ペダリングで楽なのは？", a: "ケイデンスを上げて軽く回す", b: "重いギアでゆっくり踏む", weight: { high: [1, 0], low: [0, 1] } },
   { id: "walk_pace", cat: "cadence", q: "歩くペースは？", a: "大股でゆったり", b: "小股で速く", weight: { high: [0, 1], low: [1, 0] } },
-  { id: "ride_style", cat: "cadence", q: "走るときのイメージ", a: "高回転で軽快に", b: "重めギアで力強く", weight: { high: [1, 0], low: [0, 1] } },
+  { id: "ride_style", cat: "cadence", q: "ペダリングのイメージ", a: "高回転で軽快に", b: "重めギアで力強く", weight: { high: [1, 0], low: [0, 1] } },
   { id: "stair_up", cat: "cadence", q: "階段を登るとき", a: "二段飛ばしもあり", b: "一段ずつテンポよく", weight: { high: [0, 1], low: [1, 0] } },
   { id: "music_tempo", cat: "cadence", q: "運動するときの音楽は？", a: "BPM高めが好き", b: "ゆったりめでも集中できる", weight: { high: [1, 0], low: [0, 1] } },
   // 追加：テンポ質問
@@ -1488,7 +1488,7 @@ const QUESTION_POOL = [
   { id: "cross_reach", cat: "movement", q: "右側のものを取るとき、自然なのは？", 
     a: "右手を伸ばしながら左足に体重を乗せる", b: "右手と右足側に体重を乗せる", 
     weight: { cross: [1, 0], parallel: [0, 1] } },
-  { id: "cross_run", cat: "movement", q: "走るとき、腕と脚の連動は？", 
+  { id: "cross_run", cat: "movement", q: "歩いたり走ったりするとき、腕と脚の連動は？", 
     a: "対角線（右脚と左腕）が自然に連動", b: "あまり意識しない、腕は添える程度", 
     weight: { cross: [1, 0], parallel: [0, 1] } },
   
@@ -1705,7 +1705,7 @@ const TYPE_INFO_CYCLING = {
     color: "#ef4444",
     gradient: "linear-gradient(135deg, #ef4444, #dc2626)",
     traits: ["捻りながら外側で踏む", "みぞおち主導で対角連動", "パワフルなダンシング"],
-    description: "前体幹と外側荷重でパワーを出しながら、クロス連動でダイナミックに走る。",
+    description: "前体幹と外側荷重でパワーを出しながら、クロス連動でダイナミックに攻める。",
     strengths: ["パワー系クライム", "アタック", "独走"],
     weaknesses: ["集団走行", "一定ペース維持"],
     radarData: [85, 75, 55, 70, 55],
@@ -1845,7 +1845,7 @@ const TYPE_INFO_CYCLING = {
     color: "#8b5cf6",
     gradient: "linear-gradient(135deg, #8b5cf6, #7c3aed)",
     traits: ["捻りながら内側で踏む", "肩甲骨・腰主導で対角連動", "リズミカルな走り"],
-    description: "後体幹で身体を一体に使いながら、クロス連動でリズムよく走る。",
+    description: "後体幹で身体を一体に使いながら、クロス連動でリズムよく漕ぐ。",
     strengths: ["リズム感", "テクニカルコース", "変化への対応"],
     weaknesses: ["単調な平地", "TTポジション"],
     radarData: [70, 60, 70, 85, 70],
@@ -2056,7 +2056,7 @@ const TYPE_INFO_CYCLING = {
     color: "#64748b",
     gradient: "linear-gradient(135deg, #64748b, #475569)",
     traits: ["安定して外側で踏む", "肩甲骨・腰主導で同側連動", "どっしり安定"],
-    description: "後体幹と外側荷重でどっしり安定。パラレル連動で効率よく走る。",
+    description: "後体幹と外側荷重でどっしり安定。パラレル連動で効率よく踏む。",
     strengths: ["安定感", "ロングライド", "悪条件"],
     weaknesses: ["瞬発力", "急なペース変化"],
     radarData: [45, 85, 80, 80, 95],
@@ -2741,7 +2741,7 @@ export default function App() {
               {[
                 { icon: Icons.user, color: C.pink, label: "体幹タイプ", desc: "F or R" },
                 { icon: Icons.foot, color: C.cyan, label: "荷重タイプ", desc: "Inner or Outer" },
-                { icon: Icons.activity, color: C.orange, label: "リズム", desc: "ピッチ or ストライド" },
+                { icon: Icons.activity, color: C.orange, label: "連動パターン", desc: "クロス or パラレル" },
                 { icon: Icons.zap, color: C.green, label: "メンタル", desc: "攻撃性 & チーム性" },
               ].map(item => (
                 <div key={item.label} style={{ 
@@ -3621,25 +3621,25 @@ export default function App() {
           <Card style={{ marginTop: 16 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
               {Icons.activity(C.pink, 20)}
-              <p style={{ color: C.text, fontSize: 16, fontWeight: 700, margin: 0 }}>リズム・姿勢傾向</p>
+              <p style={{ color: C.text, fontSize: 16, fontWeight: 700, margin: 0 }}>ペダリング・姿勢傾向</p>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
               <div style={{ background: "theme.bg", borderRadius: 12, padding: 14, textAlign: "center" }}>
                 <div style={{ marginBottom: 8 }}>{cadence === "high" ? Icons.rotate(C.cyan, 28) : Icons.zap(C.orange, 28)}</div>
                 <p style={{ color: cadence === "high" ? C.cyan : C.orange, fontSize: 14, fontWeight: 700, margin: "0 0 2px" }}>
-                  {cadence === "high" ? "高ピッチ型" : "ストライド型"}
+                  {cadence === "high" ? "高回転型" : "トルク型"}
                 </p>
                 <p style={{ color: C.textDim, fontSize: 11, margin: 0 }}>
-                  {cadence === "high" ? "180spm+で軽快に" : "大きな一歩で力強く"}
+                  {cadence === "high" ? "90rpm+で軽快に回す" : "重めのギアで力強く踏む"}
                 </p>
               </div>
               <div style={{ background: "theme.bg", borderRadius: 12, padding: 14, textAlign: "center" }}>
                 <div style={{ marginBottom: 8 }}>{posture === "open" ? Icons.user(C.green, 28) : Icons.activity(C.accent, 28)}</div>
                 <p style={{ color: posture === "open" ? C.green : C.accent, fontSize: 14, fontWeight: 700, margin: "0 0 2px" }}>
-                  {posture === "open" ? "胸開きタイプ" : "前傾タイプ"}
+                  {posture === "open" ? "アップライト型" : "前傾型"}
                 </p>
                 <p style={{ color: C.textDim, fontSize: 11, margin: 0 }}>
-                  {posture === "open" ? "上体を起こして走る" : "前傾姿勢で走る"}
+                  {posture === "open" ? "上体を起こして安定重視" : "深い前傾でエアロ重視"}
                 </p>
               </div>
             </div>
@@ -4697,11 +4697,11 @@ export default function App() {
           </Card>
           
           
-          {/* 走り方ガイド */}
+          {/* ライディングガイド */}
           <Card style={{ marginTop: 16 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
               {Icons.activity(typeInfo.color, 20)}
-              <p style={{ color: C.text, fontSize: 16, fontWeight: 700, margin: 0 }}>走り方ガイド</p>
+              <p style={{ color: C.text, fontSize: 16, fontWeight: 700, margin: 0 }}>ライディングガイド</p>
             </div>
             
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
@@ -5268,7 +5268,7 @@ export default function App() {
                     : type === "FIII" ? "安定して内側で効率よく回す"
                     : type === "FOX" ? "捻りながら外側でパワーを出す"
                     : type === "FOII" ? "安定して外側で粘る"
-                    : type === "RIX" ? "後体幹でリズミカルに走る"
+                    : type === "RIX" ? "後体幹でリズミカルに漕ぐ"
                     : type === "RIII" ? "後体幹で効率よく滑らかに"
                     : type === "ROX" ? "後体幹であらゆる状況に適応"
                     : "後体幹でどっしり安定";
