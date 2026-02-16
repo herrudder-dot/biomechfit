@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STANCE CORE - Refined Logo Designs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #FAFAFA;
+            color: #1a1a1a;
+            padding: 60px 40px;
+            font-weight: 300;
+        }
+        
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 80px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid #E8E8E8;
+        }
+        
+        h1 {
+            font-size: 3.5em;
+            font-weight: 500;
+            letter-spacing: 8px;
+            margin-bottom: 15px;
+            color: #10B981;
+            text-transform: uppercase;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 0.9em;
+            font-weight: 400;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        
+        .logo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 60px;
+            margin-bottom: 80px;
+        }
+        
+        .logo-card {
+            background: #FFFFFF;
+            border: 1px solid #E8E8E8;
+            padding: 0;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+        }
+        
+        .logo-card:hover {
+            border-color: #10B981;
+            box-shadow: 0 20px 40px rgba(16, 185, 129, 0.15);
+            transform: translateY(-8px);
+        }
+        
+        .logo-display {
+            height: 450px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #FAFAFA;
+            border-bottom: 1px solid #F0F0F0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .logo-display.dark {
+            background: #1a1a1a;
+        }
+        
+        .logo-info {
+            padding: 35px;
+        }
+        
+        .logo-name {
+            font-size: 0.8em;
+            font-weight: 500;
+            letter-spacing: 3px;
+            color: #10B981;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+        
+        .logo-description {
+            font-size: 0.9em;
+            color: #666;
+            line-height: 1.9;
+            font-weight: 300;
+            margin-bottom: 15px;
+        }
+        
+        .logo-specs {
+            font-size: 0.75em;
+            color: #999;
+            line-height: 1.6;
+            font-weight: 300;
+            padding-top: 15px;
+            border-top: 1px solid #F0F0F0;
+        }
+        
+        .recommended-badge {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            background: #10B981;
+            color: #FFFFFF;
+            padding: 8px 20px;
+            font-size: 0.7em;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            z-index: 10;
+        }
+        
+        .logo-svg {
+            transition: transform 0.4s ease;
+        }
+        
+        .logo-card:hover .logo-svg {
+            transform: scale(1.03);
+        }
+        
+        .usage-section {
+            margin-top: 100px;
+            padding-top: 60px;
+            border-top: 2px solid #E8E8E8;
+        }
+        
+        .usage-title {
+            font-size: 1.5em;
+            font-weight: 400;
+            letter-spacing: 4px;
+            margin-bottom: 50px;
+            color: #1a1a1a;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        
+        .usage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+        
+        .usage-example {
+            background: #FFFFFF;
+            border: 1px solid #E8E8E8;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .usage-label {
+            font-size: 0.75em;
+            color: #999;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>STANCE CORE</h1>
+            <p class="subtitle">Refined Logo Designs — Enhanced Visibility</p>
+        </header>
+        
+        <div class="logo-grid">
+            
+            <!-- Version 1: Bold Concentric with Strong Typography -->
+            <div class="logo-card">
+                <div class="recommended-badge">Primary</div>
+                <div class="logo-display">
+                    <svg class="logo-svg" width="350" height="350" viewBox="0 0 350 350">
+                        <defs>
+                            <radialGradient id="core-bold-1">
+                                <stop offset="0%" style="stop-color:#10B981;stop-opacity:0.4" />
+                                <stop offset="100%" style="stop-color:#10B981;stop-opacity:0" />
+                            </radialGradient>
+                        </defs>
+                        <!-- Strong concentric circles -->
+                        <circle cx="175" cy="160" r="70" fill="url(#core-bold-1)"/>
+                        <circle cx="175" cy="160" r="75" fill="none" stroke="#10B981" stroke-width="2" opacity="0.5"/>
+                        <circle cx="175" cy="160" r="90" fill="none" stroke="#10B981" stroke-width="1.5" opacity="0.35"/>
+                        <circle cx="175" cy="160" r="105" fill="none" stroke="#10B981" stroke-width="1" opacity="0.25"/>
+                        <!-- Bold central core -->
+                        <circle cx="175" cy="160" r="50" fill="#10B981" opacity="0.2"/>
+                        <circle cx="175" cy="160" r="12" fill="#10B981" opacity="0.8"/>
+                        <!-- Strong typography -->
+                        <text x="175" y="255" font-family="'SF Pro Display', Arial, sans-serif" font-size="32" font-weight="600" letter-spacing="6" fill="#10B981" text-anchor="middle">STANCE</text>
+                        <text x="175" y="285" font-family="'SF Pro Display', Arial, sans-serif" font-size="20" font-weight="500" letter-spacing="5" fill="#0A0A0A" text-anchor="middle">CORE</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <div class="logo-name">Version 1 — Bold Concentric</div>
+                    <div class="logo-description">同心円を太く強調し、視認性を大幅に向上。中心のコアを大きく配置し、ブランドの核心を明確に表現。フォントウェイト600/500で力強さを演出。</div>
+                    <div class="logo-specs">
+                        ストローク幅: 1-2px | コア直径: 24px | フォント: 600/500 | 推奨最小サイズ: 80px
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Version 2: Solid Geometric Core -->
+            <div class="logo-card">
+                <div class="recommended-badge">Versatile</div>
+                <div class="logo-display">
+                    <svg class="logo-svg" width="350" height="350" viewBox="0 0 350 350">
+                        <!-- Solid geometric square core -->
+                        <rect x="105" y="90" width="140" height="140" fill="none" stroke="#10B981" stroke-width="2.5" opacity="0.6"/>
+                        <rect x="120" y="105" width="110" height="110" fill="none" stroke="#10B981" stroke-width="1.5" opacity="0.4"/>
+                        <rect x="140" y="125" width="70" height="70" fill="#10B981" opacity="0.25"/>
+                        <!-- Strong central element -->
+                        <circle cx="175" cy="160" r="15" fill="#10B981" opacity="0.8"/>
+                        <!-- Corner reinforcement -->
+                        <circle cx="105" cy="90" r="4" fill="#10B981" opacity="0.6"/>
+                        <circle cx="245" cy="90" r="4" fill="#10B981" opacity="0.6"/>
+                        <circle cx="105" cy="230" r="4" fill="#10B981" opacity="0.6"/>
+                        <circle cx="245" cy="230" r="4" fill="#10B981" opacity="0.6"/>
+                        <!-- Bold typography -->
+                        <text x="175" y="270" font-family="'SF Pro Display', Arial, sans-serif" font-size="32" font-weight="600" letter-spacing="6" fill="#10B981" text-anchor="middle">STANCE</text>
+                        <text x="175" y="300" font-family="'SF Pro Display', Arial, sans-serif" font-size="20" font-weight="500" letter-spacing="5" fill="#0A0A0A" text-anchor="middle">CORE</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <div class="logo-name">Version 2 — Solid Geometric</div>
+                    <div class="logo-description">四角形のストロークを太くし、構造的な安定感を強化。コーナーマーカーで4つの要素を示唆。幾何学的で記憶に残りやすい。</div>
+                    <div class="logo-specs">
+                        ストローク幅: 1.5-2.5px | コア直径: 30px | フォント: 600/500 | 推奨最小サイズ: 85px
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Version 3: Icon + Wordmark Combination -->
+            <div class="logo-card">
+                <div class="logo-display">
+                    <svg class="logo-svg" width="350" height="350" viewBox="0 0 350 350">
+                        <!-- Simplified strong icon -->
+                        <circle cx="175" cy="130" r="50" fill="none" stroke="#10B981" stroke-width="3" opacity="0.6"/>
+                        <circle cx="175" cy="130" r="35" fill="none" stroke="#10B981" stroke-width="2" opacity="0.4"/>
+                        <circle cx="175" cy="130" r="16" fill="#10B981" opacity="0.8"/>
+                        <!-- Bold integrated typography -->
+                        <text x="175" y="235" font-family="'SF Pro Display', Arial, sans-serif" font-size="40" font-weight="600" letter-spacing="8" fill="#10B981" text-anchor="middle">STANCE</text>
+                        <line x1="95" y1="250" x2="255" y2="250" stroke="#10B981" stroke-width="1.5" opacity="0.4"/>
+                        <text x="175" y="280" font-family="'SF Pro Display', Arial, sans-serif" font-size="24" font-weight="500" letter-spacing="6" fill="#0A0A0A" text-anchor="middle">CORE</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <div class="logo-name">Version 3 — Icon Wordmark</div>
+                    <div class="logo-description">アイコンとワードマークを明確に分離。視認性の高いシンボルマークで即座に認識可能。セパレーターラインで階層を強調。</div>
+                    <div class="logo-specs">
+                        ストローク幅: 2-3px | アイコン直径: 100px | フォント: 600/500 | 推奨最小サイズ: 90px
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Version 4: Horizontal Layout -->
+            <div class="logo-card">
+                <div class="logo-display">
+                    <svg class="logo-svg" width="450" height="350" viewBox="0 0 450 350">
+                        <!-- Left-aligned strong icon -->
+                        <circle cx="120" cy="175" r="55" fill="none" stroke="#10B981" stroke-width="2.5" opacity="0.6"/>
+                        <circle cx="120" cy="175" r="40" fill="none" stroke="#10B981" stroke-width="1.5" opacity="0.4"/>
+                        <circle cx="120" cy="175" r="18" fill="#10B981" opacity="0.8"/>
+                        <!-- Horizontal bold typography -->
+                        <text x="220" y="175" font-family="'SF Pro Display', Arial, sans-serif" font-size="42" font-weight="600" letter-spacing="7" fill="#10B981" text-anchor="start" dominant-baseline="middle">STANCE</text>
+                        <text x="220" y="205" font-family="'SF Pro Display', Arial, sans-serif" font-size="20" font-weight="500" letter-spacing="5" fill="#666" text-anchor="start">CORE</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <div class="logo-name">Version 4 — Horizontal</div>
+                    <div class="logo-description">横並びレイアウトで汎用性を向上。ヘッダーやナビゲーションに最適。アイコンとテキストのバランスが取れた構成。</div>
+                    <div class="logo-specs">
+                        ストローク幅: 1.5-2.5px | 全体幅: 400px | フォント: 600/500 | 推奨最小サイズ: 120px幅
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Version 5: Badge Style -->
+            <div class="logo-card">
+                <div class="logo-display">
+                    <svg class="logo-svg" width="350" height="350" viewBox="0 0 350 350">
+                        <!-- Badge-style circular design -->
+                        <circle cx="175" cy="175" r="110" fill="none" stroke="#10B981" stroke-width="2.5" opacity="0.5"/>
+                        <circle cx="175" cy="175" r="95" fill="none" stroke="#10B981" stroke-width="1.5" opacity="0.3"/>
+                        <!-- Inner core structure -->
+                        <circle cx="175" cy="165" r="55" fill="none" stroke="#10B981" stroke-width="2" opacity="0.6"/>
+                        <circle cx="175" cy="165" r="40" fill="none" stroke="#10B981" stroke-width="1.5" opacity="0.4"/>
+                        <circle cx="175" cy="165" r="20" fill="#10B981" opacity="0.8"/>
+                        <!-- Integrated text -->
+                        <text x="175" y="255" font-family="'SF Pro Display', Arial, sans-serif" font-size="28" font-weight="600" letter-spacing="5" fill="#10B981" text-anchor="middle">STANCE</text>
+                        <text x="175" y="278" font-family="'SF Pro Display', Arial, sans-serif" font-size="16" font-weight="500" letter-spacing="4" fill="#0A0A0A" text-anchor="middle">CORE</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <div class="logo-name">Version 5 — Badge Style</div>
+                    <div class="logo-description">バッジ風の完結したデザイン。円形の枠で統一感を演出。アプリアイコンやステッカーに最適な構成。</div>
+                    <div class="logo-specs">
+                        ストローク幅: 1.5-2.5px | 外径: 220px | フォント: 600/500 | 推奨最小サイズ: 100px
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Version 6: Dark Background Version -->
+            <div class="logo-card">
+                <div class="recommended-badge">Dark Mode</div>
+                <div class="logo-display dark">
+                    <svg class="logo-svg" width="350" height="350" viewBox="0 0 350 350">
+                        <defs>
+                            <radialGradient id="core-dark">
+                                <stop offset="0%" style="stop-color:#10B981;stop-opacity:0.5" />
+                                <stop offset="100%" style="stop-color:#10B981;stop-opacity:0" />
+                            </radialGradient>
+                        </defs>
+                        <!-- Enhanced glow for dark background -->
+                        <circle cx="175" cy="160" r="75" fill="url(#core-dark)"/>
+                        <circle cx="175" cy="160" r="75" fill="none" stroke="#10B981" stroke-width="2.5" opacity="0.7"/>
+                        <circle cx="175" cy="160" r="90" fill="none" stroke="#10B981" stroke-width="1.5" opacity="0.5"/>
+                        <circle cx="175" cy="160" r="105" fill="none" stroke="#10B981" stroke-width="1" opacity="0.3"/>
+                        <!-- Glowing core -->
+                        <circle cx="175" cy="160" r="50" fill="#10B981" opacity="0.3"/>
+                        <circle cx="175" cy="160" r="14" fill="#10B981" opacity="1">
+                            <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite"/>
+                        </circle>
+                        <!-- High contrast typography -->
+                        <text x="175" y="255" font-family="'SF Pro Display', Arial, sans-serif" font-size="32" font-weight="600" letter-spacing="6" fill="#10B981" text-anchor="middle">STANCE</text>
+                        <text x="175" y="285" font-family="'SF Pro Display', Arial, sans-serif" font-size="20" font-weight="500" letter-spacing="5" fill="#FFFFFF" text-anchor="middle">CORE</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <div class="logo-name">Version 6 — Dark Mode</div>
+                    <div class="logo-description">ダークバックグラウンド用に最適化。発光効果を強化し、暗い背景でも存在感を発揮。夜間モードやダークテーマに対応。</div>
+                    <div class="logo-specs">
+                        ストローク幅: 1-2.5px | 発光効果: あり | フォント: 600/500 | 背景: ダーク推奨
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <!-- Usage Examples -->
+        <section class="usage-section">
+            <h2 class="usage-title">Usage Examples</h2>
+            <div class="usage-grid">
+                
+                <!-- App Icon Preview -->
+                <div class="usage-example">
+                    <div class="usage-label">App Icon (iOS/Android)</div>
+                    <div style="width: 120px; height: 120px; margin: 0 auto 20px; background: #10B981; border-radius: 26px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);">
+                        <svg width="80" height="80" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="35" fill="none" stroke="#FFFFFF" stroke-width="2.5" opacity="0.8"/>
+                            <circle cx="50" cy="50" r="25" fill="none" stroke="#FFFFFF" stroke-width="1.5" opacity="0.6"/>
+                            <circle cx="50" cy="50" r="10" fill="#FFFFFF" opacity="0.95"/>
+                        </svg>
+                    </div>
+                    <p style="font-size: 0.8em; color: #666;">120 × 120px, iOS rounded corners</p>
+                </div>
+                
+                <!-- Small Size Test -->
+                <div class="usage-example">
+                    <div class="usage-label">Small Size (32px)</div>
+                    <div style="margin: 20px auto;">
+                        <svg width="32" height="32" viewBox="0 0 32 32">
+                            <circle cx="16" cy="16" r="12" fill="none" stroke="#10B981" stroke-width="1.5" opacity="0.6"/>
+                            <circle cx="16" cy="16" r="8" fill="none" stroke="#10B981" stroke-width="1" opacity="0.4"/>
+                            <circle cx="16" cy="16" r="4" fill="#10B981" opacity="0.8"/>
+                        </svg>
+                    </div>
+                    <p style="font-size: 0.8em; color: #666;">視認性テスト：最小サイズでも認識可能</p>
+                </div>
+                
+                <!-- Monochrome Version -->
+                <div class="usage-example">
+                    <div class="usage-label">Monochrome (Black)</div>
+                    <div style="margin: 20px auto;">
+                        <svg width="200" height="80" viewBox="0 0 200 80">
+                            <circle cx="40" cy="40" r="25" fill="none" stroke="#000000" stroke-width="2" opacity="0.8"/>
+                            <circle cx="40" cy="40" r="18" fill="none" stroke="#000000" stroke-width="1.5" opacity="0.6"/>
+                            <circle cx="40" cy="40" r="8" fill="#000000" opacity="0.9"/>
+                            <text x="90" y="45" font-family="Arial, sans-serif" font-size="20" font-weight="600" letter-spacing="3" fill="#000000">STANCE CORE</text>
+                        </svg>
+                    </div>
+                    <p style="font-size: 0.8em; color: #666;">印刷・FAX・モノクロ対応</p>
+                </div>
+                
+            </div>
+        </section>
+        
+    </div>
+</body>
+</html>
