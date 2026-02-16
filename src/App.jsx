@@ -927,7 +927,7 @@ const HILLCLIMB_GUIDE = {
     climbing: {
       pace: "変化をつけて攻める。一定ペースより緩急で勝負",
       dancing: "積極的に使う。バイクを左右に振って対角に力を伝える",
-      sitting: "前乗りで母指球荷重。腰を微妙にひねりながらペダリング",
+      sitting: { label: "前乗りで母指球荷重。腰の回旋を使ったペダリング", ng: "腰が固定されて脚だけで踏んでいる。太もも前側がすぐ売り切れる", ok: "踏み込むたびにおへそが左右に小さく回る。脚全体で踏めている", check: "片手をおへそに当てて登る。手が動いていればOK" },
       cadence: "85-95rpm。高回転でキレを出す"
     },
     cornering: {
@@ -938,8 +938,8 @@ const HILLCLIMB_GUIDE = {
     acceleration: {
       start: "腰のひねりを起点に対角線で力を伝える",
       gear: "やや軽めで回転を上げて加速",
-      upper: "ハンドルを交互に引いて、脚と連動させる",
-      image: "「捻じって弾く」感覚"
+      upper: { label: "対角連動で上半身を使う", ng: "両手で同時にハンドルを握りしめている。肩が上がっている", ok: "右足で踏むとき左手でブラケットを引く。対角線の力を感じる", check: "加速時に引いてる手と踏んでる脚が左右逆（対角）になっていればOK" },
+      image: { label: "全身連動の加速", ng: "太もも前側だけで押している。4時以降に力が抜ける", ok: "踏み込みの瞬間、みぞおちが締まり→腰が回り→ペダルに体重が落ちる。3つが連動する", check: "加速時に腹筋に軽い張りを感じる＝全身連動。太ももだけの疲労なら脚単独" }
     },
     gradient: {
       easy: { range: "3〜5%", tip: "ハイケイデンスで飛ばす。得意ゾーン" },
@@ -955,7 +955,7 @@ const HILLCLIMB_GUIDE = {
     climbing: {
       pace: "一定ペースが得意。序盤から安定して刻む",
       dancing: "控えめ。必要なときだけ短く使う",
-      sitting: "前乗りで母指球荷重。腰を固定してスムーズに回す",
+      sitting: { label: "前乗りで母指球荷重。骨盤固定でスムーズに", ng: "腰が左右に揺れてサドルの上でお尻が動く。効率が悪い", ok: "骨盤がサドルに固定され、股関節だけが動いている。上半身は一枚板", check: "後ろから撮影。肩のラインが水平のまま動かなければOK" },
       cadence: "80-90rpm。効率重視の回転数"
     },
     cornering: {
@@ -967,7 +967,7 @@ const HILLCLIMB_GUIDE = {
       start: "脚の上下動を意識。体幹は固定",
       gear: "重すぎず軽すぎず。効率の良いギアを探す",
       upper: "安定させる。ブレない軸",
-      image: "「滑らかに押し出す」感覚"
+      image: { label: "途切れない円運動", ng: "ペダルを踏む感覚が強い。2時〜4時しか力がかからない", ok: "ペダルを12時→6時まで途切れなく押し続ける感覚。円を描いている", check: "片足ペダリングでカクカクしない＝OK。途中で力が抜ける箇所があればNG" }
     },
     gradient: {
       easy: { range: "3〜5%", tip: "最も得意。TTのように淡々と踏む" },
@@ -983,7 +983,7 @@ const HILLCLIMB_GUIDE = {
     climbing: {
       pace: "後半勝負型。序盤は集団に潜んで脚を溜める",
       dancing: "ガンガン使う。バイクを大きく振ってパワーを出す",
-      sitting: "前乗りで外側荷重。サドルの前寄りに座る",
+      sitting: { label: "前乗りで外側荷重。足裏全体でペダルを押す", ng: "母指球（内側）でだけ踏んで、パワーが出ない。膝が内に入る", ok: "足裏全体〜外側で踏み、膝がやや外を向く。大腿四頭筋全体で押せている", check: "ペダリング中に膝の軌道を確認。つま先〜やや外側を向いていればOK" },
       cadence: "75-85rpm。トルク重視"
     },
     cornering: {
@@ -995,7 +995,7 @@ const HILLCLIMB_GUIDE = {
       start: "腰のひねりを使い、対角線に体重を乗せる",
       gear: "重めでトルクをガツンとかける",
       upper: "ハンドルを強く引いて反対脚に力を伝える",
-      image: "「捻じって踏み抜く」感覚"
+      image: { label: "腰連動のトルク加速", ng: "脚を真下に踏み込むだけ。3時の位置でしか力がかからない", ok: "腰のねじり→踏み込みが連動して、体重ごとペダルに乗る。2時〜5時まで力が続く", check: "重めのギアで加速。腹斜筋（脇腹）に張りを感じれば全身連動OK" }
     },
     gradient: {
       easy: { range: "3〜5%", tip: "独走で踏み倒す。スピードで押し切る" },
@@ -1011,7 +1011,7 @@ const HILLCLIMB_GUIDE = {
     climbing: {
       pace: "最初からマイペース。自分のリズムを崩さない",
       dancing: "控えめ。長い登りはシッティング中心",
-      sitting: "前乗り〜中央で外側荷重。座面をしっかり使う",
+      sitting: { label: "前乗り〜中央で外側荷重。座面全体を使う", ng: "サドルの一点にお尻が集中して痛い。安定しない", ok: "サドルの座面全体にお尻が乗り、骨盤が安定。じわじわと力をかけ続けられる", check: "5分以上同じペースで登れる＝OK。お尻が痛くなるならサドル位置を見直す" },
       cadence: "75-85rpm。やや低めで安定"
     },
     cornering: {
@@ -1023,7 +1023,7 @@ const HILLCLIMB_GUIDE = {
       start: "脚全体で踏み込む。足裏全体で",
       gear: "重めでゆっくりトルクをかける",
       upper: "ブラケットをしっかり握って安定",
-      image: "「じわっと押し込む」感覚"
+      image: { label: "途切れない圧力", ng: "ペダルを踏み込む感覚が強く、力のON/OFFが激しい", ok: "体重をじわじわとペダルにかけ続ける。途切れない圧力", check: "ケイデンスを変えずにギアを1枚重くする。同じ感覚で回せればOK" }
     },
     gradient: {
       easy: { range: "3〜5%", tip: "淡々と効率よく消化" },
@@ -1039,7 +1039,7 @@ const HILLCLIMB_GUIDE = {
     climbing: {
       pace: "リズムを大切に。変化を楽しむ",
       dancing: "適度に使う。リズムを変えるアクセントとして",
-      sitting: "後ろ乗りで内側荷重。背中を丸めすぎない",
+      sitting: { label: "後ろ乗りで内側荷重。胸を開いてペダリング", ng: "サドル後方で背中が丸まり、呼吸が浅い。肩が上がっている", ok: "サドル中央〜やや後ろで、肩甲骨が軽く寄っている。胸が開いて呼吸が楽", check: "深呼吸してみる。胸が楽に膨らめばポジションOK" },
       cadence: "80-90rpm。リズミカルに"
     },
     cornering: {
@@ -1051,7 +1051,7 @@ const HILLCLIMB_GUIDE = {
       start: "腰のひねりを使うが、大げさにならない",
       gear: "状況に応じて柔軟に",
       upper: "リズムに合わせて自然に動く",
-      image: "「リズムに乗せて弾む」感覚"
+      image: { label: "リズムのあるペダリング", ng: "一定のリズムで踏み続けようとして、脚が重い。単調", ok: "踏み込みに強弱のリズムがあり、タン・タタンのようにアクセントが入る", check: "音楽のリズムに合わせてペダリングしてみる。自然に合わせられればOK" }
     },
     gradient: {
       easy: { range: "3〜5%", tip: "リズムよくこなす" },
@@ -1067,7 +1067,7 @@ const HILLCLIMB_GUIDE = {
     climbing: {
       pace: "超一定ペース。メトロノームのように刻む",
       dancing: "ほぼ使わない。使っても短く",
-      sitting: "後ろ乗りで内側荷重。体幹を固定して回す",
+      sitting: { label: "後ろ乗りで内側荷重。肩甲骨で安定を作る", ng: "体幹を固めようとして肩首に力が入る。息が苦しい", ok: "肩甲骨を軽く寄せるだけで上半身が安定。脚の動きに影響されない", check: "走行中に肩をストンと落とす。上半身の安定が変わらなければOK" },
       cadence: "85-95rpm。高め安定"
     },
     cornering: {
@@ -1079,7 +1079,7 @@ const HILLCLIMB_GUIDE = {
       start: "脚の回転を意識。上下動の効率",
       gear: "軽めで回転数を維持",
       upper: "固定。ブレない",
-      image: "「流れるように回す」感覚"
+      image: { label: "360度均一なペダリング", ng: "2時〜4時だけ力を入れて、残りは惰性。カクカクする", ok: "360度どこでも同じ力加減。ペダルが勝手に回り続ける感覚", check: "片足ペダリング30秒。引っかかりなく回ればOK" }
     },
     gradient: {
       easy: { range: "3〜5%", tip: "最も得意。効率で他を圧倒" },
@@ -1095,7 +1095,7 @@ const HILLCLIMB_GUIDE = {
     climbing: {
       pace: "臨機応変。状況を見て判断",
       dancing: "必要に応じて使う。バランス良く",
-      sitting: "後ろ乗りで外側荷重。安定重視",
+      sitting: { label: "後ろ乗りで外側荷重。変化に対応するペダリング", ng: "腰が固まってしまい、コースの変化についていけない", ok: "サドル後方で安定しつつ、勾配変化に合わせて腰が自然と動く", check: "勾配が変わる箇所で自然にギア＆ポジションを変えられていればOK" },
       cadence: "75-85rpm。状況に応じて調整"
     },
     cornering: {
@@ -1107,7 +1107,7 @@ const HILLCLIMB_GUIDE = {
       start: "腰のひねりを使いつつ安定感も保つ",
       gear: "その場で最適なギアを選ぶ判断力",
       upper: "状況に応じて柔軟に",
-      image: "「対応しながら進む」感覚"
+      image: { label: "状況適応の加速", ng: "1つのパターンに固定されて、変化に対応できない", ok: "勾配・風・ペースに応じてダンシング/シッティング/ギアを無意識に切り替えている", check: "走行後に振り返っていろいろ変えたなと思えればOK。ずっと同じだったらNG" }
     },
     gradient: {
       easy: { range: "3〜5%", tip: "どんなペースにも対応" },
@@ -1123,7 +1123,7 @@ const HILLCLIMB_GUIDE = {
     climbing: {
       pace: "超マイペース。周りに惑わされない",
       dancing: "ほぼ使わない。座って踏む",
-      sitting: "後ろ乗りで外側荷重。どっしり座る",
+      sitting: { label: "後ろ乗りで外側荷重。坐骨でサドルに安定", ng: "サドル前方に座って力が入らない。又はサドル後方すぎて腕が伸びきっている", ok: "坐骨がサドル後方にしっかり乗り、体重がペダルに自然に伝わる。上半身はリラックス", check: "手放しで5秒座れる安定感があればOK" },
       cadence: "70-80rpm。低めトルク型"
     },
     cornering: {
@@ -1135,7 +1135,7 @@ const HILLCLIMB_GUIDE = {
       start: "足裏全体でじわっと踏む",
       gear: "重めでトルクをかける",
       upper: "どっしり構える",
-      image: "「押し込んで進む」感覚"
+      image: { label: "体重を乗せる加速", ng: "ペダルを踏みつける感覚。膝に衝撃がくる", ok: "体重をゆっくりペダルに乗せていく。衝撃なく、じわーっと重さが伝わる", check: "膝に衝撃を感じない＝OK。ガツンと踏んでいたらNG" }
     },
     gradient: {
       easy: { range: "3〜5%", tip: "マイペースで消化" },
@@ -1209,21 +1209,21 @@ const SELF_CHECK = {
   },
 };
 
-// 体感ワード変換表
+// 体感ワード変換表（NG感覚 / OK感覚 / チェック方法）
 const BODY_FEEL_DICT = [
-  { vague: "骨盤を立てる", feel: "サドルの後ろ側に座って、お尻の骨（坐骨）を感じる", check: "座面の後ろ半分にお尻が乗ってる？" },
-  { vague: "骨盤を寝かせる", feel: "サドルの前側に座って、股の付け根がサドルに当たる", check: "座面の前半分に体重がかかってる？" },
-  { vague: "体幹を使う", feel: "お腹に力を入れた状態でペダルを踏む", check: "咳をするときに力が入る場所を意識できる？" },
-  { vague: "腰を入れる", feel: "おへそを前に突き出す感じ", check: "ベルトのバックルが前に出る？" },
-  { vague: "肩の力を抜く", feel: "肘を軽く曲げて、手のひらでブラケットを包む", check: "ハンドルを握りしめてない？指に隙間ある？" },
-  { vague: "引き足を使う", feel: "靴の中で足の甲がシューズの上に当たる感覚", check: "上死点で、靴の中で足が浮く？" },
-  { vague: "踏む", feel: "3時の位置で、かかとを少し落として体重を乗せる", check: "かかとがつま先より低くなってる？" },
-  { vague: "回す", feel: "足首を固定して、膝の上下動だけでペダルを回す", check: "足首がクニャクニャ動いてない？" },
-  { vague: "ハンドルを引く", feel: "肘を脇腹に近づける動き", check: "肘が外に開いてない？" },
-  { vague: "前乗り", feel: "サドルの先端から5cm以内に座る。ハンドルが近く感じる", check: "ブラケットを持ったとき、肘が曲がってる？" },
-  { vague: "後ろ乗り", feel: "サドルの後ろ寄りに座る。ハンドルが遠く感じる", check: "腕がほぼまっすぐに伸びてる？" },
-  { vague: "ケイデンスを上げる", feel: "太ももの動きを速くする。お尻は跳ねさせない", check: "お尻がサドルから浮いてない？" },
-  { vague: "トルクをかける", feel: "ギアを1〜2枚重くして、踏み込みで「グッ」と感じる", check: "ペダルを踏んだとき、抵抗を感じる？" },
+  { vague: "骨盤を立てる", feel: "サドルの後ろ側に座って、お尻の骨（坐骨）を感じる", check: "座面の後ろ半分にお尻が乗ってる？", ng: "お尻がサドルの前にズレている。股間が圧迫される" },
+  { vague: "骨盤を寝かせる", feel: "サドルの前側に座って、股の付け根がサドルに当たる", check: "座面の前半分に体重がかかってる？", ng: "坐骨でサドル後方に座り、腰が丸まっている" },
+  { vague: "体幹を使う", feel: "お腹に力を入れた状態でペダルを踏む", check: "咳をするときに力が入る場所を意識できる？", ng: "手脚だけで漕いでいて、お腹に力が入っていない。すぐ手が痺れる" },
+  { vague: "腰を入れる", feel: "おへそを前に突き出す感じ", check: "ベルトのバックルが前に出る？", ng: "腰が丸まって後ろに引けている。背中が猫背になっている" },
+  { vague: "肩の力を抜く", feel: "肘を軽く曲げて、手のひらでブラケットを包む", check: "ハンドルを握りしめてない？指に隙間ある？", ng: "肩が耳に近づいている。首が短く見える" },
+  { vague: "引き足を使う", feel: "靴の中で足の甲がシューズの上に当たる感覚", check: "上死点で、靴の中で足が浮く？", ng: "下死点でペダルを「踏み切って」終わり。6時以降は惰性" },
+  { vague: "踏む", feel: "3時の位置で、かかとを少し落として体重を乗せる", check: "かかとがつま先より低くなってる？", ng: "つま先でペダルを「押して」いる。ふくらはぎが先に疲れる" },
+  { vague: "回す", feel: "足首を固定して、膝の上下動だけでペダルを回す", check: "足首がクニャクニャ動いてない？", ng: "足首を上下に動かして「踏む→引く」を意識している。動きがギクシャク" },
+  { vague: "ハンドルを引く", feel: "肘を脇腹に近づける動き", check: "肘が外に開いてない？", ng: "手首で手前に引いている。手首が痛い" },
+  { vague: "前乗り", feel: "サドルの先端から5cm以内に座る。ハンドルが近く感じる", check: "ブラケットを持ったとき、肘が曲がってる？", ng: "サドルの後ろに座って腕が伸びきっている" },
+  { vague: "後ろ乗り", feel: "サドルの後ろ寄りに座る。ハンドルが遠く感じる", check: "腕がほぼまっすぐに伸びてる？", ng: "サドルの前に座っていて、ハンドルが近すぎる" },
+  { vague: "ケイデンスを上げる", feel: "太ももの動きを速くする。お尻は跳ねさせない", check: "お尻がサドルから浮いてない？", ng: "お尻がサドルの上でバウンドしている" },
+  { vague: "トルクをかける", feel: "ギアを1〜2枚重くして、踏み込みで「グッ」と感じる", check: "ペダルを踏んだとき、抵抗を感じる？", ng: "ギアが軽すぎて空回りしている。脚は速く動くが前に進まない" },
 ];
 
 // 調整フローチャート（症状別）
@@ -1570,20 +1570,23 @@ const TYPE_INFO_CYCLING = {
     weaknesses: ["長時間の一定ペース"],
     radarData: [95, 50, 60, 55, 50],
     bodyMechanics: {
-      trunk: { type: "Fタイプ（前体幹）", description: "みぞおち・股関節主導", detail: "身体を「折る」ように使うのが得意。" },
+      trunk: { type: "Fタイプ（前体幹）", description: "みぞおち・股関節主導", detail: "みぞおちと股関節の2点を支点にして、上半身と下半身が別々に動く。",
+        ng: "背中全体が一枚板のように固まって、脚だけで漕いでいる",
+        ok: "みぞおちの下で身体が「折れ目」になっていて、脚が軽く動く",
+        check: "ブラケットを持ったまま片手をみぞおちに当てる。踏み込みで腹筋の収縮を感じればOK" },
       movement: { 
         type: "クロス（対角連動）", 
         description: "捻じりの動きが自然", 
         detail: "右腕と左脚、左腕と右脚が連動する。",
         感覚: [
-          "ペダリング中、踏み込みで腰が自然と回る",
-          "ダンシングではバイクを左右に振る方が力が入る",
-          "コーナーでは内側の肩を落として曲がる"
+          { ng: "腰が固まって左右対称のまま。太もも前側だけが疲れる", ok: "右を踏むとき、おへそがわずかに右を向く。左右交互に小さく回る", check: "ウエストバンドに手を当てて10回ペダリング。手が左右に揺れればOK" },
+          { ng: "ダンシング中にバイクを真っ直ぐ保とうとして、肩と腕に力が入る", ok: "右足を踏むときバイクが左に傾き、左手のブラケットを引いている", check: "ダンシング10回。ハンドルを引く手と踏む脚が対角（右足＝左手）ならOK" },
+          { ng: "コーナーで身体全体をバイクと一緒に倒している。怖い", ok: "左コーナーなら左肩が下がり、右腰が外に出る。上半身と下半身が逆にねじれる", check: "低速で緩いカーブを走る。内側の肘が曲がって脇腹に近づいていればOK" }
         ],
         荷重バランス: {
-          ペダル: "母指球中心、内側で踏む",
-          ハンドル: "下ハンで引きつける",
-          サドル: "前寄りに座る"
+          ペダル: { label: "母指球中心、内側で踏む", ng: "小指側やかかとに体重が逃げる。足の外側がシューズに当たる", ok: "親指の付け根（母指球）にペダル軸の圧を感じる", check: "シューズを脱いで足裏を見る。母指球の下にクリートの跡が集中していればOK" },
+          ハンドル: { label: "下ハンで引きつける", ng: "手のひら全体でブラケットを握りしめている。手首が痛い", ok: "指を引っかけるように持ち、肘を曲げて脇腹方向に引く力がある", check: "ブラケットから小指を離せる＝握りしめてない。肘が外に開いてなければOK" },
+          サドル: { label: "前寄りに座る", ng: "お尻の後ろ（坐骨）でサドル後方に座っている。ハンドルが遠い", ok: "股の付け根（恥骨枝あたり）がサドルの前半分に当たっている", check: "サドルの先端から5cm以内にお尻の前端があればOK" }
         }
       },
       balance: { type: "内側荷重（Inner）", description: "母指球・内側で踏む", detail: "膝がまっすぐ〜やや内向き。" }
@@ -1637,20 +1640,23 @@ const TYPE_INFO_CYCLING = {
     weaknesses: ["急なダンシング", "テクニカルコース"],
     radarData: [60, 70, 95, 65, 75],
     bodyMechanics: {
-      trunk: { type: "Fタイプ（前体幹）", description: "みぞおち・股関節主導", detail: "身体を「折る」ように使う。" },
+      trunk: { type: "Fタイプ（前体幹）", description: "みぞおち・股関節主導", detail: "みぞおちから折りたたむように前傾し、股関節で脚を回す。",
+        ng: "背中を丸めて前傾している。腰が痛い",
+        ok: "みぞおちの位置で前傾が決まり、腰は平らなまま",
+        check: "横から見て腰が丸まっていない＝OK。みぞおちから上だけが前に倒れている" },
       movement: { 
         type: "パラレル（同側連動）", 
         description: "平行の動きが自然", 
         detail: "上半身固定で脚を回す。",
         感覚: [
-          "ペダリング中、腰は固定して脚だけ回す",
-          "ダンシングではバイクをまっすぐ保つ",
-          "コーナーではバイクと一体で傾く"
+          { ng: "ペダリング中に腰が左右に揺れる。サドルの上でお尻が動く", ok: "腰の位置が変わらず、太ももだけが上下している感覚", check: "後ろから撮影。肩のラインが水平のまま＝OK" },
+          { ng: "ダンシング中にバイクが左右に大きく振れて、ふらつく", ok: "バイクのヘッドチューブがほぼ垂直のまま、体重移動だけでペダルを押している", check: "白線の上でダンシング10回。白線から外れなければOK" },
+          { ng: "コーナーで上半身をねじろうとして、肩に力が入る", ok: "バイクと身体が同じ角度で傾き、視線だけが出口を見ている", check: "コーナリング中、内側のペダルが上・外側が下で体重が外脚に乗っていればOK" }
         ],
         荷重バランス: {
-          ペダル: "母指球中心、まっすぐ踏む",
-          ハンドル: "ブラケットで安定",
-          サドル: "前寄り〜中央"
+          ペダル: { label: "母指球中心、まっすぐ踏む", ng: "小指側に荷重が逃げている。足の外側がシューズに当たる", ok: "母指球の真下にペダル軸を感じる。まっすぐ下に踏んでいる", check: "ペダリング中に膝を正面から撮影。膝がつま先とまっすぐ同じ方向ならOK" },
+          ハンドル: { label: "ブラケットで安定", ng: "ブラケットを強く握っている。手のひらが痛い", ok: "手のひらをブラケットに乗せている感じ。力は体幹で支えている", check: "走行中に指を2本浮かせられる＝握りしめてない" },
+          サドル: { label: "前寄り〜中央", ng: "お尻がサドルの後端に来ている", ok: "サドルの前方〜中央に座り、ハンドルとの距離に余裕がある", check: "サドルの前端から10cm以内にお尻の前端があればOK" }
         }
       },
       balance: { type: "内側荷重（Inner）", description: "母指球・内側で踏む", detail: "膝がまっすぐ。" }
@@ -1704,20 +1710,23 @@ const TYPE_INFO_CYCLING = {
     weaknesses: ["集団走行", "一定ペース維持"],
     radarData: [85, 75, 55, 70, 55],
     bodyMechanics: {
-      trunk: { type: "Fタイプ（前体幹）", description: "みぞおち・股関節主導", detail: "身体を「折る」ように使う。" },
+      trunk: { type: "Fタイプ（前体幹）", description: "みぞおち・股関節主導", detail: "みぞおちと股関節を支点にして、上半身と下半身をダイナミックに使い分ける。",
+        ng: "上半身が固まってしまい、脚の力だけで押している。膝に負担を感じる",
+        ok: "踏み込むときにみぞおちが締まり、上半身の力が脚に伝わる感覚がある",
+        check: "全力ダンシング10回。腹筋に疲れを感じればOK（脚だけなら身体が使えていない）" },
       movement: { 
         type: "クロス（対角連動）", 
         description: "捻じりの動きが自然", 
         detail: "対角で連動、ダイナミック。",
         感覚: [
-          "ペダリング中、腰が左右に動く",
-          "ダンシングでバイクを大きく振る",
-          "コーナーで肩を入れる"
+          { ng: "腰が動いているが、力がペダルに伝わらず空回りする", ok: "右を踏むとき右の腰が前に出て、体重がペダルに乗る重さを感じる", check: "重めのギアで低速ペダリング。腰の動きとペダルの重さが連動していればOK" },
+          { ng: "バイクを振っているが、ハンドルをこじっているだけ。手首が痛い", ok: "踏み込む脚と反対側にバイクが傾き、体重がそのまま落ちる感覚", check: "ダンシングで手を軽く添えるだけにする。それでもバイクが振れるなら体重移動OK" },
+          { ng: "上半身は正面を向いたまま、バイクだけ傾けている", ok: "左コーナーなら左肩が前に出て、胸が少しコーナーの内側を向く", check: "コーナリング中に内側の肘が曲がっている＝肩が入っている" }
         ],
         荷重バランス: {
-          ペダル: "足裏全体〜外側",
-          ハンドル: "下ハンで引く",
-          サドル: "前寄り"
+          ペダル: { label: "足裏全体〜外側", ng: "親指の付け根にだけ荷重が集中。母指球が痛い", ok: "足裏全体、特に小指球（小指の付け根）にも荷重を感じる", check: "ペダリング後にシューズを脱ぐ。足裏の圧迫跡が外側にもあればOK" },
+          ハンドル: { label: "下ハンで引く", ng: "ブラケットの上に手を置いているだけ。引く力がない", ok: "下ハン or ブラケット下部を握り、引く力が背中まで伝わる", check: "登りで下ハンを握ったとき、肩甲骨の間に張りを感じればOK" },
+          サドル: { label: "前寄り", ng: "サドル後方に座り、ハンドルが遠く腕が伸びきっている", ok: "サドル前方に座り、股関節の屈曲（折れ曲がり）を感じる", check: "サドル先端から5cm以内にお尻の前端がある" }
         }
       },
       balance: { type: "外側荷重（Outer）", description: "足裏全体・外側", detail: "膝やや外向き。" }
@@ -1771,20 +1780,23 @@ const TYPE_INFO_CYCLING = {
     weaknesses: ["スプリント", "急加速"],
     radarData: [50, 95, 70, 65, 85],
     bodyMechanics: {
-      trunk: { type: "Fタイプ（前体幹）", description: "みぞおち・股関節主導", detail: "身体を「折る」ように使う。" },
+      trunk: { type: "Fタイプ（前体幹）", description: "みぞおち・股関節主導", detail: "みぞおちから前傾し、股関節で脚を回す。上半身は安定させたまま。",
+        ng: "背中全体を丸めて前傾。腰がつらい",
+        ok: "みぞおちで折れていて、腰は反ってもなく丸まってもない",
+        check: "横からの撮影で、腰が平ら＋みぞおちから上が前に倒れていればOK" },
       movement: { 
         type: "パラレル（同側連動）", 
         description: "平行の動きが自然", 
         detail: "腰を固定して脚を回す。",
         感覚: [
-          "ペダリング中、腰は固定",
-          "ダンシングではバイクをまっすぐ",
-          "コーナーでバイクと一体で傾く"
+          { ng: "ペダリング中に腰がぐらぐら動く。サドル上でお尻がズレる", ok: "骨盤がサドルに固定され、脚だけが動く。お尻の位置が変わらない", check: "サドルにビニールテープを十字に貼る。走行後テープがずれていなければOK" },
+          { ng: "ダンシングでバイクが左右に振れて不安定。肩に力が入る", ok: "バイクがほぼ垂直のまま、体重を交互のペダルに乗せるだけで進む", check: "ダンシング中にボトルが揺れない程度の安定感があればOK" },
+          { ng: "コーナーで身体だけが立ってしまい、バイクだけ寝ている", ok: "肩・腰・バイクが同じ角度で傾いている。一枚板のような感覚", check: "コーナリング中に外脚に体重を感じ、内側のペダルが上にあればOK" }
         ],
         荷重バランス: {
-          ペダル: "足裏全体で安定",
-          ハンドル: "ブラケットで押す",
-          サドル: "前寄り〜中央"
+          ペダル: { label: "足裏全体で安定", ng: "母指球だけに集中。内側に荷重が偏って膝が内に入る", ok: "足裏全体でペダルを踏んでいる。特に小指側にも圧を感じる", check: "スクワットの姿勢で足裏を確認。外側にも荷重があればOK" },
+          ハンドル: { label: "ブラケットで押す", ng: "ハンドルを引いている。肩が上がっている", ok: "ブラケットを前方に押す感覚。肩は下がっている", check: "走行中に肩をすくめて→ストンと落とす。落とした位置が正しいポジション" },
+          サドル: { label: "前寄り〜中央", ng: "サドル後端に座り、ハンドルに手が届きにくい", ok: "サドル前方〜中央で、股関節の折れ曲がりを感じる", check: "サドル先端から10cm以内にお尻の前端がある" }
         }
       },
       balance: { type: "外側荷重（Outer）", description: "足裏全体・外側", detail: "膝やや外向き。" }
@@ -1838,20 +1850,23 @@ const TYPE_INFO_CYCLING = {
     weaknesses: ["単調な平地", "TTポジション"],
     radarData: [70, 60, 70, 85, 70],
     bodyMechanics: {
-      trunk: { type: "Rタイプ（後体幹）", description: "首・肩甲骨・腰主導", detail: "身体を「一体」で使う。" },
+      trunk: { type: "Rタイプ（後体幹）", description: "首・肩甲骨・腰主導", detail: "首・肩甲骨・腰をつないで、背中側から動きを生み出す。",
+        ng: "お腹側（みぞおち）に力を入れようとして、呼吸が苦しい",
+        ok: "肩甲骨を寄せる→腰が安定する、という背中から始まる感覚",
+        check: "軽く肩甲骨を寄せてペダリング。呼吸が楽になればRタイプの使い方ができている" },
       movement: { 
         type: "クロス（対角連動）", 
         description: "捻じりの動きが自然", 
         detail: "対角線の連動が得意。",
         感覚: [
-          "ペダリング中、自然と腰が動く",
-          "ダンシングでバイクを振る",
-          "歩くとき腕振りが大きい"
+          { ng: "腰を意識的に動かそうとして、ぎこちない", ok: "肩甲骨を意識すると、その結果として腰が左右にわずかに動く", check: "背中に意識を置いてペダリング10回。腰の動きが勝手に出ていればOK" },
+          { ng: "腕でハンドルを引いてバイクを振っている。肩が凝る", ok: "体重移動でバイクが傾き、踏む脚と反対側の肩甲骨が寄る", check: "ダンシング中に肩の力を抜いてみる。それでもバイクが振れればOK" },
+          { ng: "歩くとき腕を意識的に振ろうとしている", ok: "肩甲骨から腕が振り子のように動く。腕の力は抜けている", check: "歩行中に肩の力を抜く。腕が勝手に振れるならクロス連動OK" }
         ],
         荷重バランス: {
-          ペダル: "母指球中心",
-          ハンドル: "下ハンも使える",
-          サドル: "中央〜後ろ"
+          ペダル: { label: "母指球中心", ng: "足の外側でペダルを踏んでいる。小指側が痛い", ok: "母指球の真下にペダル軸。内くるぶし方向に軽い張りがある", check: "ペダリング中に膝が正面〜やや内側を向いていればOK" },
+          ハンドル: { label: "下ハンも使える", ng: "ブラケットの上部だけを握っている。手のひらが浮いている", ok: "ブラケット全体を包むように握り、下ハンにも自然に移行できる", check: "ブラケットから下ハンへの持ち替えがスムーズならOK" },
+          サドル: { label: "中央〜後ろ", ng: "サドルの先端に座っていて、股間が圧迫される", ok: "サドルの中央〜やや後ろ。坐骨がサドルにしっかり乗っている", check: "手放しで5秒座れる安定感があればOK" }
         }
       },
       balance: { type: "内側荷重（Inner）", description: "母指球・内側", detail: "膝まっすぐ。" }
@@ -1905,20 +1920,23 @@ const TYPE_INFO_CYCLING = {
     weaknesses: ["ダンシング", "急な地形変化"],
     radarData: [55, 70, 95, 75, 70],
     bodyMechanics: {
-      trunk: { type: "Rタイプ（後体幹）", description: "首・肩甲骨・腰主導", detail: "身体を「一体」で使う。" },
+      trunk: { type: "Rタイプ（後体幹）", description: "首・肩甲骨・腰主導", detail: "肩甲骨と腰を連動させて、背中全体で安定を作る。上半身は動かさない。",
+        ng: "上半身を固めようとして肩に力が入り、呼吸が浅い",
+        ok: "肩甲骨を軽く寄せるだけで上半身が安定する。力まずに固定できている",
+        check: "片手をハンドルから離して5秒。上半身がブレなければOK" },
       movement: { 
         type: "パラレル（同側連動）", 
         description: "平行の動きが自然", 
         detail: "捻じらず安定。",
         感覚: [
-          "ペダリング中、上半身固定",
-          "ダンシングではバイク立てたまま",
-          "腕振り控えめ"
+          { ng: "上半身を固めようとして肩が上がっている。首が痛い", ok: "肩は落ちたまま、骨盤から上が一つのブロックのように安定している", check: "走行中に肩をすくめて→ストンと落とす。落とした状態で上半身が安定すればOK" },
+          { ng: "ダンシングでバイクが左右にふらつく。上半身が揺れる", ok: "バイクのヘッドチューブがほぼ垂直。体重を真下にかけている", check: "緩い登りでダンシング10回。ハンドルから手を軽くしても進めればOK" },
+          { ng: "ハンドルを左右に引っ張っている。腕が疲れる", ok: "ハンドルに手を置いているだけ。推進力は脚と体幹から", check: "ブラケットを握る力を半分にしてみる。走りが変わらなければOK" }
         ],
         荷重バランス: {
-          ペダル: "母指球中心、まっすぐ",
-          ハンドル: "ブラケットに添える",
-          サドル: "中央にどっしり"
+          ペダル: { label: "母指球中心、まっすぐ", ng: "つま先で踏んでいる。ふくらはぎが先に疲れる", ok: "母指球中心に、ペダル軸をまっすぐ真下に押している", check: "膝がまっすぐ前を向き、つま先と同じ方向ならOK" },
+          ハンドル: { label: "ブラケットに添える", ng: "ブラケットを強く握り、手のひらに圧がかかっている", ok: "指をブラケットに添えているだけ。手のひらに体重をかけていない", check: "走行中に指を2本浮かせて3秒維持できればOK" },
+          サドル: { label: "中央にどっしり", ng: "サドルの前に座りすぎて股間が痛い", ok: "サドル中央にどっしり。坐骨の2点がサドルに乗っている感覚", check: "お尻を左右に振ってみる。坐骨がサドルの座面にハマる位置が正解" }
         }
       },
       balance: { type: "内側荷重（Inner）", description: "母指球・内側", detail: "膝まっすぐ。" }
@@ -1973,20 +1991,23 @@ const TYPE_INFO_CYCLING = {
     weaknesses: ["突出した武器がない（逆に強み）"],
     radarData: [70, 75, 75, 95, 80],
     bodyMechanics: {
-      trunk: { type: "Rタイプ（後体幹）", description: "首・肩甲骨・腰主導", detail: "身体を「一体」で使う。" },
+      trunk: { type: "Rタイプ（後体幹）", description: "首・肩甲骨・腰主導", detail: "肩甲骨と腰を起点に、背中側からねじりの動きを生み出す。",
+        ng: "お腹側で体をねじろうとして窮屈。肩が突っ張る",
+        ok: "肩甲骨を起点にねじると、腰まで連動して動く。背中側が主役",
+        check: "椅子に座って上半身を左右にねじる。背中から動き始める感覚があればOK" },
       movement: { 
         type: "クロス（対角連動）", 
         description: "捻じりの動きが自然", 
         detail: "対角線の動きが得意。",
         感覚: [
-          "ペダリング中、腰が左右に動く",
-          "ダンシングでバイクを振る",
-          "歩くとき腕脚が対角で連動"
+          { ng: "意識的に腰を動かそうとして、サドルの上でお尻が滑る", ok: "踏み込みに合わせて腰が結果として左右に動く。お尻はサドルに安定", check: "サドルの上で骨盤を左右に動かしてみる。動きが自然で力まなければOK" },
+          { ng: "腕でバイクを振っている。手首や前腕が疲れる", ok: "体重移動でバイクが傾き、肩甲骨〜腰のねじりが脚に伝わる", check: "ダンシング中に握力を緩める。それでもバイクが振れれば体幹主導OK" },
+          { ng: "歩くとき同じ側の手脚が一緒に出る（ナンバ歩きっぽい）", ok: "右脚が出ると左腕が前に出る。胸〜腰にかけて軽いねじりがある", check: "大股で10歩歩く。腕が自然に対角で振れていればOK" }
         ],
         荷重バランス: {
-          ペダル: "足裏外側も使う",
-          ハンドル: "下ハンで引く",
-          サドル: "後方、左右に動く"
+          ペダル: { label: "足裏外側も使う", ng: "母指球だけに荷重が集中して、足の内側が疲れる", ok: "足裏全体、特に小指球（外側）にも荷重を感じる", check: "ペダリング中に足の小指を意識してみる。圧を感じればOK" },
+          ハンドル: { label: "下ハンで引く", ng: "ブラケットの上に手を置いているだけ。加速時に力が逃げる", ok: "下ハンで引くと背中まで力が伝わる。肩甲骨の間に張りがある", check: "加速時に下ハンを握る。肩甲骨が寄る感覚があればOK" },
+          サドル: { label: "後方、左右に動く", ng: "サドル前方に座って股間が圧迫される", ok: "サドルのやや後方で、ねじりの動きに対応できるスペースがある", check: "ペダリング中にお尻が左右に動ける余裕がサドル上にあればOK" }
         }
       },
       balance: { type: "外側荷重（Outer）", description: "足裏全体・外側", detail: "膝やや外向き。" }
@@ -2040,20 +2061,23 @@ const TYPE_INFO_CYCLING = {
     weaknesses: ["瞬発力", "急なペース変化"],
     radarData: [45, 85, 80, 80, 95],
     bodyMechanics: {
-      trunk: { type: "Rタイプ（後体幹）", description: "首・肩甲骨・腰主導", detail: "身体を「一体」で使う。" },
+      trunk: { type: "Rタイプ（後体幹）", description: "首・肩甲骨・腰主導", detail: "肩甲骨と腰を固定して、背中全体で安定を作る。どっしりとした土台。",
+        ng: "上半身がふらつく。体重がハンドルに逃げて手が痛い",
+        ok: "肩甲骨を寄せると腰が安定し、体重がサドルに乗る。手が軽い",
+        check: "走行中に両手を軽く浮かせる。3秒以上できればOK（体幹で支えられている）" },
       movement: { 
         type: "パラレル（同側連動）", 
         description: "平行の動きが自然", 
         detail: "捻じらず安定。",
         感覚: [
-          "ペダリング中、上半身固定",
-          "ダンシングはバイクまっすぐ",
-          "腕振り控えめ"
+          { ng: "上半身を固めようとして肩や首に力が入る。息が詰まる", ok: "背中が壁のように安定して、その下で脚だけが動いている", check: "10分間走行中に肩が上がっていないか確認。下がったままならOK" },
+          { ng: "ダンシングでバイクが左右に振れる。ハンドル操作で疲れる", ok: "バイクを真っ直ぐ保ったまま、体重を左右のペダルに交互に乗せる", check: "白線の上でダンシング10回。白線から外れなければOK" },
+          { ng: "ハンドルを左右に引いて推進力を作ろうとしている。腕が疲れる", ok: "ハンドルは安定のための支え。推進力は脚のみ", check: "ブラケットの握りを半分に緩めて走る。速度が変わらなければOK" }
         ],
         荷重バランス: {
-          ペダル: "足裏全体でどっしり",
-          ハンドル: "ブラケットで安定",
-          サドル: "後方にどっしり"
+          ペダル: { label: "足裏全体でどっしり", ng: "親指の付け根だけに荷重。ペダルの内側を踏んでいる", ok: "足裏全体でペダルを包むように踏む。特にかかと寄り〜外側にも圧がある", check: "ペダリング後に足裏を見る。圧迫跡が足裏全体に分布していればOK" },
+          ハンドル: { label: "ブラケットで安定", ng: "ブラケットに体重がかかって手のひらが痺れる", ok: "ブラケットに手を添えているだけ。体重はサドルと脚で支えている", check: "走行中に手のひらを開いても安定して走れればOK" },
+          サドル: { label: "後方にどっしり", ng: "サドルの前に座って、ハンドルが近すぎる。窮屈", ok: "サドル後方に坐骨が乗り、腕はリラックスして伸びている", check: "サドルの後ろ半分にお尻の重心がある。手放しで安定すればOK" }
         }
       },
       balance: { type: "外側荷重（Outer）", description: "足裏全体・外側", detail: "膝やや外向き。" }
@@ -2192,6 +2216,7 @@ export default function App() {
   });
   const [showFittingCalc, setShowFittingCalc] = useState(false);
   const [showHistory, setShowHistory] = useState(false); // 回答履歴表示
+  const [showAllBodyFeel, setShowAllBodyFeel] = useState(false); // 体感ワード全表示
   const [stageUp, setStageUp] = useState(null); // ステージアップ演出 { level, message }
   const [prevAccuracyLevel, setPrevAccuracyLevel] = useState(0); // 前回の精度レベル
   
@@ -2414,6 +2439,7 @@ export default function App() {
     if (qIndex >= 0) {
       setCurrentIndex(qIndex);
       setShowHistory(false);
+      setShowAllBodyFeel(false);
     }
   };
   
@@ -3473,6 +3499,22 @@ export default function App() {
                 </div>
                 <p style={{ color: C.text, fontSize: 14, fontWeight: 600, margin: "0 0 4px" }}>{typeInfo.bodyMechanics.trunk.description}</p>
                 <p style={{ color: C.textMuted, fontSize: 12, margin: 0, lineHeight: 1.5 }}>{typeInfo.bodyMechanics.trunk.detail}</p>
+                {typeInfo.bodyMechanics.trunk.ng && (
+                  <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
+                    <div style={{ padding: "8px 10px", borderRadius: 8, background: `${C.red}08`, borderLeft: `3px solid ${C.red}40` }}>
+                      <p style={{ color: C.red, fontSize: 10, fontWeight: 700, margin: "0 0 2px", textTransform: "uppercase" }}>NG感覚</p>
+                      <p style={{ color: C.textMuted, fontSize: 12, margin: 0, lineHeight: 1.5 }}>{typeInfo.bodyMechanics.trunk.ng}</p>
+                    </div>
+                    <div style={{ padding: "8px 10px", borderRadius: 8, background: `${C.green}08`, borderLeft: `3px solid ${C.green}40` }}>
+                      <p style={{ color: C.green, fontSize: 10, fontWeight: 700, margin: "0 0 2px", textTransform: "uppercase" }}>OK感覚</p>
+                      <p style={{ color: C.textMuted, fontSize: 12, margin: 0, lineHeight: 1.5 }}>{typeInfo.bodyMechanics.trunk.ok}</p>
+                    </div>
+                    <div style={{ padding: "8px 10px", borderRadius: 8, background: `${typeInfo.color}08`, borderLeft: `3px solid ${typeInfo.color}40` }}>
+                      <p style={{ color: typeInfo.color, fontSize: 10, fontWeight: 700, margin: "0 0 2px", textTransform: "uppercase" }}>セルフチェック</p>
+                      <p style={{ color: C.textMuted, fontSize: 12, margin: 0, lineHeight: 1.5 }}>{typeInfo.bodyMechanics.trunk.check}</p>
+                    </div>
+                  </div>
+                )}
               </div>
               
               {/* 連動パターン */}
@@ -3488,13 +3530,24 @@ export default function App() {
                 {typeInfo.bodyMechanics.movement.感覚 && (
                   <div style={{ marginTop: 12, paddingTop: 12, borderTop: `1px solid ${theme.cardBorder}` }}>
                     <p style={{ color: C.textDim, fontSize: 10, fontWeight: 600, margin: "0 0 8px", textTransform: "uppercase", letterSpacing: "1px" }}>
-                      こんな感覚に心当たりは？
+                      身体の使い方チェック
                     </p>
-                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                       {typeInfo.bodyMechanics.movement.感覚.map((s, i) => (
-                        <p key={i} style={{ color: C.text, fontSize: 12, margin: 0, lineHeight: 1.6, paddingLeft: 12, borderLeft: `2px solid ${typeInfo.color}30` }}>
-                          {s}
-                        </p>
+                        <div key={i} style={{ borderRadius: 8, overflow: "hidden" }}>
+                          <div style={{ padding: "8px 10px", background: `${C.red}08`, borderLeft: `3px solid ${C.red}40` }}>
+                            <p style={{ color: C.red, fontSize: 10, fontWeight: 700, margin: "0 0 2px", textTransform: "uppercase" }}>NG感覚</p>
+                            <p style={{ color: C.textMuted, fontSize: 12, margin: 0, lineHeight: 1.5 }}>{s.ng}</p>
+                          </div>
+                          <div style={{ padding: "8px 10px", background: `${C.green}08`, borderLeft: `3px solid ${C.green}40` }}>
+                            <p style={{ color: C.green, fontSize: 10, fontWeight: 700, margin: "0 0 2px", textTransform: "uppercase" }}>OK感覚</p>
+                            <p style={{ color: C.textMuted, fontSize: 12, margin: 0, lineHeight: 1.5 }}>{s.ok}</p>
+                          </div>
+                          <div style={{ padding: "8px 10px", background: `${typeInfo.color}08`, borderLeft: `3px solid ${typeInfo.color}40` }}>
+                            <p style={{ color: typeInfo.color, fontSize: 10, fontWeight: 700, margin: "0 0 2px", textTransform: "uppercase" }}>セルフチェック</p>
+                            <p style={{ color: C.textMuted, fontSize: 12, margin: 0, lineHeight: 1.5 }}>{s.check}</p>
+                          </div>
+                        </div>
                       ))}
                     </div>
                   </div>
@@ -3506,11 +3559,29 @@ export default function App() {
                     <p style={{ color: C.textDim, fontSize: 10, fontWeight: 600, margin: "0 0 8px", textTransform: "uppercase", letterSpacing: "1px" }}>
                       荷重バランスの傾向
                     </p>
-                    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                       {Object.entries(typeInfo.bodyMechanics.movement.荷重バランス).map(([key, val]) => (
-                        <div key={key} style={{ display: "flex", gap: 8 }}>
-                          <span style={{ color: typeInfo.color, fontSize: 11, fontWeight: 600, minWidth: 60 }}>{key}</span>
-                          <span style={{ color: C.textMuted, fontSize: 12 }}>{val}</span>
+                        <div key={key} style={{ borderRadius: 8, overflow: "hidden" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                            <span style={{ color: typeInfo.color, fontSize: 12, fontWeight: 700 }}>{key}</span>
+                            <span style={{ color: C.text, fontSize: 12, fontWeight: 500 }}>{typeof val === "string" ? val : val.label}</span>
+                          </div>
+                          {typeof val === "object" && val.ng && (
+                            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                              <div style={{ padding: "6px 10px", background: `${C.red}08`, borderLeft: `3px solid ${C.red}40`, borderRadius: 6 }}>
+                                <p style={{ color: C.red, fontSize: 10, fontWeight: 700, margin: "0 0 1px", textTransform: "uppercase" }}>NG</p>
+                                <p style={{ color: C.textMuted, fontSize: 11, margin: 0, lineHeight: 1.5 }}>{val.ng}</p>
+                              </div>
+                              <div style={{ padding: "6px 10px", background: `${C.green}08`, borderLeft: `3px solid ${C.green}40`, borderRadius: 6 }}>
+                                <p style={{ color: C.green, fontSize: 10, fontWeight: 700, margin: "0 0 1px", textTransform: "uppercase" }}>OK</p>
+                                <p style={{ color: C.textMuted, fontSize: 11, margin: 0, lineHeight: 1.5 }}>{val.ok}</p>
+                              </div>
+                              <div style={{ padding: "6px 10px", background: `${typeInfo.color}08`, borderLeft: `3px solid ${typeInfo.color}40`, borderRadius: 6 }}>
+                                <p style={{ color: typeInfo.color, fontSize: 10, fontWeight: 700, margin: "0 0 1px", textTransform: "uppercase" }}>CHECK</p>
+                                <p style={{ color: C.textMuted, fontSize: 11, margin: 0, lineHeight: 1.5 }}>{val.check}</p>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       ))}
                     </div>
@@ -4705,14 +4776,34 @@ export default function App() {
                     {[
                       { label: "ペース配分", value: guide.climbing.pace },
                       { label: "ダンシング", value: guide.climbing.dancing },
-                      { label: "シッティング", value: guide.climbing.sitting },
                       { label: "ケイデンス", value: guide.climbing.cadence },
                     ].map(item => (
                       <div key={item.label}>
                         <p style={{ color: C.textMuted, fontSize: 11, fontWeight: 600, margin: "0 0 2px" }}>{item.label}</p>
-                        <p style={{ color: C.text, fontSize: 13, margin: 0, lineHeight: 1.5 }}>{item.value}</p>
+                        <p style={{ color: C.text, fontSize: 13, margin: 0, lineHeight: 1.5 }}>{typeof item.value === "string" ? item.value : item.value.label}</p>
                       </div>
                     ))}
+                    {/* シッティング NG/OK/Check */}
+                    <div>
+                      <p style={{ color: C.textMuted, fontSize: 11, fontWeight: 600, margin: "0 0 2px" }}>シッティング</p>
+                      <p style={{ color: C.text, fontSize: 13, margin: "0 0 8px", lineHeight: 1.5 }}>{typeof guide.climbing.sitting === "string" ? guide.climbing.sitting : guide.climbing.sitting.label}</p>
+                      {typeof guide.climbing.sitting === "object" && guide.climbing.sitting.ng && (
+                        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                          <div style={{ padding: "6px 10px", background: `${C.red}08`, borderLeft: `3px solid ${C.red}40`, borderRadius: 6 }}>
+                            <p style={{ color: C.red, fontSize: 10, fontWeight: 700, margin: "0 0 1px", textTransform: "uppercase" }}>NG感覚</p>
+                            <p style={{ color: C.textMuted, fontSize: 12, margin: 0, lineHeight: 1.5 }}>{guide.climbing.sitting.ng}</p>
+                          </div>
+                          <div style={{ padding: "6px 10px", background: `${C.green}08`, borderLeft: `3px solid ${C.green}40`, borderRadius: 6 }}>
+                            <p style={{ color: C.green, fontSize: 10, fontWeight: 700, margin: "0 0 1px", textTransform: "uppercase" }}>OK感覚</p>
+                            <p style={{ color: C.textMuted, fontSize: 12, margin: 0, lineHeight: 1.5 }}>{guide.climbing.sitting.ok}</p>
+                          </div>
+                          <div style={{ padding: "6px 10px", background: `${typeInfo.color}08`, borderLeft: `3px solid ${typeInfo.color}40`, borderRadius: 6 }}>
+                            <p style={{ color: typeInfo.color, fontSize: 10, fontWeight: 700, margin: "0 0 1px", textTransform: "uppercase" }}>CHECK</p>
+                            <p style={{ color: C.textMuted, fontSize: 12, margin: 0, lineHeight: 1.5 }}>{guide.climbing.sitting.check}</p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
                 
@@ -4744,25 +4835,66 @@ export default function App() {
                     {[
                       { label: "踏み出し", value: guide.acceleration.start },
                       { label: "ギア選択", value: guide.acceleration.gear },
-                      { label: "上半身", value: guide.acceleration.upper },
                     ].map(item => (
                       <div key={item.label}>
                         <p style={{ color: C.textMuted, fontSize: 11, fontWeight: 600, margin: "0 0 2px" }}>{item.label}</p>
-                        <p style={{ color: C.text, fontSize: 13, margin: 0, lineHeight: 1.5 }}>{item.value}</p>
+                        <p style={{ color: C.text, fontSize: 13, margin: 0, lineHeight: 1.5 }}>{typeof item.value === "string" ? item.value : item.value.label}</p>
                       </div>
                     ))}
+                    {/* 上半身 */}
+                    <div>
+                      <p style={{ color: C.textMuted, fontSize: 11, fontWeight: 600, margin: "0 0 2px" }}>上半身</p>
+                      <p style={{ color: C.text, fontSize: 13, margin: "0 0 6px", lineHeight: 1.5 }}>{typeof guide.acceleration.upper === "string" ? guide.acceleration.upper : guide.acceleration.upper.label}</p>
+                      {typeof guide.acceleration.upper === "object" && guide.acceleration.upper.ng && (
+                        <div style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 8 }}>
+                          <div style={{ padding: "6px 10px", background: `${C.red}08`, borderLeft: `3px solid ${C.red}40`, borderRadius: 6 }}>
+                            <p style={{ color: C.red, fontSize: 10, fontWeight: 700, margin: "0 0 1px", textTransform: "uppercase" }}>NG</p>
+                            <p style={{ color: C.textMuted, fontSize: 12, margin: 0, lineHeight: 1.5 }}>{guide.acceleration.upper.ng}</p>
+                          </div>
+                          <div style={{ padding: "6px 10px", background: `${C.green}08`, borderLeft: `3px solid ${C.green}40`, borderRadius: 6 }}>
+                            <p style={{ color: C.green, fontSize: 10, fontWeight: 700, margin: "0 0 1px", textTransform: "uppercase" }}>OK</p>
+                            <p style={{ color: C.textMuted, fontSize: 12, margin: 0, lineHeight: 1.5 }}>{guide.acceleration.upper.ok}</p>
+                          </div>
+                          <div style={{ padding: "6px 10px", background: `${typeInfo.color}08`, borderLeft: `3px solid ${typeInfo.color}40`, borderRadius: 6 }}>
+                            <p style={{ color: typeInfo.color, fontSize: 10, fontWeight: 700, margin: "0 0 1px", textTransform: "uppercase" }}>CHECK</p>
+                            <p style={{ color: C.textMuted, fontSize: 12, margin: 0, lineHeight: 1.5 }}>{guide.acceleration.upper.check}</p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <div style={{ 
-                    marginTop: 12, 
-                    padding: 12, 
-                    background: `${typeInfo.color}15`, 
-                    borderRadius: 8,
-                    border: `1px solid ${typeInfo.color}30`
-                  }}>
-                    <p style={{ color: typeInfo.color, fontSize: 13, fontWeight: 700, margin: 0 }}>
-                      {guide.acceleration.image}
-                    </p>
-                  </div>
+                  {/* 加速の感覚 NG/OK/Check */}
+                  {typeof guide.acceleration.image === "object" ? (
+                    <div style={{ marginTop: 12, borderRadius: 8, overflow: "hidden" }}>
+                      <p style={{ color: typeInfo.color, fontSize: 12, fontWeight: 700, margin: "0 0 8px" }}>{guide.acceleration.image.label}</p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                        <div style={{ padding: "8px 10px", background: `${C.red}08`, borderLeft: `3px solid ${C.red}40`, borderRadius: 6 }}>
+                          <p style={{ color: C.red, fontSize: 10, fontWeight: 700, margin: "0 0 1px", textTransform: "uppercase" }}>NG感覚</p>
+                          <p style={{ color: C.textMuted, fontSize: 12, margin: 0, lineHeight: 1.5 }}>{guide.acceleration.image.ng}</p>
+                        </div>
+                        <div style={{ padding: "8px 10px", background: `${C.green}08`, borderLeft: `3px solid ${C.green}40`, borderRadius: 6 }}>
+                          <p style={{ color: C.green, fontSize: 10, fontWeight: 700, margin: "0 0 1px", textTransform: "uppercase" }}>OK感覚</p>
+                          <p style={{ color: C.textMuted, fontSize: 12, margin: 0, lineHeight: 1.5 }}>{guide.acceleration.image.ok}</p>
+                        </div>
+                        <div style={{ padding: "8px 10px", background: `${typeInfo.color}08`, borderLeft: `3px solid ${typeInfo.color}40`, borderRadius: 6 }}>
+                          <p style={{ color: typeInfo.color, fontSize: 10, fontWeight: 700, margin: "0 0 1px", textTransform: "uppercase" }}>CHECK</p>
+                          <p style={{ color: C.textMuted, fontSize: 12, margin: 0, lineHeight: 1.5 }}>{guide.acceleration.image.check}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div style={{ 
+                      marginTop: 12, 
+                      padding: 12, 
+                      background: `${typeInfo.color}15`, 
+                      borderRadius: 8,
+                      border: `1px solid ${typeInfo.color}30`
+                    }}>
+                      <p style={{ color: typeInfo.color, fontSize: 13, fontWeight: 700, margin: 0 }}>
+                        {typeof guide.acceleration.image === "string" ? guide.acceleration.image : guide.acceleration.image.label}
+                      </p>
+                    </div>
+                  )}
                 </div>
                 
                 {/* 勾配別攻略 */}
@@ -4887,6 +5019,46 @@ export default function App() {
                   <p style={{ color: C.textDim, fontSize: 11, margin: "0 0 4px", textDecoration: "line-through" }}>
                     「{item.vague}」
                   </p>
+                  {item.ng && (
+                    <p style={{ color: C.red, fontSize: 11, margin: "0 0 4px", lineHeight: 1.5 }}>
+                      ✗ NG: {item.ng}
+                    </p>
+                  )}
+                  <p style={{ color: C.text, fontSize: 13, fontWeight: 600, margin: "0 0 6px" }}>
+                    → {item.feel}
+                  </p>
+                  <p style={{ color: typeInfo.color, fontSize: 11, margin: 0 }}>
+                    ✓ 確認: {item.check}
+                  </p>
+                </div>
+              ))}
+              {!showAllBodyFeel && BODY_FEEL_DICT.length > 6 && (
+                <button
+                  onClick={() => setShowAllBodyFeel(true)}
+                  style={{
+                    width: "100%", marginTop: 4, padding: 10, borderRadius: 8,
+                    border: `1px solid ${theme.cardBorder}`, background: "transparent",
+                    color: C.textMuted, fontSize: 12, cursor: "pointer"
+                  }}
+                >
+                  もっと見る（+{BODY_FEEL_DICT.length - 6}語）
+                </button>
+              )}
+              {showAllBodyFeel && BODY_FEEL_DICT.slice(6).map((item, i) => (
+                <div key={i + 6} style={{ 
+                  background: theme.bg, 
+                  borderRadius: 10, 
+                  padding: 12,
+                  borderLeft: `3px solid ${typeInfo.color}`
+                }}>
+                  <p style={{ color: C.textDim, fontSize: 11, margin: "0 0 4px", textDecoration: "line-through" }}>
+                    「{item.vague}」
+                  </p>
+                  {item.ng && (
+                    <p style={{ color: C.red, fontSize: 11, margin: "0 0 4px", lineHeight: 1.5 }}>
+                      ✗ NG: {item.ng}
+                    </p>
+                  )}
                   <p style={{ color: C.text, fontSize: 13, fontWeight: 600, margin: "0 0 6px" }}>
                     → {item.feel}
                   </p>
@@ -4896,19 +5068,6 @@ export default function App() {
                 </div>
               ))}
             </div>
-            <button
-              onClick={() => {
-                const more = BODY_FEEL_DICT.slice(6);
-                alert(more.map(d => `「${d.vague}」→ ${d.feel}`).join("\n\n"));
-              }}
-              style={{
-                width: "100%", marginTop: 12, padding: 10, borderRadius: 8,
-                border: `1px solid ${theme.cardBorder}`, background: "transparent",
-                color: C.textMuted, fontSize: 12, cursor: "pointer"
-              }}
-            >
-              もっと見る（+{BODY_FEEL_DICT.length - 6}語）
-            </button>
           </Card>
           
           {/* 調整フローチャート */}
