@@ -1711,9 +1711,9 @@ const TYPE_INFO_CYCLING = {
       },
       cleat: {
         position: { fore_aft: "母指球の真下", detail: "内側荷重(I)で母指球から踏み込むタイプ。ペダル軸を母指球直下に合わせる" },
-        angle: { rotation: "浅め（つま先まっすぐ）", detail: "内股気味OK" },
+        angle: { rotation: "つま先がまっすぐ前", detail: "膝もまっすぐ〜やや内向き" },
         float: { degree: "少なめ（0〜4.5°）", detail: "ダイレクト感" },
-        qFactor: { guide: "狭め（146〜150mm）", detail: "膝まっすぐ" },
+        qFactor: { guide: "狭め（146〜150mm）", detail: "両足が近い。膝がまっすぐ前を向く" },
       },
       crank: { length: { guide: "股下 × 0.20〜0.205", detail: "短めで高回転" } },
     },
@@ -1781,9 +1781,9 @@ const TYPE_INFO_CYCLING = {
       },
       cleat: {
         position: { fore_aft: "母指球の真下", detail: "内側荷重(I)で効率重視。ペダル軸を母指球直下に" },
-        angle: { rotation: "浅め", detail: "まっすぐ" },
+        angle: { rotation: "つま先がまっすぐ前", detail: "膝がまっすぐ前を向く設定" },
         float: { degree: "標準（4.5°）", detail: "適度な自由度" },
-        qFactor: { guide: "狭め（146〜150mm）", detail: "内側荷重に合わせる" },
+        qFactor: { guide: "狭め（146〜150mm）", detail: "両足が近い。内側荷重に最適" },
       },
       crank: { length: { guide: "股下 × 0.20〜0.205", detail: "標準〜短め" } },
     },
@@ -1851,9 +1851,9 @@ const TYPE_INFO_CYCLING = {
       },
       cleat: {
         position: { fore_aft: "母指球〜やや後ろ（かかと寄り）", detail: "外側荷重(O)で足裏全体を使う。ペダル軸をやや後ろにずらし安定させる" },
-        angle: { rotation: "深め（外向き）", detail: "ガニ股OK" },
+        angle: { rotation: "つま先がやや外向き", detail: "膝が自然に外を向く設定" },
         float: { degree: "多め（6°）", detail: "膝の自由度" },
-        qFactor: { guide: "広め（150〜156mm）", detail: "外側荷重に対応" },
+        qFactor: { guide: "広め（150〜156mm）", detail: "両足が広い。外側荷重で安定" },
       },
       crank: { length: { guide: "股下 × 0.205〜0.21", detail: "標準〜やや長め" } },
     },
@@ -1921,9 +1921,9 @@ const TYPE_INFO_CYCLING = {
       },
       cleat: {
         position: { fore_aft: "母指球〜やや後ろ（かかと寄り）", detail: "外側荷重(O)で安定重視。足裏全体で踏むポジション" },
-        angle: { rotation: "深め（外向き）", detail: "ガニ股OK" },
+        angle: { rotation: "つま先がやや外向き", detail: "膝が自然に外を向く設定" },
         float: { degree: "多め（6°）", detail: "長時間の快適性" },
-        qFactor: { guide: "広め（150〜156mm）", detail: "外側荷重に対応" },
+        qFactor: { guide: "広め（150〜156mm）", detail: "両足が広い。外側荷重で安定" },
       },
       crank: { length: { guide: "股下 × 0.205〜0.215", detail: "標準〜長め" } },
     },
@@ -1991,9 +1991,9 @@ const TYPE_INFO_CYCLING = {
       },
       cleat: {
         position: { fore_aft: "母指球の真下", detail: "内側荷重(I)で母指球中心。後体幹(R)なので安定寄りに" },
-        angle: { rotation: "浅め", detail: "まっすぐ" },
+        angle: { rotation: "つま先がまっすぐ前", detail: "膝がまっすぐ前を向く設定" },
         float: { degree: "標準（4.5°）", detail: "適度な自由度" },
-        qFactor: { guide: "狭め（146〜150mm）", detail: "内側荷重" },
+        qFactor: { guide: "狭め（146〜150mm）", detail: "両足が近い。内側で踏みやすい" },
       },
       crank: { length: { guide: "股下 × 0.205", detail: "標準" } },
     },
@@ -2061,9 +2061,9 @@ const TYPE_INFO_CYCLING = {
       },
       cleat: {
         position: { fore_aft: "母指球の真下", detail: "内側荷重(I)×パラレル。母指球中心でまっすぐ踏む安定型" },
-        angle: { rotation: "浅め", detail: "まっすぐ" },
+        angle: { rotation: "つま先がまっすぐ前", detail: "膝がまっすぐ前を向く設定" },
         float: { degree: "標準（4.5°）", detail: "適度" },
-        qFactor: { guide: "狭め（146〜150mm）", detail: "内側荷重" },
+        qFactor: { guide: "狭め（146〜150mm）", detail: "両足が近い。内側で踏みやすい" },
       },
       crank: { length: { guide: "股下 × 0.205", detail: "標準で効率" } },
     },
@@ -2132,9 +2132,9 @@ const TYPE_INFO_CYCLING = {
       },
       cleat: {
         position: { fore_aft: "やや後ろ（かかと寄り）", detail: "外側荷重(O)×後体幹(R)。足裏全体〜かかと寄りで安定してトルクをかける" },
-        angle: { rotation: "深め（外向き）", detail: "外側荷重" },
+        angle: { rotation: "つま先がやや外向き", detail: "外側荷重に合わせて膝が開く設定" },
         float: { degree: "多め（6°）", detail: "膝保護と腰の回旋" },
-        qFactor: { guide: "広め（150〜156mm）", detail: "外側荷重とクロス" },
+        qFactor: { guide: "広め（150〜156mm）", detail: "両足が広い。外側荷重×クロス連動に対応" },
       },
       crank: { length: { guide: "股下 × 0.205〜0.21", detail: "標準〜やや長め" } },
     },
@@ -2202,9 +2202,9 @@ const TYPE_INFO_CYCLING = {
       },
       cleat: {
         position: { fore_aft: "後ろ寄り（かかと寄り）", detail: "外側荷重(O)×後体幹(R)。かかと寄りで体重を乗せてじっくり踏む" },
-        angle: { rotation: "深め（外向き）", detail: "ガニ股OK" },
+        angle: { rotation: "つま先がやや外向き", detail: "膝が自然に外を向く設定" },
         float: { degree: "多め（6°）", detail: "快適性" },
-        qFactor: { guide: "広め（150〜156mm）", detail: "外側荷重" },
+        qFactor: { guide: "広め（150〜156mm）", detail: "両足が広い。外側でどっしり踏む" },
       },
       crank: { length: { guide: "股下 × 0.205〜0.215", detail: "やや長め" } },
     },
@@ -2327,14 +2327,6 @@ export default function App() {
   const [openSections, setOpenSections] = useState({ body: true, fitting: true, selfCheck: true, hill: false, ride: false, feel: false, gear: false });
   const tog = (k) => setOpenSections(s => ({ ...s, [k]: !s[k] }));
   
-  // フォーム分析PRO
-  const [photoAnalysis, setPhotoAnalysis] = useState({ 
-    image: null,      // base64画像
-    preview: null,    // プレビューURL
-    loading: false, 
-    result: null,     // 分析結果テキスト
-    error: null 
-  });
   const [stageUp, setStageUp] = useState(null); // ステージアップ演出 { level, message }
   const [prevAccuracyLevel, setPrevAccuracyLevel] = useState(0); // 前回の精度レベル
   
@@ -2722,75 +2714,6 @@ export default function App() {
     }
     
     setMode("result");
-  };
-  
-  // フォーム分析：画像をClaude APIに送信
-  const analyzePhoto = async (base64Data) => {
-    if (!result) return;
-    const typeInfo = getTypeInfo(sport, result.type);
-    
-    setPhotoAnalysis(p => ({ ...p, loading: true, result: null, error: null }));
-    
-    try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 1000,
-          messages: [{
-            role: "user",
-            content: [
-              {
-                type: "image",
-                source: { type: "base64", media_type: "image/jpeg", data: base64Data }
-              },
-              {
-                type: "text",
-                text: `あなたはプロのバイクフィッターです。4スタンス理論に基づくフィッティングの専門家です。
-
-このサイクリストの写真を分析してください。
-
-【このライダーの診断結果】
-- タイプ: ${result.type}（${typeInfo.name}）
-- 体幹: ${result.spectrum?.fr >= 50 ? "前体幹(F)" : "後体幹(R)"}寄り ${result.spectrum?.fr}%
-- 荷重: ${result.spectrum?.io >= 50 ? "内側(I)" : "外側(O)"}寄り ${result.spectrum?.io}%
-- 連動: ${result.spectrum?.xp >= 50 ? "クロス(X)" : "パラレル(II)"}寄り ${result.spectrum?.xp}%
-- ケイデンス: ${result.cadence === "high" ? "高回転型" : "トルク型"}
-- ポジション: ${result.posture === "open" ? "アップライト" : "前傾"}
-
-【分析してほしいポイント】
-1. ポジション評価（このタイプに対して適切か）
-2. 改善ポイント（具体的に何をmm単位で調整すべきか）
-3. このタイプならではの注意点
-
-日本語で、簡潔に回答してください（300文字以内）。
-写真が不鮮明だったり、サイクリストでない場合はその旨を伝えてください。`
-              }
-            ]
-          }]
-        })
-      });
-      
-      const data = await response.json();
-      const text = data.content?.map(c => c.type === "text" ? c.text : "").join("") || "分析結果を取得できませんでした";
-      setPhotoAnalysis(p => ({ ...p, loading: false, result: text }));
-    } catch (err) {
-      setPhotoAnalysis(p => ({ ...p, loading: false, error: "分析に失敗しました。ネットワークを確認してください。" }));
-    }
-  };
-  
-  const handlePhotoUpload = (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    
-    const reader = new FileReader();
-    reader.onload = () => {
-      const dataUrl = reader.result;
-      const base64 = dataUrl.split(",")[1];
-      setPhotoAnalysis(p => ({ ...p, image: base64, preview: dataUrl, result: null, error: null }));
-    };
-    reader.readAsDataURL(file);
   };
 
   // スタート画面
@@ -3921,6 +3844,9 @@ export default function App() {
                 <p style={{ color: C.textDim, fontSize: 11, margin: 0 }}>
                   {cadence === "high" ? "90rpm+で軽快に回す" : "重めのギアで力強く踏む"}
                 </p>
+                <p style={{ color: C.textMuted, fontSize: 10, margin: "6px 0 0", borderTop: `1px solid ${C.textDim}20`, paddingTop: 6 }}>
+                  {typeInfo.name}推奨: {typeInfo.form.cadence.type}
+                </p>
               </div>
               <div style={{ background: "theme.bg", borderRadius: 12, padding: 14, textAlign: "center" }}>
                 <div style={{ marginBottom: 8 }}>{posture === "open" ? Icons.user(C.green, 28) : Icons.activity(C.accent, 28)}</div>
@@ -3930,8 +3856,34 @@ export default function App() {
                 <p style={{ color: C.textDim, fontSize: 11, margin: 0 }}>
                   {posture === "open" ? "上体を起こして安定重視" : "深い前傾でエアロ重視"}
                 </p>
+                <p style={{ color: C.textMuted, fontSize: 10, margin: "6px 0 0", borderTop: `1px solid ${C.textDim}20`, paddingTop: 6 }}>
+                  {typeInfo.name}推奨: {typeInfo.form.posture.type}
+                </p>
               </div>
             </div>
+            {/* 個人傾向とタイプ推奨のミスマッチ補足 */}
+            {(() => {
+              const typeCadHigh = typeInfo.form.cadence.type.includes("85") || typeInfo.form.cadence.type.includes("90") || typeInfo.form.cadence.type.includes("95");
+              const mismatchCad = (cadence === "high" && !typeCadHigh) || (cadence === "low" && typeCadHigh);
+              const typePosOpen = typeInfo.form.posture.type.includes("後ろ") || typeInfo.form.posture.type.includes("ニュートラル");
+              const mismatchPos = (posture === "open" && !typePosOpen) || (posture === "forward" && typePosOpen);
+              if (!mismatchCad && !mismatchPos) return null;
+              return (
+                <div style={{ marginTop: 12, padding: 12, background: `${C.cyan}06`, border: `1px solid ${C.cyan}15`, borderRadius: 10 }}>
+                  <p style={{ color: C.cyan, fontSize: 11, fontWeight: 700, margin: "0 0 4px" }}>個人傾向とタイプの違いについて</p>
+                  {mismatchCad && (
+                    <p style={{ color: C.textMuted, fontSize: 11, margin: "0 0 4px", lineHeight: 1.5 }}>
+                      あなたは{cadence === "high" ? "高回転" : "トルク"}傾向ですが、{typeInfo.name}タイプでは{typeInfo.form.cadence.type}が力を活かしやすいとされています。タイプ推奨を試してみると新しい発見があるかも。
+                    </p>
+                  )}
+                  {mismatchPos && (
+                    <p style={{ color: C.textMuted, fontSize: 11, margin: 0, lineHeight: 1.5 }}>
+                      姿勢の傾向がタイプ推奨と異なります。テクニックガイドのフォーム解説も参考にしてみてください。
+                    </p>
+                  )}
+                </div>
+              );
+            })()}
           </Card>
           
           {/* メンタル傾向 */}
@@ -4454,79 +4406,122 @@ export default function App() {
                 const currentCrank = parseFloat(bodyMetrics.currentCrank) || 170;
                 const currentDrop = parseFloat(bodyMetrics.currentDrop) || -30;
                 
-                // 8タイプ別の推奨傾向
-                const advice = {
-                  FIX: { 
-                    saddle: "高め", saddleAdj: "+5〜15mm", 
-                    drop: "深め", dropRange: "-40〜-60mm",
-                    setback: "前乗り", setbackAdj: "膝がペダル軸より5〜15mm前",
-                    setbackWhy: "前体幹(F)×内側荷重(I)。みぞおち主導で前荷重のタイプなので、膝を前に出して股関節のパワーを活かす",
-                    crank: "短め", crankAdj: "165〜170mm推奨",
-                  },
-                  FIII: { 
-                    saddle: "高め", saddleAdj: "+5〜10mm", 
-                    drop: "中〜深め", dropRange: "-30〜-50mm",
-                    setback: "やや前乗り", setbackAdj: "膝がペダル軸より0〜10mm前",
-                    setbackWhy: "前体幹(F)×パラレル。前寄りだが骨盤を安定させて効率的に回す",
-                    crank: "短め", crankAdj: "165〜170mm推奨",
-                  },
-                  FOX: { 
-                    saddle: "標準", saddleAdj: "±5mm", 
-                    drop: "中〜深め", dropRange: "-35〜-55mm",
-                    setback: "やや前乗り", setbackAdj: "膝がペダル軸より0〜10mm前",
-                    setbackWhy: "前体幹(F)×外側荷重(O)。やや前寄りで外側荷重のパワーを安定して出す",
-                    crank: "標準", crankAdj: "170〜172.5mm推奨",
-                  },
-                  FOII: { 
-                    saddle: "標準", saddleAdj: "±5mm", 
-                    drop: "中程度", dropRange: "-25〜-45mm",
-                    setback: "やや前〜中央", setbackAdj: "膝がペダル軸より0〜10mm前",
-                    setbackWhy: "前体幹(F)×外側荷重(O)×パラレル。前寄りで安定したペダリングを維持",
-                    crank: "標準〜長め", crankAdj: "170〜175mm推奨",
-                  },
-                  RIX: { 
-                    saddle: "標準", saddleAdj: "±5mm", 
-                    drop: "中程度", dropRange: "-25〜-45mm",
-                    setback: "中央", setbackAdj: "膝がペダル軸の真上〜5mm後ろ",
-                    setbackWhy: "後体幹(R)×内側荷重(I)。肩甲骨主導で体幹を安定させつつ、膝真上でバランスよく踏む",
-                    crank: "標準", crankAdj: "170mm推奨",
-                  },
-                  RIII: { 
-                    saddle: "高め", saddleAdj: "+5〜10mm", 
-                    drop: "中程度", dropRange: "-30〜-50mm",
-                    setback: "中央", setbackAdj: "膝がペダル軸の真上",
-                    setbackWhy: "後体幹(R)×パラレル。膝がペダル軸の真上に来るニュートラルが最も効率的",
-                    crank: "標準", crankAdj: "170mm推奨",
-                  },
-                  ROX: { 
-                    saddle: "低め", saddleAdj: "-5〜10mm", 
-                    drop: "控えめ", dropRange: "-10〜-30mm",
-                    setback: "やや後ろ乗り", setbackAdj: "膝がペダル軸より5〜15mm後ろ",
-                    setbackWhy: "後体幹(R)×外側荷重(O)。後ろ寄りでハムストリングスのトルクを活かす",
-                    crank: "標準〜長め", crankAdj: "170〜172.5mm推奨",
-                  },
-                  ROII: { 
-                    saddle: "低め", saddleAdj: "-5〜15mm", 
-                    drop: "控えめ", dropRange: "-5〜-25mm",
-                    setback: "後ろ乗り", setbackAdj: "膝がペダル軸より10〜20mm後ろ",
-                    setbackWhy: "後体幹(R)×外側荷重(O)。どっしり後ろ乗りで体重をペダルに伝える",
-                    crank: "長め", crankAdj: "172.5〜175mm推奨",
-                  },
+                // 8タイプ別の推奨傾向（数値ベースでブレンド可能に）
+                const adviceNumeric = {
+                  FIX:  { saddleMin: 5,   saddleMax: 15,  dropMin: -60, dropMax: -40, setbackMin: 5,   setbackMax: 15,  setbackDir: "前", crankMin: 165, crankMax: 170 },
+                  FIII: { saddleMin: 5,   saddleMax: 10,  dropMin: -50, dropMax: -30, setbackMin: 0,   setbackMax: 10,  setbackDir: "前", crankMin: 165, crankMax: 170 },
+                  FOX:  { saddleMin: -5,  saddleMax: 5,   dropMin: -55, dropMax: -35, setbackMin: 0,   setbackMax: 10,  setbackDir: "前", crankMin: 170, crankMax: 172.5 },
+                  FOII: { saddleMin: -5,  saddleMax: 5,   dropMin: -45, dropMax: -25, setbackMin: 0,   setbackMax: 10,  setbackDir: "前", crankMin: 170, crankMax: 175 },
+                  RIX:  { saddleMin: -5,  saddleMax: 5,   dropMin: -45, dropMax: -25, setbackMin: 0,   setbackMax: 5,   setbackDir: "後", crankMin: 170, crankMax: 170 },
+                  RIII: { saddleMin: 5,   saddleMax: 10,  dropMin: -50, dropMax: -30, setbackMin: 0,   setbackMax: 0,   setbackDir: "中", crankMin: 170, crankMax: 170 },
+                  ROX:  { saddleMin: -10, saddleMax: -5,  dropMin: -30, dropMax: -10, setbackMin: 5,   setbackMax: 15,  setbackDir: "後", crankMin: 170, crankMax: 172.5 },
+                  ROII: { saddleMin: -15, saddleMax: -5,  dropMin: -25, dropMax: -5,  setbackMin: 10,  setbackMax: 20,  setbackDir: "後", crankMin: 172.5, crankMax: 175 },
                 };
-                const adv = advice[type];
+                
+                // スペクトラムに基づくブレンド
+                const sp = result.spectrum || { fr: 50, io: 50, xp: 50 };
+                const conf = result.confidence || { fr: "clear", io: "clear", xp: "clear" };
+                
+                // タイプ文字列を軸ごとに分解してブレンド対象を特定
+                // type = "FIX" → F/R軸のペア: "RIX", I/O軸のペア: "FOX", X/II軸のペア: "FIII"
+                const flipAxis = (t, axis) => {
+                  if (axis === "fr") {
+                    return t[0] === "F" ? "R" + t.slice(1) : "F" + t.slice(1);
+                  }
+                  if (axis === "io") {
+                    // I↔O: FIX↔FOX, FIII↔FOII, RIX↔ROX, RIII↔ROII
+                    const map = { FIX:"FOX", FOX:"FIX", FIII:"FOII", FOII:"FIII", RIX:"ROX", ROX:"RIX", RIII:"ROII", ROII:"RIII" };
+                    return map[t] || t;
+                  }
+                  if (axis === "xp") {
+                    // X↔II: FIX↔FIII, FOX↔FOII, RIX↔RIII, ROX↔ROII
+                    const map = { FIX:"FIII", FIII:"FIX", FOX:"FOII", FOII:"FOX", RIX:"RIII", RIII:"RIX", ROX:"ROII", ROII:"ROX" };
+                    return map[t] || t;
+                  }
+                  return t;
+                };
+                
+                // 加重平均ヘルパー
+                const blend = (valA, valB, ratioA) => {
+                  const r = ratioA / 100;
+                  return Math.round(valA * r + valB * (1 - r)); // 1mm単位
+                };
+                
+                // メインタイプの数値
+                const mainAdv = adviceNumeric[type];
+                
+                // 3軸すべてでブレンド
+                let blended = { ...mainAdv };
+                const blendNotes = [];
+                
+                ["fr", "io", "xp"].forEach(axis => {
+                  const ratio = sp[axis]; // メインタイプ側の%
+                  if (conf[axis] !== "clear") {
+                    const altType = flipAxis(type, axis);
+                    const altAdv = adviceNumeric[altType];
+                    if (altAdv) {
+                      blended.saddleMin = blend(blended.saddleMin, altAdv.saddleMin, ratio);
+                      blended.saddleMax = blend(blended.saddleMax, altAdv.saddleMax, ratio);
+                      blended.dropMin = blend(blended.dropMin, altAdv.dropMin, ratio);
+                      blended.dropMax = blend(blended.dropMax, altAdv.dropMax, ratio);
+                      blended.setbackMin = blend(blended.setbackMin, altAdv.setbackMin, ratio);
+                      blended.setbackMax = blend(blended.setbackMax, altAdv.setbackMax, ratio);
+                      // クランクはブレンドしない（規格品のため2.5mm刻み）
+                      // 前後方向もブレンド
+                      if (mainAdv.setbackDir !== altAdv.setbackDir) {
+                        blended.setbackDir = ratio >= 60 ? mainAdv.setbackDir : "中央";
+                      }
+                      const axisLabel = axis === "fr" ? "体幹(F/R)" : axis === "io" ? "荷重(I/O)" : "連動(X/II)";
+                      const pct = Math.round(ratio);
+                      blendNotes.push(`${axisLabel}が${pct}:${100-pct}のため、${altType}の要素を${100-pct}%反映`);
+                    }
+                  }
+                });
+                
+                // 数値→表示テキスト変換
+                const fmtSaddle = (min, max) => {
+                  if (min >= 0 && max > 0) return `+${min}〜${max}mm`;
+                  if (min < 0 && max <= 0) return `${min}〜${max}mm`;
+                  return `${min}〜+${max}mm`;
+                };
+                const fmtSetback = (min, max, dir) => {
+                  if (dir === "中央") return `膝がペダル軸の真上〜${max}mm`;
+                  return `膝がペダル軸より${min}〜${max}mm${dir}`;
+                };
+                const fmtCrank = (min, max) => {
+                  if (min === max) return `${min}mm推奨`;
+                  return `${min}〜${max}mm推奨`;
+                };
+                const saddleLabel = blended.saddleMin >= 3 ? "高め" : blended.saddleMax <= -3 ? "低め" : "標準";
+                
+                const adv = {
+                  saddle: saddleLabel,
+                  saddleAdj: fmtSaddle(blended.saddleMin, blended.saddleMax),
+                  drop: "",
+                  dropRange: `${blended.dropMin}〜${blended.dropMax}mm`,
+                  setback: blended.setbackDir === "前" ? "前乗り" : blended.setbackDir === "後" ? "後ろ乗り" : "中央",
+                  setbackAdj: fmtSetback(blended.setbackMin, blended.setbackMax, blended.setbackDir),
+                  setbackWhy: adviceWhy[type],
+                  crank: "",
+                  crankAdj: fmtCrank(blended.crankMin, blended.crankMax),
+                  blendNotes,
+                };
+                
+                // setbackWhy（テキストはタイプ固定でOK）
+                const adviceWhy = {
+                  FIX:  "前体幹(F)×内側荷重(I)。みぞおち主導で前荷重のタイプなので、膝を前に出して股関節のパワーを活かす",
+                  FIII: "前体幹(F)×パラレル。前寄りだが骨盤を安定させて効率的に回す",
+                  FOX:  "前体幹(F)×外側荷重(O)。やや前寄りで外側荷重のパワーを安定して出す",
+                  FOII: "前体幹(F)×外側荷重(O)×パラレル。前寄りで安定したペダリングを維持",
+                  RIX:  "後体幹(R)×内側荷重(I)。肩甲骨主導で体幹を安定させつつ、膝真上でバランスよく踏む",
+                  RIII: "後体幹(R)×パラレル。膝がペダル軸の真上に来るニュートラルが最も効率的",
+                  ROX:  "後体幹(R)×外側荷重(O)。後ろ寄りでハムストリングスのトルクを活かす",
+                  ROII: "後体幹(R)×外側荷重(O)。どっしり後ろ乗りで体重をペダルに伝える",
+                };
+                adv.setbackWhy = adviceWhy[type];
                 
                 // 落差の判定
-                const dropRanges = {
-                  FIX:  { min: -60, max: -40 },
-                  FIII: { min: -50, max: -30 },
-                  FOX:  { min: -55, max: -35 },
-                  FOII: { min: -45, max: -25 },
-                  RIX:  { min: -45, max: -25 },
-                  RIII: { min: -50, max: -30 },
-                  ROX:  { min: -30, max: -10 },
-                  ROII: { min: -25, max: -5 },
-                };
-                const dropRange = dropRanges[type];
+                const dropRange = { min: blended.dropMin, max: blended.dropMax };
                 const dropStatus = currentDrop < dropRange.min ? "深すぎ" : currentDrop > dropRange.max ? "浅すぎ" : "適正";
                 
                 return (
@@ -4534,6 +4529,23 @@ export default function App() {
                   <p style={{ color: C.text, fontSize: 13, fontWeight: 700, margin: 0 }}>
                     Tip: {typeInfo.name}への調整アドバイス
                   </p>
+                  
+                  {/* ブレンド情報 */}
+                  {adv.blendNotes.length > 0 && (
+                    <div style={{ background: `${C.cyan}08`, border: `1px solid ${C.cyan}20`, borderRadius: 10, padding: 12 }}>
+                      <p style={{ color: C.cyan, fontSize: 11, fontWeight: 700, margin: "0 0 6px" }}>
+                        スペクトラム補正適用中
+                      </p>
+                      {adv.blendNotes.map((note, i) => (
+                        <p key={i} style={{ color: C.textMuted, fontSize: 11, margin: "2px 0", lineHeight: 1.5 }}>
+                          • {note}
+                        </p>
+                      ))}
+                      <p style={{ color: C.textDim, fontSize: 10, margin: "6px 0 0" }}>
+                        僅差の軸は隣接タイプの値とブレンドしています
+                      </p>
+                    </div>
+                  )}
                   
                   {/* サドル高 */}
                   <div style={{ background: C.bg, borderRadius: 12, padding: 14, ...neu.raised }}>
@@ -5368,118 +5380,6 @@ export default function App() {
             {Icons.refresh(C.textDim, 16)} 最初からやり直す
           </button>
           
-          {/* フォーム分析 PRO β */}
-          <Card style={{ marginTop: 24, background: `linear-gradient(135deg, ${typeInfo.color}08, ${C.accent}05)`, border: `1px solid ${typeInfo.color}25` }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-              <div style={{ width: 28, height: 28, borderRadius: 8, background: `${typeInfo.color}20`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                {Icons.activity(typeInfo.color, 16)}
-              </div>
-              <div>
-                <p style={{ color: C.text, fontSize: 15, fontWeight: 700, margin: 0 }}>フォーム分析</p>
-                <span style={{ fontSize: 9, fontWeight: 700, color: typeInfo.color, background: `${typeInfo.color}15`, padding: "1px 6px", borderRadius: 8 }}>PRO β</span>
-              </div>
-            </div>
-            
-            <p style={{ color: C.textMuted, fontSize: 12, margin: "0 0 16px", lineHeight: 1.6 }}>
-              ライディング写真をアップロードすると、あなたのタイプ（{typeInfo.name}）に基づいてAIがポジションを分析します。
-            </p>
-            
-            {/* アップロードエリア */}
-            {!photoAnalysis.preview ? (
-              <label style={{
-                display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-                padding: "24px 16px", border: `2px dashed ${typeInfo.color}30`, borderRadius: 12, cursor: "pointer",
-                background: `${typeInfo.color}04`, transition: "all 0.2s",
-              }}>
-                <input type="file" accept="image/*" onChange={handlePhotoUpload} style={{ display: "none" }} />
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" style={{ marginBottom: 8, opacity: 0.5 }}>
-                  <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke={typeInfo.color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-                <p style={{ color: C.text, fontSize: 13, fontWeight: 600, margin: "0 0 4px" }}>写真をアップロード</p>
-                <p style={{ color: C.textDim, fontSize: 11, margin: 0 }}>横から撮ったライディング写真がベスト</p>
-              </label>
-            ) : (
-              <div>
-                {/* プレビュー */}
-                <div style={{ position: "relative", marginBottom: 12 }}>
-                  <img 
-                    src={photoAnalysis.preview} 
-                    alt="Uploaded" 
-                    style={{ width: "100%", borderRadius: 8, maxHeight: 300, objectFit: "cover" }} 
-                  />
-                  <button
-                    onClick={() => setPhotoAnalysis({ image: null, preview: null, loading: false, result: null, error: null })}
-                    style={{
-                      position: "absolute", top: 8, right: 8, width: 28, height: 28, borderRadius: 14,
-                      background: "rgba(0,0,0,0.6)", border: "none", color: "#fff", fontSize: 14, cursor: "pointer",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                    }}
-                  >
-                    ✕
-                  </button>
-                </div>
-                
-                {/* 分析ボタン */}
-                {!photoAnalysis.result && !photoAnalysis.loading && (
-                  <button
-                    onClick={() => analyzePhoto(photoAnalysis.image)}
-                    style={{
-                      width: "100%", padding: "14px", borderRadius: 8, border: "none",
-                      background: typeInfo.color, color: "#fff", fontSize: 14, fontWeight: 700,
-                      cursor: "pointer", letterSpacing: "0.5px",
-                    }}
-                  >
-                    {typeInfo.name}タイプとして分析する
-                  </button>
-                )}
-                
-                {/* ローディング */}
-                {photoAnalysis.loading && (
-                  <div style={{ textAlign: "center", padding: 20 }}>
-                    <div style={{ 
-                      width: 32, height: 32, border: `3px solid ${typeInfo.color}30`, borderTopColor: typeInfo.color,
-                      borderRadius: "50%", margin: "0 auto 12px",
-                      animation: "spin 1s linear infinite",
-                    }} />
-                    <p style={{ color: C.textMuted, fontSize: 12, margin: 0 }}>AIが分析中...</p>
-                  </div>
-                )}
-                
-                {/* 結果 */}
-                {photoAnalysis.result && (
-                  <div style={{ background: theme.bg, borderRadius: 10, padding: 16, marginTop: 8 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 10 }}>
-                      {Icons.check(typeInfo.color, 16)}
-                      <p style={{ color: typeInfo.color, fontSize: 13, fontWeight: 700, margin: 0 }}>分析結果</p>
-                    </div>
-                    <p style={{ color: C.text, fontSize: 13, margin: 0, lineHeight: 1.8, whiteSpace: "pre-wrap" }}>
-                      {photoAnalysis.result}
-                    </p>
-                    <button
-                      onClick={() => setPhotoAnalysis({ image: null, preview: null, loading: false, result: null, error: null })}
-                      style={{
-                        marginTop: 12, padding: "8px 16px", borderRadius: 6, border: `1px solid ${theme.cardBorder}`,
-                        background: "transparent", color: C.textMuted, fontSize: 12, cursor: "pointer",
-                      }}
-                    >
-                      別の写真を分析する
-                    </button>
-                  </div>
-                )}
-                
-                {/* エラー */}
-                {photoAnalysis.error && (
-                  <div style={{ background: `${C.red}08`, borderRadius: 8, padding: 12, marginTop: 8 }}>
-                    <p style={{ color: C.red, fontSize: 12, margin: 0 }}>{photoAnalysis.error}</p>
-                  </div>
-                )}
-              </div>
-            )}
-            
-            <p style={{ color: C.textDim, fontSize: 10, margin: "12px 0 0", lineHeight: 1.5 }}>
-              ※ β版のため精度は参考程度です。画像はAI分析のみに使用され、保存されません。
-            </p>
-          </Card>
           
           {/* フィッター紹介 */}
           {sport === "cycling" && (
