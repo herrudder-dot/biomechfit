@@ -1316,66 +1316,126 @@ const SELF_CHECK = {
   },
 };
 
-// 体感ワード変換表（NG感覚 / OK感覚 / チェック方法）
+// 体感ワード変換表（タイプ別解説付き）
 const BODY_FEEL_DICT = [
-  { vague: "骨盤を立てる", feel: "サドルの後ろ側に座って、お尻の骨（坐骨）を感じる", check: "座面の後ろ半分にお尻が乗ってる？", ng: "お尻がサドルの前にズレている。股間が圧迫される" },
-  { vague: "骨盤を寝かせる", feel: "サドルの前側に座って、股の付け根がサドルに当たる", check: "座面の前半分に体重がかかってる？", ng: "坐骨でサドル後方に座り、腰が丸まっている" },
-  { vague: "体幹を使う", feel: "お腹に力を入れた状態でペダルを踏む", check: "咳をするときに力が入る場所を意識できる？", ng: "手脚だけで漕いでいて、お腹に力が入っていない。すぐ手が痺れる" },
-  { vague: "腰を入れる", feel: "おへそを前に突き出す感じ", check: "ベルトのバックルが前に出る？", ng: "腰が丸まって後ろに引けている。背中が猫背になっている" },
-  { vague: "肩の力を抜く", feel: "肘を軽く曲げて、手のひらでブラケットを包む", check: "ハンドルを握りしめてない？指に隙間ある？", ng: "肩が耳に近づいている。首が短く見える" },
-  { vague: "引き足を使う", feel: "靴の中で足の甲がシューズの上に当たる感覚", check: "上死点で、靴の中で足が浮く？", ng: "下死点でペダルを「踏み切って」終わり。6時以降は惰性" },
-  { vague: "踏む", feel: "3時の位置で、かかとを少し落として体重を乗せる", check: "かかとがつま先より低くなってる？", ng: "つま先でペダルを「押して」いる。ふくらはぎが先に疲れる" },
-  { vague: "回す", feel: "足首を固定して、膝の上下動だけでペダルを回す", check: "足首がクニャクニャ動いてない？", ng: "足首を上下に動かして「踏む→引く」を意識している。動きがギクシャク" },
-  { vague: "ハンドルを引く", feel: "肘を脇腹に近づける動き", check: "肘が外に開いてない？", ng: "手首で手前に引いている。手首が痛い" },
-  { vague: "前乗り", feel: "サドルの先端から5cm以内に座る。ハンドルが近く感じる", check: "ブラケットを持ったとき、肘が曲がってる？", ng: "サドルの後ろに座って腕が伸びきっている" },
-  { vague: "後ろ乗り", feel: "サドルの後ろ寄りに座る。ハンドルが遠く感じる", check: "腕がほぼまっすぐに伸びてる？", ng: "サドルの前に座っていて、ハンドルが近すぎる" },
-  { vague: "ケイデンスを上げる", feel: "太ももの動きを速くする。お尻は跳ねさせない", check: "お尻がサドルから浮いてない？", ng: "お尻がサドルの上でバウンドしている" },
-  { vague: "トルクをかける", feel: "ギアを1〜2枚重くして、踏み込みで「グッ」と感じる", check: "ペダルを踏んだとき、抵抗を感じる？", ng: "ギアが軽すぎて空回りしている。脚は速く動くが前に進まない" },
+  { vague: "骨盤を立てる",
+    general: "坐骨をサドルに感じるように座る",
+    byType: {
+      F: { fit: "△", advice: "Fタイプはこの指示に従いすぎると逆効果。みぞおちから自然に前傾すると骨盤は適度に寝る。無理に立てると股関節の動きが制限される" },
+      R: { fit: "◎", advice: "Rタイプにはぴったりの指示。肩甲骨を軽く寄せると骨盤が自然に立つ。坐骨の2点でサドルに座る感覚を大事に" },
+    },
+    check: "座面の後ろ半分にお尻が乗ってる？",
+    ng: "お尻がサドルの前にズレて股間が圧迫される",
+  },
+  { vague: "骨盤を寝かせる",
+    general: "サドルの前側に荷重し、股関節が使いやすい角度にする",
+    byType: {
+      F: { fit: "◎", advice: "Fタイプの自然な姿勢。みぞおちから折りたたむように前傾すれば、骨盤は勝手に最適な角度になる" },
+      R: { fit: "△", advice: "Rタイプが無理に寝かせると腰を痛めやすい。肩甲骨主導で前傾をコントロールして" },
+    },
+    check: "みぞおちから前傾できてる？腰から曲げてない？",
+    ng: "腰を丸めて無理に前傾している。腰痛の原因",
+  },
+  { vague: "体幹を使う",
+    general: "お腹に力を入れた状態でペダルを踏む",
+    byType: {
+      F: { fit: "◎", advice: "Fタイプはみぞおち〜股関節が体幹の起点。おへそ周りの締まりを意識するとペダリングが安定する" },
+      R: { fit: "◎", advice: "Rタイプは肩甲骨〜背中が体幹の起点。肩甲骨を軽く寄せるだけで上半身が安定する。お腹を固めすぎない" },
+    },
+    check: "咳をするときに力が入る場所を意識できる？",
+    ng: "手脚だけで漕いでいて、お腹に力が入っていない",
+  },
+  { vague: "腰を入れる",
+    general: "骨盤を安定させてペダリングの土台を作る",
+    byType: {
+      F: { fit: "○", advice: "Fタイプは「おへそを前に突き出す」イメージが近い。腰の回旋を使ってペダリングするので、固めすぎない" },
+      R: { fit: "○", advice: "Rタイプは「坐骨でサドルに根を張る」イメージ。腰を前に押すより、お尻をサドルに安定させる意識" },
+    },
+    check: "ペダリング中に腰が安定してる？",
+    ng: "腰が丸まって後ろに引けている。猫背になっている",
+  },
+  { vague: "肩の力を抜く",
+    general: "上半身をリラックスさせて効率よく走る",
+    byType: {
+      F: { fit: "◎", advice: "Fタイプは肩を落として、肘を軽く曲げる。上半身の力は体幹（みぞおち）で支えて腕はリラックス" },
+      R: { fit: "◎", advice: "Rタイプは肩甲骨を軽く寄せてからストンと落とす。背中で支える感覚ができると肩が自然に下がる" },
+    },
+    check: "ハンドルを握りしめてない？指に隙間ある？",
+    ng: "肩が耳に近づいている。首が短く見える",
+  },
+  { vague: "引き足を使う",
+    general: "上死点〜引き上げ局面でも力を加える",
+    byType: {
+      F: { fit: "○", advice: "Fタイプは「引く」より「みぞおちで脚を持ち上げる」意識が効く。股関節の屈曲を使う" },
+      R: { fit: "△", advice: "Rタイプは引き足より「踏み込みの質」に集中したほうが効率的。無理に引くとフォームが崩れやすい" },
+    },
+    check: "上死点で靴の中で足の甲がシューズに当たる？",
+    ng: "下死点でペダルを踏み切って終わり。6時以降は惰性",
+  },
+  { vague: "踏む",
+    general: "ペダルに体重を乗せて推進力を生む基本動作",
+    byType: {
+      I: { fit: "◎", advice: "内側荷重(I)は母指球で真下に踏む。膝がまっすぐ前を向いた状態で、2時〜4時の区間に集中" },
+      O: { fit: "◎", advice: "外側荷重(O)は足裏全体〜外側で踏む。膝がやや外を向くのが自然。大腿四頭筋全体を使う感覚" },
+    },
+    check: "3時の位置で体重がペダルに乗ってる？",
+    ng: "つま先だけで押している。ふくらはぎが先に疲れる",
+  },
+  { vague: "回す",
+    general: "ペダルを円運動として途切れなく動かす",
+    byType: {
+      X: { fit: "◎", advice: "クロス(X)タイプは対角連動を使って「回す」のが自然。腰のひねりがペダリングのリズムを作る" },
+      II: { fit: "◎", advice: "パラレル(II)タイプは上下動の効率で「回す」。体幹を固定して脚だけを綺麗に回す意識が合う" },
+    },
+    check: "足首がクニャクニャ動いてない？",
+    ng: "足首を上下に動かしてギクシャクしている",
+  },
+  { vague: "ハンドルを引く",
+    general: "上半身の力をペダリングに伝える動作",
+    byType: {
+      X: { fit: "◎", advice: "クロス(X)タイプは「右足で踏むとき左手で引く」対角線の動き。自然にやっているはず" },
+      II: { fit: "△", advice: "パラレル(II)タイプはハンドルを引くより「体幹で安定させる」方が効率的。引きすぎるとフォームが崩れる" },
+    },
+    check: "肘を脇腹に近づける動き？肘が外に開いてない？",
+    ng: "手首で手前に引いている。手首が痛い",
+  },
+  { vague: "前乗り",
+    general: "サドルの前方に座るポジション",
+    byType: {
+      F: { fit: "◎", advice: "Fタイプの基本ポジション。みぞおし主導の前傾と合わせると股関節が使いやすくなる" },
+      R: { fit: "△", advice: "Rタイプには不向きなことが多い。無理に前乗りすると肩甲骨の安定が崩れ、手に荷重がかかりすぎる" },
+    },
+    check: "サドルの先端から5cm以内に座ってる？",
+    ng: "サドルの後ろに座って腕が伸びきっている",
+  },
+  { vague: "後ろ乗り",
+    general: "サドルの後方に座るポジション",
+    byType: {
+      F: { fit: "△", advice: "Fタイプが後ろ乗りすると股関節の可動域が制限される。ただし僅差でR寄りなら試す価値あり" },
+      R: { fit: "◎", advice: "Rタイプの基本ポジション。坐骨でどっしり座り、肩甲骨で上半身を安定させる" },
+    },
+    check: "坐骨がサドルの後方に乗ってる？",
+    ng: "サドルの前に座ってハンドルが近すぎる",
+  },
+  { vague: "ケイデンスを上げる",
+    general: "ペダルの回転数を増やして軽快に走る",
+    byType: {
+      F: { fit: "○", advice: "Fタイプは高回転と相性がいいことが多い。特にF-Iタイプは90rpm+が得意ゾーン" },
+      R: { fit: "○", advice: "R-IIタイプは高回転が得意。R-Oタイプは無理に上げず、自分のリズムで" },
+    },
+    check: "お尻がサドルから浮いてない？",
+    ng: "お尻がバウンドしている。体幹が使えてないサイン",
+  },
+  { vague: "トルクをかける",
+    general: "重めのギアで力強く踏み込む",
+    byType: {
+      I: { fit: "○", advice: "内側荷重(I)は母指球でダイレクトにトルクをかける。膝をまっすぐ保つことが大事" },
+      O: { fit: "◎", advice: "外側荷重(O)の得意技。足裏全体で体重を乗せるようにトルクをかけると膝への負担が少ない" },
+    },
+    check: "ペダルを踏んだとき重みを感じる？",
+    ng: "ギアが軽すぎて空回り。脚は速いが進まない",
+  },
 ];
-
-// 調整フローチャート（症状別）
-const ADJUSTMENT_FLOW = [
-  { symptom: "膝の前側が痛い", causes: ["サドルが低い", "サドルが前すぎ"], fixes: [
-    { what: "サドル高さ", action: "+5mm上げる", check: "下死点で膝が伸びきらない" },
-    { what: "サドル前後", action: "5mm後ろへ", check: "3時で膝がつま先より後ろ" },
-  ]},
-  { symptom: "膝の裏側が痛い", causes: ["サドルが高い", "サドルが後ろすぎ"], fixes: [
-    { what: "サドル高さ", action: "-5mm下げる", check: "下死点で膝に余裕がある" },
-    { what: "サドル前後", action: "5mm前へ", check: "3時で膝がつま先の上" },
-  ]},
-  { symptom: "手が痺れる", causes: ["ハンドルが低い/遠い", "体重が手にかかりすぎ"], fixes: [
-    { what: "ステム", action: "短くする or 角度上げる", check: "肘に余裕がある" },
-    { what: "体幹", action: "お腹に力を入れて上半身を支える", check: "手に体重かけずに走れる" },
-  ]},
-  { symptom: "お尻が痛い", causes: ["サドルが合ってない", "サドルが高すぎ"], fixes: [
-    { what: "サドル高さ", action: "-3〜5mm下げる", check: "お尻が左右に動かない" },
-    { what: "サドル角度", action: "水平に調整", check: "前にも後ろにも滑らない" },
-  ]},
-  { symptom: "腰が痛い", causes: ["落差が大きい", "ハンドルが遠い"], fixes: [
-    { what: "ステム", action: "角度を上げる or 短くする", check: "背中が丸まりすぎてない" },
-    { what: "体幹トレ", action: "プランク30秒×3を毎日", check: "1週間で改善するか" },
-  ]},
-  { symptom: "力が入らない", causes: ["サドルが低い", "サドル位置が合ってない"], fixes: [
-    { what: "サドル高さ", action: "+5mm上げる", check: "下死点で膝に少し余裕" },
-    { what: "サドル前後", action: "タイプに合わせて調整", check: "3時で膝の位置を確認" },
-  ]},
-  { symptom: "ケイデンスが上がらない", causes: ["サドルが高すぎ"], fixes: [
-    { what: "サドル高さ", action: "-3mm下げる", check: "お尻が跳ねない" },
-    { what: "練習", action: "片足ペダリング", check: "カクカクせず回せるか" },
-  ]},
-];
-
-// タイプ別「しっくりこない」対処
-const TYPE_TROUBLESHOOT = {
-  FIX: { issue: "ダンシングで力が出ない", try: ["ギアを2枚重くして", "バイクを大きく振る", "ハンドルを引いて反対脚で踏む"] },
-  FIII: { issue: "すぐ疲れる", try: ["落差を10mm減らす", "お腹に力を入れる", "ケイデンスを5rpm上げる"] },
-  FOX: { issue: "パワーが出ない", try: ["サドルを5mm前へ", "クリートを外寄りに", "重いギアでダンシング練習"] },
-  FOII: { issue: "長距離で垂れる", try: ["最初の1時間を抑える", "落差を10mm減らす", "ケイデンスを80rpmに"] },
-  RIX: { issue: "リズムに乗れない", try: ["変化のあるコースを選ぶ", "ギアチェンジを増やす", "音楽を聴きながらライドする"] },
-  RIII: { issue: "集団についていけない", try: ["前方を見て変化を予測", "ギアを1枚軽めに", "ダンシングの練習を追加"] },
-  ROX: { issue: "特徴がなくて物足りない", try: ["それが強み。状況判断を磨く", "弱い部分を少しずつ強化", "レースは終盤勝負"] },
-  ROII: { issue: "スピードが出ない", try: ["後半勝負に持ち込む", "長い登りで差をつける", "インターバル練習を追加"] },
-};
 
 // 質問プール
 // 軸1: AかBか（体幹タイプ） - A=みぞおち・股関節主導 / B=首・肩甲骨・腰主導
@@ -1715,7 +1775,7 @@ const TYPE_INFO_CYCLING = {
         float: { degree: "少なめ（0〜4.5°）", detail: "ダイレクト感" },
         qFactor: { guide: "狭め（146〜150mm）", detail: "両足が近い。膝がまっすぐ前を向く" },
       },
-      crank: { length: { guide: "股下 × 0.20〜0.205", detail: "短めで高回転" } },
+      crank: { length: { guide: "股下 × 0.195〜0.200", detail: "短めで高回転" } },
     },
     selfCheck: [
       { name: "股関節屈曲", method: "仰向けで膝を胸に", good: "120°以上", action: "深い前傾OK" },
@@ -1785,7 +1845,7 @@ const TYPE_INFO_CYCLING = {
         float: { degree: "標準（4.5°）", detail: "適度な自由度" },
         qFactor: { guide: "狭め（146〜150mm）", detail: "両足が近い。内側荷重に最適" },
       },
-      crank: { length: { guide: "股下 × 0.20〜0.205", detail: "標準〜短め" } },
+      crank: { length: { guide: "股下 × 0.195〜0.200", detail: "短め" } },
     },
     selfCheck: [
       { name: "片足ペダリング", method: "30秒スムーズに", good: "カクつかない", action: "効率型" },
@@ -1855,7 +1915,7 @@ const TYPE_INFO_CYCLING = {
         float: { degree: "多め（6°）", detail: "膝の自由度" },
         qFactor: { guide: "広め（150〜156mm）", detail: "両足が広い。外側荷重で安定" },
       },
-      crank: { length: { guide: "股下 × 0.205〜0.21", detail: "標準〜やや長め" } },
+      crank: { length: { guide: "股下 × 0.197〜0.203", detail: "標準" } },
     },
     selfCheck: [
       { name: "ダンシングテスト", method: "1分全力", good: "バイク振れる", action: "クロス型確定" },
@@ -1925,7 +1985,7 @@ const TYPE_INFO_CYCLING = {
         float: { degree: "多め（6°）", detail: "長時間の快適性" },
         qFactor: { guide: "広め（150〜156mm）", detail: "両足が広い。外側荷重で安定" },
       },
-      crank: { length: { guide: "股下 × 0.205〜0.215", detail: "標準〜長め" } },
+      crank: { length: { guide: "股下 × 0.197〜0.203", detail: "標準" } },
     },
     selfCheck: [
       { name: "片足ペダリング", method: "30秒", good: "スムーズ", action: "効率型" },
@@ -1995,7 +2055,7 @@ const TYPE_INFO_CYCLING = {
         float: { degree: "標準（4.5°）", detail: "適度な自由度" },
         qFactor: { guide: "狭め（146〜150mm）", detail: "両足が近い。内側で踏みやすい" },
       },
-      crank: { length: { guide: "股下 × 0.205", detail: "標準" } },
+      crank: { length: { guide: "股下 × 0.197〜0.200", detail: "標準〜短め" } },
     },
     selfCheck: [
       { name: "腰回旋", method: "座って左右に捻る", good: "スムーズ", action: "クロス型" },
@@ -2065,7 +2125,7 @@ const TYPE_INFO_CYCLING = {
         float: { degree: "標準（4.5°）", detail: "適度" },
         qFactor: { guide: "狭め（146〜150mm）", detail: "両足が近い。内側で踏みやすい" },
       },
-      crank: { length: { guide: "股下 × 0.205", detail: "標準で効率" } },
+      crank: { length: { guide: "股下 × 0.197〜0.200", detail: "標準〜短め" } },
     },
     selfCheck: [
       { name: "片足立ち", method: "30秒", good: "ほぼ動かない", action: "体幹安定" },
@@ -2136,7 +2196,7 @@ const TYPE_INFO_CYCLING = {
         float: { degree: "多め（6°）", detail: "膝保護と腰の回旋" },
         qFactor: { guide: "広め（150〜156mm）", detail: "両足が広い。外側荷重×クロス連動に対応" },
       },
-      crank: { length: { guide: "股下 × 0.205〜0.21", detail: "標準〜やや長め" } },
+      crank: { length: { guide: "股下 × 0.197〜0.203", detail: "標準" } },
     },
     selfCheck: [
       { name: "スクワット", method: "ゆっくり10回", good: "膝がつま先方向", action: "安定型" },
@@ -2206,7 +2266,7 @@ const TYPE_INFO_CYCLING = {
         float: { degree: "多め（6°）", detail: "快適性" },
         qFactor: { guide: "広め（150〜156mm）", detail: "両足が広い。外側でどっしり踏む" },
       },
-      crank: { length: { guide: "股下 × 0.205〜0.215", detail: "やや長め" } },
+      crank: { length: { guide: "股下 × 0.200〜0.207", detail: "標準〜やや長め" } },
     },
     selfCheck: [
       { name: "長時間立ち", method: "5分", good: "楽に立てる", action: "安定型" },
@@ -2329,6 +2389,9 @@ export default function App() {
   
   const [stageUp, setStageUp] = useState(null); // ステージアップ演出 { level, message }
   const [prevAccuracyLevel, setPrevAccuracyLevel] = useState(0); // 前回の精度レベル
+  const [fitterSearchArea, setFitterSearchArea] = useState("");
+  const [showPartners, setShowPartners] = useState(true);
+  const [typeDistribution, setTypeDistribution] = useState(null); // { FIX: 123, FIII: 98, ... , total: 800 }
   
   // ============================================
   // 質問出題設定
@@ -2713,6 +2776,39 @@ export default function App() {
       console.log("Failed to save result");
     }
     
+    // Persistent Storage: タイプ分布に記録 & 取得
+    (async () => {
+      try {
+        // 現在の分布を取得
+        let dist = {};
+        try {
+          const raw = await window.storage.get("type-distribution", true);
+          dist = raw ? JSON.parse(raw.value) : {};
+        } catch (e) {
+          dist = {};
+        }
+        // このセッションで既に記録済みか確認（重複防止）
+        const sessionKey = `voted-${Date.now().toString(36)}`;
+        let alreadyVoted = false;
+        try {
+          const voted = await window.storage.get("my-vote-id");
+          if (voted) alreadyVoted = true;
+        } catch (e) {}
+        
+        if (!alreadyVoted) {
+          dist[type] = (dist[type] || 0) + 1;
+          await window.storage.set("type-distribution", JSON.stringify(dist), true);
+          await window.storage.set("my-vote-id", sessionKey);
+        }
+        
+        // 分布データをstateに
+        const total = Object.values(dist).reduce((s, v) => s + v, 0);
+        setTypeDistribution({ ...dist, total });
+      } catch (e) {
+        console.log("Storage unavailable, using fallback");
+      }
+    })();
+    
     setMode("result");
   };
 
@@ -2723,6 +2819,15 @@ export default function App() {
       if (savedResult) {
         setResult(savedResult);
         setMode("result");
+        // 分布データも取得
+        (async () => {
+          try {
+            const raw = await window.storage.get("type-distribution", true);
+            const dist = raw ? JSON.parse(raw.value) : {};
+            const total = Object.values(dist).reduce((s, v) => s + v, 0);
+            setTypeDistribution({ ...dist, total });
+          } catch (e) {}
+        })();
       }
     };
     
@@ -3523,6 +3628,63 @@ export default function App() {
               })}
             </div>
             )}
+
+            {/* タイプ分布 */}
+            {(() => {
+              const fallback = { FIX: 45, FIII: 38, FOX: 42, FOII: 35, RIX: 40, RIII: 37, ROX: 43, ROII: 36, total: 316 };
+              const dist = typeDistribution && typeDistribution.total >= 10 ? typeDistribution : fallback;
+              const total = dist.total || Object.values(dist).reduce((s, v) => s + (typeof v === "number" ? v : 0), 0);
+              const types = ["FIX", "FIII", "FOX", "FOII", "RIX", "RIII", "ROX", "ROII"];
+              const maxCount = Math.max(...types.map(t => dist[t] || 0));
+              const myPct = total > 0 ? Math.round((dist[type] || 0) / total * 100) : 12;
+              const isReal = typeDistribution && typeDistribution.total >= 10;
+              
+              return (
+              <div style={{ marginTop: 20 }}>
+                <p style={{ color: C.textMuted, fontSize: 11, fontWeight: 700, margin: "0 0 12px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  タイプ分布 {isReal ? `(${total}人)` : ""}
+                </p>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  {types.map(t => {
+                    const count = dist[t] || 0;
+                    const pctVal = total > 0 ? Math.round(count / total * 100) : 12;
+                    const barW = maxCount > 0 ? Math.max(4, Math.round(count / maxCount * 100)) : 50;
+                    const isMine = t === type;
+                    const tInfo = getTypeInfo(sport, t);
+                    return (
+                      <div key={t} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <span style={{ 
+                          width: 48, fontSize: 11, fontWeight: isMine ? 800 : 500, textAlign: "right",
+                          color: isMine ? tInfo.color : C.textDim,
+                        }}>
+                          {tInfo.name.split("(")[0].trim()}
+                        </span>
+                        <div style={{ flex: 1, height: 14, background: `${C.textDim}08`, borderRadius: 7, overflow: "hidden", position: "relative" }}>
+                          <div style={{
+                            width: `${barW}%`, height: "100%", borderRadius: 7,
+                            background: isMine ? tInfo.color : `${C.textDim}25`,
+                            transition: "width 0.8s ease",
+                          }} />
+                        </div>
+                        <span style={{ 
+                          width: 32, fontSize: 11, fontWeight: isMine ? 700 : 500,
+                          color: isMine ? tInfo.color : C.textDim, textAlign: "right",
+                        }}>
+                          {pctVal}%
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+                <p style={{ color: C.textDim, fontSize: 10, margin: "8px 0 0", textAlign: "center" }}>
+                  {isReal 
+                    ? `あなたの${getTypeInfo(sport, type).name}は全体の${myPct}%`
+                    : "※ データ蓄積中のため参考値です"
+                  }
+                </p>
+              </div>
+              );
+            })()}
           </Card>
           
           {/* 僅差警告（残り質問あり） */}
@@ -4408,14 +4570,14 @@ export default function App() {
                 
                 // 8タイプ別の推奨傾向（数値ベースでブレンド可能に）
                 const adviceNumeric = {
-                  FIX:  { saddleMin: 5,   saddleMax: 15,  dropMin: -60, dropMax: -40, setbackMin: 5,   setbackMax: 15,  setbackDir: "前", crankMin: 165, crankMax: 170 },
-                  FIII: { saddleMin: 5,   saddleMax: 10,  dropMin: -50, dropMax: -30, setbackMin: 0,   setbackMax: 10,  setbackDir: "前", crankMin: 165, crankMax: 170 },
-                  FOX:  { saddleMin: -5,  saddleMax: 5,   dropMin: -55, dropMax: -35, setbackMin: 0,   setbackMax: 10,  setbackDir: "前", crankMin: 170, crankMax: 172.5 },
-                  FOII: { saddleMin: -5,  saddleMax: 5,   dropMin: -45, dropMax: -25, setbackMin: 0,   setbackMax: 10,  setbackDir: "前", crankMin: 170, crankMax: 175 },
-                  RIX:  { saddleMin: -5,  saddleMax: 5,   dropMin: -45, dropMax: -25, setbackMin: 0,   setbackMax: 5,   setbackDir: "後", crankMin: 170, crankMax: 170 },
-                  RIII: { saddleMin: 5,   saddleMax: 10,  dropMin: -50, dropMax: -30, setbackMin: 0,   setbackMax: 0,   setbackDir: "中", crankMin: 170, crankMax: 170 },
-                  ROX:  { saddleMin: -10, saddleMax: -5,  dropMin: -30, dropMax: -10, setbackMin: 5,   setbackMax: 15,  setbackDir: "後", crankMin: 170, crankMax: 172.5 },
-                  ROII: { saddleMin: -15, saddleMax: -5,  dropMin: -25, dropMax: -5,  setbackMin: 10,  setbackMax: 20,  setbackDir: "後", crankMin: 172.5, crankMax: 175 },
+                  FIX:  { saddleMin: 5,   saddleMax: 15,  dropMin: -60, dropMax: -40, setbackMin: 5,   setbackMax: 15,  setbackDir: "前", crankMin: 165, crankMax: 167.5 },
+                  FIII: { saddleMin: 5,   saddleMax: 10,  dropMin: -50, dropMax: -30, setbackMin: 0,   setbackMax: 10,  setbackDir: "前", crankMin: 165, crankMax: 167.5 },
+                  FOX:  { saddleMin: -5,  saddleMax: 5,   dropMin: -55, dropMax: -35, setbackMin: 0,   setbackMax: 10,  setbackDir: "前", crankMin: 165, crankMax: 170 },
+                  FOII: { saddleMin: -5,  saddleMax: 5,   dropMin: -45, dropMax: -25, setbackMin: 0,   setbackMax: 10,  setbackDir: "前", crankMin: 165, crankMax: 170 },
+                  RIX:  { saddleMin: -5,  saddleMax: 5,   dropMin: -45, dropMax: -25, setbackMin: 0,   setbackMax: 5,   setbackDir: "後", crankMin: 165, crankMax: 170 },
+                  RIII: { saddleMin: 5,   saddleMax: 10,  dropMin: -50, dropMax: -30, setbackMin: 0,   setbackMax: 0,   setbackDir: "中", crankMin: 165, crankMax: 170 },
+                  ROX:  { saddleMin: -10, saddleMax: -5,  dropMin: -30, dropMax: -10, setbackMin: 5,   setbackMax: 15,  setbackDir: "後", crankMin: 167.5, crankMax: 170 },
+                  ROII: { saddleMin: -15, saddleMax: -5,  dropMin: -25, dropMax: -5,  setbackMin: 10,  setbackMax: 20,  setbackDir: "後", crankMin: 167.5, crankMax: 172.5 },
                 };
                 
                 // スペクトラムに基づくブレンド
@@ -4502,7 +4664,40 @@ export default function App() {
                   setback: blended.setbackDir === "前" ? "前乗り" : blended.setbackDir === "後" ? "後ろ乗り" : "中央",
                   setbackAdj: fmtSetback(blended.setbackMin, blended.setbackMax, blended.setbackDir),
                   crank: "",
-                  crankAdj: fmtCrank(mainAdv.crankMin, mainAdv.crankMax),
+                  crankAdj: (() => {
+                    const inseam = parseFloat(bodyMetrics.inseam);
+                    const standards = [165, 167.5, 170, 172.5, 175];
+                    const snap = (v) => standards.reduce((a, b) => Math.abs(b - v) < Math.abs(a - v) ? b : a);
+                    
+                    const crankOffset = {
+                      FIX: -2.5, FIII: -2.5, FOX: 0, FOII: 0,
+                      RIX: 0, RIII: 0, ROX: 2.5, ROII: 2.5,
+                    };
+                    const crankReason = {
+                      FIX: "前傾で股関節が詰まらないよう短め",
+                      FIII: "前傾姿勢に合わせて短め",
+                      FOX: null,
+                      FOII: null,
+                      RIX: null,
+                      RIII: null,
+                      ROX: "体重を活かすレバーとしてやや長め",
+                      ROII: "トルク重視で長めのレバーを活用",
+                    };
+                    const cadenceAdj = cadence === "high" ? -2.5 : 0;
+                    const offset = (crankOffset[type] || 0) + cadenceAdj;
+                    
+                    if (inseam > 0) {
+                      const base = inseam * 10 * 0.200;
+                      const adjusted = base + offset;
+                      const snapped = snap(adjusted);
+                      const reasons = [];
+                      if (crankReason[type]) reasons.push(crankReason[type]);
+                      if (cadenceAdj) reasons.push("高回転型のためさらに短め");
+                      const reasonStr = reasons.length > 0 ? `（${reasons.join("。")}）` : "";
+                      return `${snapped}mm${reasonStr}`;
+                    }
+                    return fmtCrank(mainAdv.crankMin, mainAdv.crankMax);
+                  })(),
                   blendNotes,
                 };
                 
@@ -4601,10 +4796,17 @@ export default function App() {
                   <div style={{ background: C.bg, borderRadius: 12, padding: 14, ...neu.raised }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                       <span style={{ color: C.text, fontSize: 13, fontWeight: 700 }}>クランク長</span>
-                      <span style={{ color: typeInfo.color, fontSize: 14, fontWeight: 800 }}>{adv.crankAdj}</span>
+                      <span style={{ color: typeInfo.color, fontSize: 14, fontWeight: 800 }}>
+                        {adv.crankAdj.split("（")[0].split("mm")[0]}mm
+                      </span>
                     </div>
-                    <p style={{ color: C.textMuted, fontSize: 11, margin: 0 }}>
-                      現在 {currentCrank}mm → {typeInfo.name}は{adv.crank}
+                    <p style={{ color: C.textMuted, fontSize: 11, margin: 0, lineHeight: 1.5 }}>
+                      {bodyMetrics.inseam 
+                        ? adv.crankAdj.includes("（") 
+                          ? adv.crankAdj.split("（")[1].replace("）","")
+                          : `現在 ${currentCrank}mm`
+                        : `現在 ${currentCrank}mm（股下を入力するとより正確な推奨が出ます）`
+                      }
                     </p>
                   </div>
                   
@@ -4806,21 +5008,23 @@ export default function App() {
                 const adj = bodyTypeAdj[bodyMetrics.bodyType] || -0.003;
                 
                 const coefficients = {
-                  FIX:  { saddleMin: 0.875 + adj, saddleMax: 0.885 + adj, crankMin: 0.200, crankMax: 0.205, dropMin: -60, dropMax: -40 },
-                  FIII: { saddleMin: 0.875 + adj, saddleMax: 0.885 + adj, crankMin: 0.200, crankMax: 0.205, dropMin: -50, dropMax: -30 },
-                  FOX:  { saddleMin: 0.870 + adj, saddleMax: 0.880 + adj, crankMin: 0.205, crankMax: 0.210, dropMin: -55, dropMax: -35 },
-                  FOII: { saddleMin: 0.870 + adj, saddleMax: 0.880 + adj, crankMin: 0.205, crankMax: 0.215, dropMin: -45, dropMax: -25 },
-                  RIX:  { saddleMin: 0.870 + adj, saddleMax: 0.880 + adj, crankMin: 0.205, crankMax: 0.205, dropMin: -45, dropMax: -25 },
-                  RIII: { saddleMin: 0.875 + adj, saddleMax: 0.885 + adj, crankMin: 0.200, crankMax: 0.205, dropMin: -50, dropMax: -30 },
-                  ROX:  { saddleMin: 0.865 + adj, saddleMax: 0.875 + adj, crankMin: 0.205, crankMax: 0.210, dropMin: -30, dropMax: -10 },
-                  ROII: { saddleMin: 0.860 + adj, saddleMax: 0.870 + adj, crankMin: 0.205, crankMax: 0.215, dropMin: -25, dropMax: -5 },
+                  FIX:  { saddleMin: 0.875 + adj, saddleMax: 0.885 + adj, crankMin: 0.195, crankMax: 0.200, dropMin: -60, dropMax: -40 },
+                  FIII: { saddleMin: 0.875 + adj, saddleMax: 0.885 + adj, crankMin: 0.195, crankMax: 0.200, dropMin: -50, dropMax: -30 },
+                  FOX:  { saddleMin: 0.870 + adj, saddleMax: 0.880 + adj, crankMin: 0.197, crankMax: 0.203, dropMin: -55, dropMax: -35 },
+                  FOII: { saddleMin: 0.870 + adj, saddleMax: 0.880 + adj, crankMin: 0.197, crankMax: 0.203, dropMin: -45, dropMax: -25 },
+                  RIX:  { saddleMin: 0.870 + adj, saddleMax: 0.880 + adj, crankMin: 0.197, crankMax: 0.200, dropMin: -45, dropMax: -25 },
+                  RIII: { saddleMin: 0.875 + adj, saddleMax: 0.885 + adj, crankMin: 0.197, crankMax: 0.200, dropMin: -50, dropMax: -30 },
+                  ROX:  { saddleMin: 0.865 + adj, saddleMax: 0.875 + adj, crankMin: 0.200, crankMax: 0.205, dropMin: -30, dropMax: -10 },
+                  ROII: { saddleMin: 0.860 + adj, saddleMax: 0.870 + adj, crankMin: 0.200, crankMax: 0.207, dropMin: -25, dropMax: -5 },
                 };
                 const coef = coefficients[type];
                 
                 const saddleHeightMin = Math.round(inseam * 10 * coef.saddleMin);
                 const saddleHeightMax = Math.round(inseam * 10 * coef.saddleMax);
-                const crankLengthMin = Math.round(inseam * 10 * coef.crankMin);
-                const crankLengthMax = Math.round(inseam * 10 * coef.crankMax);
+                // ケイデンス補正: 高回転型は短め方向にシフト
+                const cadCrankAdj = cadence === "high" ? -0.003 : 0;
+                const crankLengthMin = Math.round(inseam * 10 * (coef.crankMin + cadCrankAdj));
+                const crankLengthMax = Math.round(inseam * 10 * (coef.crankMax + cadCrankAdj));
                 
                 // 肩幅タイプによるハンドル幅調整
                 const shoulderAdj = { wide: 20, standard: 0, narrow: -20 };
@@ -4884,8 +5088,17 @@ export default function App() {
                         {recommendedCrank}mm
                       </span>
                     </div>
-                    <p style={{ color: C.textMuted, fontSize: 11, margin: 0 }}>
-                      計算値: {crankLengthMin}〜{crankLengthMax}mm | {typeInfo.fitting.crank.length.detail}
+                    <p style={{ color: C.textMuted, fontSize: 11, margin: 0, lineHeight: 1.5 }}>
+                      {(() => {
+                        const reasons = [];
+                        const crankReasons = {
+                          FIX: "前傾で股関節が詰まらないよう短め", FIII: "前傾姿勢に合わせて短め",
+                          ROX: "体重を活かすレバーとしてやや長め", ROII: "トルク重視で長めのレバーを活用",
+                        };
+                        if (crankReasons[type]) reasons.push(crankReasons[type]);
+                        if (cadence === "high") reasons.push("高回転型のためさらに短め");
+                        return reasons.length > 0 ? reasons.join("。") : typeInfo.fitting.crank.length.detail;
+                      })()}
                     </p>
                   </div>
                   
@@ -5219,144 +5432,107 @@ export default function App() {
           {openSections.feel && (
           <Card style={{ marginTop: 0, borderTop: "none" }}>
             <p style={{ color: C.textMuted, fontSize: 12, margin: "0 0 16px", lineHeight: 1.5 }}>
-              曖昧なフィッティング用語を「体感できる言葉」に変換
+              よく聞くアドバイスが{typeInfo.name}タイプのあなたに合うかどうかを解説
             </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {BODY_FEEL_DICT.slice(0, 6).map((item, i) => (
-                <div key={i} style={{ 
-                  background: theme.bg, 
-                  borderRadius: 10, 
-                  padding: 12,
-                  borderLeft: `3px solid ${typeInfo.color}`
-                }}>
-                  <p style={{ color: C.textDim, fontSize: 11, margin: "0 0 4px", textDecoration: "line-through" }}>
-                    「{item.vague}」
-                  </p>
-                  {item.ng && (
-                    <p style={{ color: C.red, fontSize: 11, margin: "0 0 4px", lineHeight: 1.5 }}>
-                      ✗ NG: {item.ng}
+            {(() => {
+              // タイプから軸を判定
+              const axes = {
+                fr: type.startsWith("F") ? "F" : "R",
+                io: type.includes("I") && !type.includes("II") ? "I" : type.includes("O") ? "O" : (type.endsWith("III") || type.endsWith("RIII")) ? "I" : "I",
+                xp: type.endsWith("X") ? "X" : "II",
+              };
+              // 正確なI/O判定
+              const ioAxis = (type === "FIX" || type === "FIII" || type === "RIX" || type === "RIII") ? "I" : "O";
+              
+              const renderItem = (item, i) => {
+                // このワードに該当する軸のアドバイスを取得
+                const byType = item.byType;
+                const keys = Object.keys(byType);
+                let myAdvice = null;
+                let myFit = null;
+                
+                // F/R軸
+                if (byType.F && byType.R) {
+                  const k = axes.fr;
+                  myAdvice = byType[k].advice;
+                  myFit = byType[k].fit;
+                }
+                // I/O軸
+                else if (byType.I && byType.O) {
+                  myAdvice = byType[ioAxis].advice;
+                  myFit = byType[ioAxis].fit;
+                }
+                // X/II軸
+                else if (byType.X && byType.II) {
+                  const k = axes.xp;
+                  myAdvice = byType[k].advice;
+                  myFit = byType[k].fit;
+                }
+                
+                const fitColor = myFit === "◎" ? C.green : myFit === "○" ? C.cyan : C.orange;
+                
+                return (
+                  <div key={i} style={{ background: theme.bg, borderRadius: 10, padding: 12, borderLeft: `3px solid ${fitColor}` }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
+                      <p style={{ color: C.text, fontSize: 13, fontWeight: 700, margin: 0 }}>
+                        「{item.vague}」
+                      </p>
+                      <span style={{ 
+                        fontSize: 11, fontWeight: 700, color: fitColor,
+                        background: `${fitColor}15`, padding: "2px 8px", borderRadius: 8,
+                      }}>
+                        {myFit} {myFit === "◎" ? "合う" : myFit === "○" ? "やや合う" : "注意"}
+                      </span>
+                    </div>
+                    <p style={{ color: C.textMuted, fontSize: 11, margin: "0 0 6px", lineHeight: 1.5 }}>
+                      一般的: {item.general}
                     </p>
-                  )}
-                  <p style={{ color: C.text, fontSize: 13, fontWeight: 600, margin: "0 0 6px" }}>
-                    → {item.feel}
-                  </p>
-                  <p style={{ color: typeInfo.color, fontSize: 11, margin: 0 }}>
-                    ✓ 確認: {item.check}
-                  </p>
+                    {myAdvice && (
+                      <div style={{ padding: "8px 10px", background: `${fitColor}06`, borderRadius: 6, marginBottom: 6 }}>
+                        <p style={{ color: C.text, fontSize: 12, fontWeight: 600, margin: 0, lineHeight: 1.6 }}>
+                          {typeInfo.name}タイプ: {myAdvice}
+                        </p>
+                      </div>
+                    )}
+                    <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+                      {item.ng && (
+                        <p style={{ color: C.red, fontSize: 11, margin: 0, lineHeight: 1.5 }}>✗ {item.ng}</p>
+                      )}
+                      <p style={{ color: typeInfo.color, fontSize: 11, margin: 0 }}>✓ {item.check}</p>
+                    </div>
+                  </div>
+                );
+              };
+              
+              const items = BODY_FEEL_DICT;
+              return (
+                <>
+                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                  {items.slice(0, 6).map(renderItem)}
                 </div>
-              ))}
-            </div>
-            {!showAllBodyFeel && BODY_FEEL_DICT.length > 6 && (
-              <button
-                onClick={() => setShowAllBodyFeel(true)}
-                style={{
-                  width: "100%", marginTop: 12, padding: 10, borderRadius: 8,
-                  border: `1px solid ${theme.cardBorder}`, background: "transparent",
-                  color: C.textMuted, fontSize: 12, cursor: "pointer"
-                }}
-              >
-                もっと見る（+{BODY_FEEL_DICT.length - 6}語）
-              </button>
-            )}
-            {showAllBodyFeel && BODY_FEEL_DICT.slice(6).map((item, i) => (
-              <div key={i + 6} style={{ 
-                background: theme.bg, borderRadius: 10, padding: 12, marginTop: 10,
-                borderLeft: `3px solid ${typeInfo.color}`
-              }}>
-                <p style={{ color: C.textDim, fontSize: 11, margin: "0 0 4px", textDecoration: "line-through" }}>
-                  「{item.vague}」
-                </p>
-                {item.ng && (
-                  <p style={{ color: C.red, fontSize: 11, margin: "0 0 4px", lineHeight: 1.5 }}>
-                    ✗ NG: {item.ng}
-                  </p>
+                {!showAllBodyFeel && items.length > 6 && (
+                  <button
+                    onClick={() => setShowAllBodyFeel(true)}
+                    style={{
+                      width: "100%", marginTop: 12, padding: 10, borderRadius: 8,
+                      border: `1px solid ${theme.cardBorder}`, background: "transparent",
+                      color: C.textMuted, fontSize: 12, cursor: "pointer"
+                    }}
+                  >
+                    もっと見る（+{items.length - 6}語）
+                  </button>
                 )}
-                <p style={{ color: C.text, fontSize: 13, fontWeight: 600, margin: "0 0 6px" }}>
-                  → {item.feel}
-                </p>
-                <p style={{ color: typeInfo.color, fontSize: 11, margin: 0 }}>
-                  ✓ 確認: {item.check}
-                </p>
-              </div>
-            ))}
+                {showAllBodyFeel && (
+                  <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 10 }}>
+                    {items.slice(6).map((item, i) => renderItem(item, i + 6))}
+                  </div>
+                )}
+                </>
+              );
+            })()}
           </Card>
           )}
           
-          {/* 調整フローチャート */}
-          <Card style={{ marginTop: 16 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
-              {Icons.settings(typeInfo.color, 20)}
-              <p style={{ color: C.text, fontSize: 16, fontWeight: 700, margin: 0 }}>困ったときの調整ガイド</p>
-            </div>
-            
-            {/* タイプ別トラブルシュート */}
-            {TYPE_TROUBLESHOOT[type] && (
-            <div style={{ 
-              background: `${typeInfo.color}10`, 
-              borderRadius: 12, 
-              padding: 14, 
-              marginBottom: 16,
-              border: `1px solid ${typeInfo.color}20`
-            }}>
-              <p style={{ color: typeInfo.color, fontSize: 13, fontWeight: 700, margin: "0 0 8px" }}>
-                {typeInfo.name}で「{TYPE_TROUBLESHOOT[type].issue}」とき
-              </p>
-              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                {TYPE_TROUBLESHOOT[type].try.map((t, i) => (
-                  <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
-                    <span style={{ color: typeInfo.color, fontSize: 12, fontWeight: 700 }}>→</span>
-                    <p style={{ color: C.text, fontSize: 13, margin: 0 }}>{t}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-            )}
-            
-            {/* 症状別 */}
-            <p style={{ color: C.textMuted, fontSize: 12, margin: "0 0 12px" }}>
-              症状から調整ポイントを探す
-            </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {ADJUSTMENT_FLOW.map((flow, i) => (
-                <details key={i} style={{ background: theme.bg, borderRadius: 10, overflow: "hidden" }}>
-                  <summary style={{ 
-                    padding: 12, 
-                    cursor: "pointer", 
-                    color: C.text, 
-                    fontSize: 13, 
-                    fontWeight: 600,
-                    listStyle: "none",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8
-                  }}>
-                    <span style={{ color: C.orange }}>⚠</span> {flow.symptom}
-                  </summary>
-                  <div style={{ padding: "0 12px 12px" }}>
-                    <p style={{ color: C.textDim, fontSize: 11, margin: "0 0 8px" }}>
-                      原因: {flow.causes.join(" / ")}
-                    </p>
-                    {flow.fixes.map((fix, j) => (
-                      <div key={j} style={{ 
-                        padding: 10, 
-                        background: `${C.green}08`, 
-                        borderRadius: 8, 
-                        marginBottom: 6,
-                        border: `1px solid ${C.green}15`
-                      }}>
-                        <p style={{ color: C.text, fontSize: 12, fontWeight: 600, margin: "0 0 4px" }}>
-                          {fix.what}: {fix.action}
-                        </p>
-                        <p style={{ color: C.green, fontSize: 11, margin: 0 }}>
-                          ✓ 確認: {fix.check}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </details>
-              ))}
-            </div>
-          </Card>
           
           <button
             onClick={() => {
@@ -5380,7 +5556,7 @@ export default function App() {
           </button>
           
           
-          {/* フィッター紹介 */}
+          {/* フィッター検索 */}
           {sport === "cycling" && (
           <Card style={{ marginTop: 16 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
@@ -5396,73 +5572,149 @@ export default function App() {
                 {Icons.stanceCore(typeInfo.color, 28)}
               </div>
               <div>
-                <p style={{ color: C.text, fontSize: 16, fontWeight: 700, margin: 0 }}>プロのフィッティング</p>
+                <p style={{ color: C.text, fontSize: 16, fontWeight: 700, margin: 0 }}>フィッター検索</p>
                 <p style={{ color: C.textMuted, fontSize: 11, margin: 0 }}>あなたのタイプを活かすポジションへ</p>
               </div>
             </div>
             
             <p style={{ color: C.textMuted, fontSize: 13, margin: "0 0 16px", lineHeight: 1.7 }}>
               診断結果をさらに活かすなら、プロのバイクフィッターに相談してみませんか？
-              身体の使い方に合った最適なポジションを導き出してくれます。
             </p>
             
-            {/* フィッターリスト */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {[
-                { name: "ACTIVIKE", area: "東京", desc: "理学療法士による身体評価ベース", url: "https://activike.com/bikefitting_activike/", color: "#4A90D9" },
-                { name: "カミハギサイクル", area: "名古屋", desc: "Retül Fit対応・実績豊富", url: "https://kamihagi.com/retul/", color: "#E85A4F" },
-                { name: "ベックオン", area: "大阪", desc: "各種フィッティング対応", url: "https://beckon.jp/pages/bikefitting", color: "#F5A623" },
-                { name: "自転車のウエサカ", area: "中部", desc: "idmatch BIKELAB・複数資格保有", url: "http://jitensha-uesaka.sun.bindcloud.jp/idmatch/idmatchbikelab.html", color: "#7ED321" },
-                { name: "一条サイクル", area: "大阪・京都・兵庫", desc: "元プロMTBライダーによるフィッティング", url: "https://www.1jyo.com/enjoy-bike/36843", color: "#9B59B6" },
-              ].map((fitter, i) => (
-                <a
-                  key={i}
-                  href={fitter.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
+            {/* お近くのフィッターを探す（Google Maps） */}
+            {(() => {
+              
+              const partners = [
+                { name: "ACTIVIKE", area: "東京", pref: "東京都", desc: "理学療法士による身体評価ベースのフィッティング", url: "https://activike.com/bikefitting_activike/", color: "#4A90D9", partner: true },
+                { name: "カミハギサイクル", area: "名古屋", pref: "愛知県", desc: "Retül Fit対応。豊富な実績", url: "https://kamihagi.com/retul/", color: "#E85A4F", partner: true },
+                { name: "ベックオン", area: "大阪", pref: "大阪府", desc: "各種フィッティングに対応", url: "https://beckon.jp/pages/bikefitting", color: "#F5A623", partner: true },
+                { name: "自転車のウエサカ", area: "中部", pref: "岐阜県", desc: "idmatch BIKELAB・複数資格保有", url: "http://jitensha-uesaka.sun.bindcloud.jp/idmatch/idmatchbikelab.html", color: "#7ED321", partner: true },
+                { name: "一条サイクル", area: "大阪・京都・兵庫", pref: "大阪府", desc: "元プロMTBライダーによるフィッティング", url: "https://www.1jyo.com/enjoy-bike/36843", color: "#9B59B6", partner: true },
+              ];
+              
+              // 検索地域でフィルタ（空なら全表示）
+              const filtered = fitterSearchArea 
+                ? partners.filter(f => f.area.includes(fitterSearchArea) || f.pref.includes(fitterSearchArea) || f.name.includes(fitterSearchArea))
+                : partners;
+              
+              const openGoogleMaps = () => {
+                const query = fitterSearchArea 
+                  ? `バイクフィッティング ${fitterSearchArea}`
+                  : "バイクフィッティング";
+                window.open(`https://www.google.com/maps/search/${encodeURIComponent(query)}`, "_blank");
+              };
+              
+              return (
+              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                {/* 検索バー */}
+                <div style={{ display: "flex", gap: 8 }}>
+                  <input
+                    type="text"
+                    placeholder="地域を入力（例: 東京、大阪、名古屋）"
+                    value={fitterSearchArea}
+                    onChange={(e) => setFitterSearchArea(e.target.value)}
+                    style={{
+                      flex: 1, padding: "12px 14px", borderRadius: 10, border: "none",
+                      background: C.bg, color: C.text, fontSize: 14, ...neu.pressed, boxSizing: "border-box",
+                    }}
+                  />
+                  <button
+                    onClick={openGoogleMaps}
+                    style={{
+                      padding: "12px 16px", borderRadius: 10, border: "none",
+                      background: typeInfo.color, color: "#fff", fontSize: 12, fontWeight: 700,
+                      cursor: "pointer", whiteSpace: "nowrap",
+                    }}
+                  >
+                    MAP検索
+                  </button>
+                </div>
+                
+                {/* 提携フィッター */}
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 4 }}>
+                  <p style={{ color: C.text, fontSize: 13, fontWeight: 700, margin: 0 }}>
+                    提携フィッター {filtered.length > 0 && `(${filtered.length})`}
+                  </p>
+                  <button 
+                    onClick={() => setShowPartners(!showPartners)}
+                    style={{ background: "none", border: "none", color: C.textDim, fontSize: 11, cursor: "pointer" }}
+                  >
+                    {showPartners ? "▲ 閉じる" : "▼ 開く"}
+                  </button>
+                </div>
+                
+                {showPartners && (
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  {filtered.length > 0 ? filtered.map((fitter, i) => (
+                    <a
+                      key={i}
+                      href={fitter.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: "flex", alignItems: "center", justifyContent: "space-between",
+                        padding: "14px 16px", borderRadius: 12,
+                        background: theme.bg, border: `1px solid ${theme.cardBorder}`,
+                        textDecoration: "none", transition: "all 0.2s ease",
+                      }}
+                    >
+                      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                        <div style={{ width: 8, height: 8, borderRadius: "50%", background: fitter.color }} />
+                        <div>
+                          <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                            <p style={{ color: C.text, fontSize: 14, fontWeight: 700, margin: 0 }}>{fitter.name}</p>
+                            <span style={{ color: C.textDim, fontSize: 10, background: `${C.textDim}15`, padding: "2px 8px", borderRadius: 10 }}>
+                              {fitter.area}
+                            </span>
+                            {fitter.partner && (
+                              <span style={{ color: typeInfo.color, fontSize: 9, fontWeight: 700, background: `${typeInfo.color}15`, padding: "2px 6px", borderRadius: 8 }}>
+                                提携
+                              </span>
+                            )}
+                          </div>
+                          <p style={{ color: C.textMuted, fontSize: 11, margin: "4px 0 0" }}>{fitter.desc}</p>
+                        </div>
+                      </div>
+                      <div style={{ color: C.textDim, flexShrink: 0 }}>
+                        {Icons.arrowRight(C.textDim, 16)}
+                      </div>
+                    </a>
+                  )) : (
+                    <div style={{ padding: 16, textAlign: "center", background: theme.bg, borderRadius: 12 }}>
+                      <p style={{ color: C.textMuted, fontSize: 13, margin: "0 0 8px" }}>
+                        「{fitterSearchArea}」の提携フィッターはまだありません
+                      </p>
+                      <p style={{ color: C.textDim, fontSize: 11, margin: 0 }}>
+                        MAP検索で近くのフィッティングサービスを探してみてください
+                      </p>
+                    </div>
+                  )}
+                </div>
+                )}
+                
+                {/* Google Maps全体検索ボタン */}
+                <button
+                  onClick={openGoogleMaps}
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    padding: "14px 16px",
-                    borderRadius: 12,
-                    background: theme.bg,
-                    border: `1px solid ${theme.cardBorder}`,
-                    textDecoration: "none",
-                    transition: "all 0.2s ease",
+                    display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                    width: "100%", padding: "14px", borderRadius: 12,
+                    border: `1px solid ${typeInfo.color}30`, background: `${typeInfo.color}06`,
+                    color: typeInfo.color, fontSize: 14, fontWeight: 700, cursor: "pointer",
                   }}
                 >
-                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                    <div style={{
-                      width: 8,
-                      height: 8,
-                      borderRadius: "50%",
-                      background: fitter.color,
-                    }} />
-                    <div>
-                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <p style={{ color: C.text, fontSize: 14, fontWeight: 700, margin: 0 }}>{fitter.name}</p>
-                        <span style={{ 
-                          color: C.textDim, 
-                          fontSize: 10, 
-                          background: `${C.textDim}15`,
-                          padding: "2px 8px",
-                          borderRadius: 10,
-                        }}>{fitter.area}</span>
-                      </div>
-                      <p style={{ color: C.textMuted, fontSize: 11, margin: "4px 0 0" }}>{fitter.desc}</p>
-                    </div>
-                  </div>
-                  <div style={{ color: C.textDim }}>
-                    {Icons.arrowRight(C.textDim, 16)}
-                  </div>
-                </a>
-              ))}
-            </div>
-            
-            <p style={{ color: C.textDim, fontSize: 10, margin: "16px 0 0", textAlign: "center", lineHeight: 1.5 }}>
-              ※ 各店舗の予約・詳細は直接お問い合わせください
-            </p>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="2"/>
+                  </svg>
+                  {fitterSearchArea ? `「${fitterSearchArea}」でGoogle Maps検索` : "Google Mapsでフィッターを探す"}
+                </button>
+                
+                <p style={{ color: C.textDim, fontSize: 10, margin: "4px 0 0", textAlign: "center", lineHeight: 1.5 }}>
+                  ※ 提携フィッターは随時追加中です。掲載希望の方はお問い合わせください
+                </p>
+              </div>
+              );
+            })()}
           </Card>
           )}
           
