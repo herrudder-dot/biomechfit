@@ -4501,9 +4501,8 @@ export default function App() {
                   dropRange: `${blended.dropMin}〜${blended.dropMax}mm`,
                   setback: blended.setbackDir === "前" ? "前乗り" : blended.setbackDir === "後" ? "後ろ乗り" : "中央",
                   setbackAdj: fmtSetback(blended.setbackMin, blended.setbackMax, blended.setbackDir),
-                  setbackWhy: adviceWhy[type],
                   crank: "",
-                  crankAdj: fmtCrank(blended.crankMin, blended.crankMax),
+                  crankAdj: fmtCrank(mainAdv.crankMin, mainAdv.crankMax),
                   blendNotes,
                 };
                 
