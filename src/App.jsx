@@ -271,108 +271,187 @@ const GEAR_TENDENCIES = {
   ROII: { saddle: "ラウンド・幅広・クッション多め", pedal: "安定性重視", shoes: "快適フィット", bartape: "厚手で振動吸収" },
 };
 
-// シェア画像生成（Canvas）
+// シェア画像生成（Canvas - リッチデザイン）
 const generateShareImage = async (typeInfo, type, spectrum, confidence) => {
   const W = 1200, H = 630;
   const canvas = document.createElement("canvas");
   canvas.width = W; canvas.height = H;
   const ctx = canvas.getContext("2d");
+  const color = typeInfo.color;
   
-  // 背景
-  ctx.fillStyle = "#0F0F0F";
+  // ── 背景グラデーション ──
+  const bgGrad = ctx.createLinearGradient(0, 0, W, H);
+  bgGrad.addColorStop(0, "#0a0a0a");
+  bgGrad.addColorStop(1, "#141414");
+  ctx.fillStyle = bgGrad;
   ctx.fillRect(0, 0, W, H);
   
-  // アクセントライン
-  ctx.fillStyle = typeInfo.color;
-  ctx.fillRect(0, 0, W, 4);
+  // ── 装飾：大きな円形シンボル（右側） ──
+  const cx = W - 200, cy = H / 2;
+  // 外側グロー
+  const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, 260);
+  glow.addColorStop(0, color + "20");
+  glow.addColorStop(0.6, color + "08");
+  glow.addColorStop(1, "transparent");
+  ctx.fillStyle = glow;
+  ctx.fillRect(cx - 260, cy - 260, 520, 520);
   
-  // STANCE CORE ロゴテキスト
-  ctx.fillStyle = "#666";
-  ctx.font = "600 16px sans-serif";
-  ctx.fillText("STANCE CORE", 60, 50);
+  // 同心円
+  [200, 150, 100].forEach((r, i) => {
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.strokeStyle = color;
+    ctx.globalAlpha = 0.08 + i * 0.04;
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  });
+  ctx.globalAlpha = 1;
   
-  // タイプ名
-  ctx.fillStyle = typeInfo.color;
-  ctx.font = "800 72px sans-serif";
-  ctx.fillText(type, 60, 160);
+  // タイプシンボル（中央の大文字）
+  ctx.fillStyle = color;
+  ctx.globalAlpha = 0.12;
+  ctx.font = "900 180px sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText(type.charAt(0), cx, cy + 60);
+  ctx.globalAlpha = 1;
+  ctx.textAlign = "left";
   
-  // サブタイトル
-  ctx.fillStyle = "#999";
-  ctx.font = "500 24px sans-serif";
-  ctx.fillText(typeInfo.sub || "", 60, 200);
+  // ── 上部アクセントライン ──
+  const lineGrad = ctx.createLinearGradient(0, 0, 400, 0);
+  lineGrad.addColorStop(0, color);
+  lineGrad.addColorStop(1, color + "00");
+  ctx.fillStyle = lineGrad;
+  ctx.fillRect(0, 0, 400, 3);
   
-  // 説明
-  ctx.fillStyle = "#ccc";
-  ctx.font = "400 20px sans-serif";
+  // ── STANCE CORE ロゴ ──
+  ctx.fillStyle = "#555";
+  ctx.font = "700 13px sans-serif";
+  ctx.letterSpacing = "2px";
+  ctx.fillText("S T A N C E   C O R E", 60, 48);
+  
+  // ── タイプ名（大） ──
+  ctx.fillStyle = color;
+  ctx.font = "900 80px sans-serif";
+  ctx.fillText(type, 60, 150);
+  
+  // タイプ名の横にドット装飾
+  const typeW = ctx.measureText(type).width;
+  ctx.beginPath();
+  ctx.arc(60 + typeW + 20, 130, 6, 0, Math.PI * 2);
+  ctx.fillStyle = color;
+  ctx.fill();
+  
+  // ── サブタイトル ──
+  ctx.fillStyle = "#888";
+  ctx.font = "500 22px sans-serif";
+  ctx.fillText(typeInfo.sub || "", 60, 190);
+  
+  // ── 3つの特性タグ ──
+  const traits = typeInfo.traits || [];
+  let tagX = 60;
+  ctx.font = "600 14px sans-serif";
+  traits.slice(0, 3).forEach(trait => {
+    const tw = ctx.measureText(trait).width;
+    // タグ背景
+    ctx.fillStyle = color + "18";
+    ctx.fillRect(tagX, 210, tw + 20, 28);
+    // 左ボーダー
+    ctx.fillStyle = color;
+    ctx.fillRect(tagX, 210, 2, 28);
+    // テキスト
+    ctx.fillStyle = color;
+    ctx.fillText(trait, tagX + 12, 229);
+    tagX += tw + 32;
+  });
+  
+  // ── 説明文 ──
+  ctx.fillStyle = "#aaa";
+  ctx.font = "400 18px sans-serif";
   const desc = typeInfo.description || "";
-  const maxW = W - 120;
-  let line = "", y = 260;
+  const maxDescW = 640;
+  let line = "", descY = 280;
   for (const ch of desc) {
     line += ch;
-    if (ctx.measureText(line).width > maxW) {
-      ctx.fillText(line.slice(0, -1), 60, y);
-      line = ch; y += 32;
-      if (y > 320) break;
+    if (ctx.measureText(line).width > maxDescW) {
+      ctx.fillText(line.slice(0, -1), 60, descY);
+      line = ch; descY += 28;
+      if (descY > 330) break;
     }
   }
-  if (line && y <= 320) ctx.fillText(line, 60, y);
+  if (line && descY <= 330) ctx.fillText(line, 60, descY);
   
-  // スペクトラムバー
+  // ── スペクトラムバー（左半分） ──
   if (spectrum) {
     const bars = [
-      { left: "F", right: "R", value: spectrum.fr, colors: ["#FF6B35", "#06B6D4"] },
-      { left: "I", right: "O", value: spectrum.io, colors: ["#10B981", "#EC4899"] },
-      { left: "X", right: "II", value: spectrum.xp, colors: ["#EC4899", "#3B82F6"] },
+      { left: "F", right: "R", value: spectrum.fr, colors: ["#FF6B35", "#06B6D4"], full: ["前体幹", "後体幹"] },
+      { left: "I", right: "O", value: spectrum.io, colors: ["#10B981", "#EC4899"], full: ["内側荷重", "外側荷重"] },
+      { left: "X", right: "II", value: spectrum.xp, colors: ["#EC4899", "#3B82F6"], full: ["クロス", "パラレル"] },
     ];
-    const barY = 380;
-    const barW = W - 120;
-    const barH = 16;
+    const barStartY = 380;
+    const barW = 520;
+    const barH = 12;
     
     bars.forEach((bar, i) => {
-      const cy = barY + i * 60;
+      const by = barStartY + i * 58;
       
-      // ラベル
-      ctx.fillStyle = bar.value >= 50 ? bar.colors[0] : "#666";
-      ctx.font = bar.value >= 50 ? "700 18px sans-serif" : "500 18px sans-serif";
+      // ラベル（左）
+      const isLeftDominant = bar.value >= 50;
+      ctx.font = isLeftDominant ? "800 16px sans-serif" : "400 16px sans-serif";
+      ctx.fillStyle = isLeftDominant ? bar.colors[0] : "#555";
       ctx.textAlign = "left";
-      ctx.fillText(bar.left, 60, cy - 8);
+      ctx.fillText(`${bar.left}`, 60, by - 6);
+      ctx.font = "400 11px sans-serif";
+      ctx.fillStyle = "#555";
+      ctx.fillText(bar.full[0], 60 + ctx.measureText(bar.left + " ").width + 8, by - 6);
       
-      ctx.fillStyle = bar.value < 50 ? bar.colors[1] : "#666";
-      ctx.font = bar.value < 50 ? "700 18px sans-serif" : "500 18px sans-serif";
+      // ラベル（右）
       ctx.textAlign = "right";
-      ctx.fillText(bar.right, W - 60, cy - 8);
-      ctx.textAlign = "left";
+      ctx.font = !isLeftDominant ? "800 16px sans-serif" : "400 16px sans-serif";
+      ctx.fillStyle = !isLeftDominant ? bar.colors[1] : "#555";
+      ctx.fillText(`${bar.right}`, 60 + barW, by - 6);
       
       // バー背景
-      ctx.fillStyle = "#222";
-      ctx.fillRect(60, cy, barW, barH);
+      ctx.fillStyle = "#1a1a1a";
+      ctx.fillRect(60, by + 2, barW, barH);
       
       // 左バー
       const leftW = barW * bar.value / 100;
-      ctx.globalAlpha = 0.85;
       ctx.fillStyle = bar.colors[0];
-      ctx.fillRect(60, cy, leftW, barH);
+      ctx.globalAlpha = 0.8;
+      ctx.fillRect(60, by + 2, leftW, barH);
       
       // 右バー
       ctx.fillStyle = bar.colors[1];
-      ctx.fillRect(60 + leftW, cy, barW - leftW, barH);
+      ctx.fillRect(60 + leftW, by + 2, barW - leftW, barH);
       ctx.globalAlpha = 1;
       
       // パーセント
-      ctx.fillStyle = "#888";
-      ctx.font = "600 13px sans-serif";
-      ctx.fillText(bar.value + "%", 60, cy + barH + 18);
+      ctx.font = "700 12px sans-serif";
+      ctx.textAlign = "left";
+      ctx.fillStyle = isLeftDominant ? bar.colors[0] : "#444";
+      ctx.fillText(bar.value + "%", 60, by + barH + 18);
       ctx.textAlign = "right";
-      ctx.fillText((100 - bar.value) + "%", W - 60, cy + barH + 18);
+      ctx.fillStyle = !isLeftDominant ? bar.colors[1] : "#444";
+      ctx.fillText((100 - bar.value) + "%", 60 + barW, by + barH + 18);
       ctx.textAlign = "left";
     });
   }
   
+  // ── 下部フッター ──
+  // セパレータ
+  ctx.fillStyle = "#222";
+  ctx.fillRect(60, H - 55, W - 120, 1);
+  
   // URL
-  ctx.fillStyle = "#555";
-  ctx.font = "500 16px sans-serif";
+  ctx.fillStyle = "#444";
+  ctx.font = "500 14px sans-serif";
+  ctx.fillText("stancecore.vercel.app", 60, H - 25);
+  
+  // 右下にタイプカラードット
   ctx.textAlign = "right";
-  ctx.fillText("stancecore.vercel.app", W - 60, H - 30);
+  ctx.fillStyle = "#333";
+  ctx.font = "400 13px sans-serif";
+  ctx.fillText("Cyclist Body Type Diagnosis", W - 60, H - 25);
   ctx.textAlign = "left";
   
   return canvas.toDataURL("image/png");
