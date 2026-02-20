@@ -438,7 +438,7 @@ const generateShareImage = async (typeInfo, type, spectrum, confidence) => {
   
   ctx.fillStyle = "#aaa";
   ctx.font = "500 14px sans-serif";
-  ctx.fillText("stancecore.vercel.app", 60, H - 25);
+  ctx.fillText("stancecore.com", 60, H - 25);
   
   ctx.textAlign = "right";
   ctx.fillStyle = "#bbb";
@@ -2496,6 +2496,7 @@ export default function App() {
   const [resultHistory, setResultHistory] = useState([]);
   const [showComparison, setShowComparison] = useState(false);
   const [extraRoundDone, setExtraRoundDone] = useState(false);
+  const [openChecks, setOpenChecks] = useState({});
   const [showHistory, setShowHistory] = useState(false); // 回答履歴表示
   const [showAllBodyFeel, setShowAllBodyFeel] = useState(false);
   const [openSections, setOpenSections] = useState({ body: true, fitting: true, selfCheck: true, hill: false, ride: false, feel: false, gear: false });
@@ -4196,19 +4197,30 @@ export default function App() {
                   {typeof typeInfo.bodyMechanics.trunk.detail === "string" ? typeInfo.bodyMechanics.trunk.detail : typeInfo.bodyMechanics.trunk.detail.ok}
                 </p>
                 {typeof typeInfo.bodyMechanics.trunk.detail === "object" && (
-                  <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 4 }}>
-                    <div style={{ padding: "6px 10px", background: `${C.red}08`, borderLeft: `3px solid ${C.red}40`, borderRadius: 4 }}>
-                      <span style={{ color: C.red, fontSize: 10, fontWeight: 700 }}>NG </span>
-                      <span style={{ color: C.textMuted, fontSize: 11 }}>{typeInfo.bodyMechanics.trunk.detail.ng}</span>
+                  <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
+                    <div style={{ padding: "10px 12px", background: `${C.green}10`, borderLeft: `3px solid ${C.green}`, borderRadius: 6 }}>
+                      <span style={{ color: C.green, fontSize: 11, fontWeight: 700, display: "block", marginBottom: 3 }}>✓ 正しい動き</span>
+                      <span style={{ color: C.text, fontSize: 13, lineHeight: 1.6 }}>{typeInfo.bodyMechanics.trunk.detail.ok}</span>
                     </div>
-                    <div style={{ padding: "6px 10px", background: `${C.green}08`, borderLeft: `3px solid ${C.green}40`, borderRadius: 4 }}>
-                      <span style={{ color: C.green, fontSize: 10, fontWeight: 700 }}>OK </span>
-                      <span style={{ color: C.textMuted, fontSize: 11 }}>{typeInfo.bodyMechanics.trunk.detail.ok}</span>
+                    <div 
+                      onClick={(e) => { e.stopPropagation(); setOpenChecks(prev => ({ ...prev, trunk: !prev.trunk })); }}
+                      style={{ padding: "6px 10px", background: `${C.textDim}06`, borderRadius: 6, cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center" }}
+                    >
+                      <span style={{ color: C.textDim, fontSize: 11 }}>NG例・セルフチェック</span>
+                      <span style={{ color: C.textDim, fontSize: 10 }}>{openChecks.trunk ? "▲" : "▼"}</span>
                     </div>
-                    <div style={{ padding: "6px 10px", background: `${typeInfo.color}08`, borderLeft: `3px solid ${typeInfo.color}40`, borderRadius: 4 }}>
-                      <span style={{ color: typeInfo.color, fontSize: 10, fontWeight: 700 }}>CHECK </span>
-                      <span style={{ color: C.textMuted, fontSize: 11 }}>{typeInfo.bodyMechanics.trunk.detail.check}</span>
-                    </div>
+                    {openChecks.trunk && (
+                      <div style={{ display: "flex", flexDirection: "column", gap: 4, paddingLeft: 8 }}>
+                        <div style={{ padding: "6px 10px", borderLeft: `2px solid ${C.red}30`, borderRadius: 4 }}>
+                          <span style={{ color: C.red, fontSize: 10, fontWeight: 600, opacity: 0.7 }}>NG </span>
+                          <span style={{ color: C.textDim, fontSize: 11 }}>{typeInfo.bodyMechanics.trunk.detail.ng}</span>
+                        </div>
+                        <div style={{ padding: "6px 10px", borderLeft: `2px solid ${typeInfo.color}30`, borderRadius: 4 }}>
+                          <span style={{ color: typeInfo.color, fontSize: 10, fontWeight: 600, opacity: 0.7 }}>CHECK </span>
+                          <span style={{ color: C.textDim, fontSize: 11 }}>{typeInfo.bodyMechanics.trunk.detail.check}</span>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -4231,18 +4243,29 @@ export default function App() {
                     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                       {typeInfo.bodyMechanics.movement.感覚.map((s, i) => (
                         <div key={i} style={{ borderRadius: 8, overflow: "hidden" }}>
-                          <div style={{ padding: "6px 10px", background: `${C.red}08`, borderLeft: `3px solid ${C.red}40` }}>
-                            <p style={{ color: C.red, fontSize: 10, fontWeight: 700, margin: "0 0 1px" }}>NG</p>
-                            <p style={{ color: C.textMuted, fontSize: 12, margin: 0, lineHeight: 1.5 }}>{s.ng}</p>
+                          <div style={{ padding: "10px 12px", background: `${C.green}10`, borderLeft: `3px solid ${C.green}`, borderRadius: 6, marginBottom: 4 }}>
+                            <p style={{ color: C.green, fontSize: 11, fontWeight: 700, margin: "0 0 3px" }}>✓ 正しい動き</p>
+                            <p style={{ color: C.text, fontSize: 13, margin: 0, lineHeight: 1.6 }}>{s.ok}</p>
                           </div>
-                          <div style={{ padding: "6px 10px", background: `${C.green}08`, borderLeft: `3px solid ${C.green}40` }}>
-                            <p style={{ color: C.green, fontSize: 10, fontWeight: 700, margin: "0 0 1px" }}>OK</p>
-                            <p style={{ color: C.textMuted, fontSize: 12, margin: 0, lineHeight: 1.5 }}>{s.ok}</p>
+                          <div 
+                            onClick={(e) => { e.stopPropagation(); setOpenChecks(prev => ({ ...prev, [`mv${i}`]: !prev[`mv${i}`] })); }}
+                            style={{ padding: "6px 10px", background: `${C.textDim}06`, borderRadius: 6, cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 2 }}
+                          >
+                            <span style={{ color: C.textDim, fontSize: 11 }}>NG例・セルフチェック</span>
+                            <span style={{ color: C.textDim, fontSize: 10 }}>{openChecks[`mv${i}`] ? "▲" : "▼"}</span>
                           </div>
-                          <div style={{ padding: "6px 10px", background: `${typeInfo.color}08`, borderLeft: `3px solid ${typeInfo.color}40` }}>
-                            <p style={{ color: typeInfo.color, fontSize: 10, fontWeight: 700, margin: "0 0 1px" }}>CHECK</p>
-                            <p style={{ color: C.textMuted, fontSize: 12, margin: 0, lineHeight: 1.5 }}>{s.check}</p>
-                          </div>
+                          {openChecks[`mv${i}`] && (
+                            <div style={{ display: "flex", flexDirection: "column", gap: 4, paddingLeft: 8 }}>
+                              <div style={{ padding: "6px 10px", borderLeft: `2px solid ${C.red}30`, borderRadius: 4 }}>
+                                <span style={{ color: C.red, fontSize: 10, fontWeight: 600, opacity: 0.7 }}>NG </span>
+                                <span style={{ color: C.textDim, fontSize: 11 }}>{s.ng}</span>
+                              </div>
+                              <div style={{ padding: "6px 10px", borderLeft: `2px solid ${typeInfo.color}30`, borderRadius: 4 }}>
+                                <span style={{ color: typeInfo.color, fontSize: 10, fontWeight: 600, opacity: 0.7 }}>CHECK </span>
+                                <span style={{ color: C.textDim, fontSize: 11 }}>{s.check}</span>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       ))}
                     </div>
@@ -4263,19 +4286,30 @@ export default function App() {
                             <span style={{ color: C.text, fontSize: 12 }}>{typeof val === "string" ? val : val.label}</span>
                           </div>
                           {typeof val === "object" && val.ng && (
-                            <div style={{ display: "flex", flexDirection: "column", gap: 3, marginBottom: 6 }}>
-                              <div style={{ padding: "4px 8px", background: `${C.red}08`, borderLeft: `2px solid ${C.red}40`, borderRadius: 4 }}>
-                                <span style={{ color: C.red, fontSize: 10, fontWeight: 700 }}>NG </span>
-                                <span style={{ color: C.textMuted, fontSize: 11 }}>{val.ng}</span>
+                            <div style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 6 }}>
+                              <div style={{ padding: "8px 10px", background: `${C.green}10`, borderLeft: `3px solid ${C.green}`, borderRadius: 6 }}>
+                                <span style={{ color: C.green, fontSize: 10, fontWeight: 700 }}>✓ </span>
+                                <span style={{ color: C.text, fontSize: 12 }}>{val.ok}</span>
                               </div>
-                              <div style={{ padding: "4px 8px", background: `${C.green}08`, borderLeft: `2px solid ${C.green}40`, borderRadius: 4 }}>
-                                <span style={{ color: C.green, fontSize: 10, fontWeight: 700 }}>OK </span>
-                                <span style={{ color: C.textMuted, fontSize: 11 }}>{val.ok}</span>
+                              <div 
+                                onClick={(e) => { e.stopPropagation(); setOpenChecks(prev => ({ ...prev, [`lb_${key}`]: !prev[`lb_${key}`] })); }}
+                                style={{ padding: "4px 8px", background: `${C.textDim}06`, borderRadius: 4, cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center" }}
+                              >
+                                <span style={{ color: C.textDim, fontSize: 10 }}>NG例・チェック</span>
+                                <span style={{ color: C.textDim, fontSize: 9 }}>{openChecks[`lb_${key}`] ? "▲" : "▼"}</span>
                               </div>
-                              <div style={{ padding: "4px 8px", background: `${typeInfo.color}08`, borderLeft: `2px solid ${typeInfo.color}40`, borderRadius: 4 }}>
-                                <span style={{ color: typeInfo.color, fontSize: 10, fontWeight: 700 }}>CHECK </span>
-                                <span style={{ color: C.textMuted, fontSize: 11 }}>{val.check}</span>
-                              </div>
+                              {openChecks[`lb_${key}`] && (
+                                <div style={{ display: "flex", flexDirection: "column", gap: 3, paddingLeft: 6 }}>
+                                  <div style={{ padding: "4px 8px", borderLeft: `2px solid ${C.red}30`, borderRadius: 4 }}>
+                                    <span style={{ color: C.red, fontSize: 10, fontWeight: 600, opacity: 0.7 }}>NG </span>
+                                    <span style={{ color: C.textDim, fontSize: 11 }}>{val.ng}</span>
+                                  </div>
+                                  <div style={{ padding: "4px 8px", borderLeft: `2px solid ${typeInfo.color}30`, borderRadius: 4 }}>
+                                    <span style={{ color: typeInfo.color, fontSize: 10, fontWeight: 600, opacity: 0.7 }}>CHECK </span>
+                                    <span style={{ color: C.textDim, fontSize: 11 }}>{val.check}</span>
+                                  </div>
+                                </div>
+                              )}
                             </div>
                           )}
                         </div>
@@ -5267,22 +5301,33 @@ export default function App() {
             
             {(() => {
               const guide = TECHNIQUE_GUIDE[type];
-              const ngOkCheck = (item) => typeof item.value === "string" ? (
+              const ngOkCheck = (item, itemKey) => typeof item.value === "string" ? (
                 <p style={{ color: C.text, fontSize: 13, margin: 0, lineHeight: 1.5 }}>{item.value}</p>
               ) : (
-                <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
-                  <div style={{ padding: "4px 8px", background: `${C.red}08`, borderLeft: `2px solid ${C.red}40`, borderRadius: 4 }}>
-                    <span style={{ color: C.red, fontSize: 10, fontWeight: 700 }}>NG </span>
-                    <span style={{ color: C.textMuted, fontSize: 11 }}>{item.value.ng}</span>
+                <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                  <div style={{ padding: "8px 10px", background: `${C.green}10`, borderLeft: `3px solid ${C.green}`, borderRadius: 6 }}>
+                    <span style={{ color: C.green, fontSize: 10, fontWeight: 700 }}>✓ </span>
+                    <span style={{ color: C.text, fontSize: 12 }}>{item.value.ok}</span>
                   </div>
-                  <div style={{ padding: "4px 8px", background: `${C.green}08`, borderLeft: `2px solid ${C.green}40`, borderRadius: 4 }}>
-                    <span style={{ color: C.green, fontSize: 10, fontWeight: 700 }}>OK </span>
-                    <span style={{ color: C.textMuted, fontSize: 11 }}>{item.value.ok}</span>
+                  <div 
+                    onClick={(e) => { e.stopPropagation(); setOpenChecks(prev => ({ ...prev, [`tg_${itemKey}`]: !prev[`tg_${itemKey}`] })); }}
+                    style={{ padding: "4px 8px", background: `${C.textDim}06`, borderRadius: 4, cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center" }}
+                  >
+                    <span style={{ color: C.textDim, fontSize: 10 }}>NG例・チェック</span>
+                    <span style={{ color: C.textDim, fontSize: 9 }}>{openChecks[`tg_${itemKey}`] ? "▲" : "▼"}</span>
                   </div>
-                  <div style={{ padding: "4px 8px", background: `${typeInfo.color}08`, borderLeft: `2px solid ${typeInfo.color}40`, borderRadius: 4 }}>
-                    <span style={{ color: typeInfo.color, fontSize: 10, fontWeight: 700 }}>CHECK </span>
-                    <span style={{ color: C.textMuted, fontSize: 11 }}>{item.value.check}</span>
-                  </div>
+                  {openChecks[`tg_${itemKey}`] && (
+                    <div style={{ display: "flex", flexDirection: "column", gap: 3, paddingLeft: 6 }}>
+                      <div style={{ padding: "4px 8px", borderLeft: `2px solid ${C.red}30`, borderRadius: 4 }}>
+                        <span style={{ color: C.red, fontSize: 10, fontWeight: 600, opacity: 0.7 }}>NG </span>
+                        <span style={{ color: C.textDim, fontSize: 11 }}>{item.value.ng}</span>
+                      </div>
+                      <div style={{ padding: "4px 8px", borderLeft: `2px solid ${typeInfo.color}30`, borderRadius: 4 }}>
+                        <span style={{ color: typeInfo.color, fontSize: 10, fontWeight: 600, opacity: 0.7 }}>CHECK </span>
+                        <span style={{ color: C.textDim, fontSize: 11 }}>{item.value.check}</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               );
               
@@ -5320,7 +5365,7 @@ export default function App() {
                     ].map(item => (
                       <div key={item.label}>
                         <p style={{ color: C.textMuted, fontSize: 11, fontWeight: 600, margin: "0 0 2px" }}>{item.label}</p>
-                        {ngOkCheck(item)}
+                        {ngOkCheck(item, item.label)}
                       </div>
                     ))}
                   </div>
@@ -5387,7 +5432,7 @@ export default function App() {
                     ].map(item => (
                       <div key={item.label}>
                         <p style={{ color: C.textMuted, fontSize: 11, fontWeight: 600, margin: "0 0 2px" }}>{item.label}</p>
-                        {ngOkCheck(item)}
+                        {ngOkCheck(item, item.label)}
                       </div>
                     ))}
                   </div>
