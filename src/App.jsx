@@ -257,83 +257,197 @@ const neu = {
 
 
 // ========================================
-// サイクリング機材データベース
 // ========================================
-const CYCLING_GEAR_DB = [
-  // === サドル ===
-  // F-I向け（前乗り・ショートノーズ）
-  { id: "power-arc", name: "Specialized Power Arc", brand: "Specialized", price: 28000, category: "saddle",
-    style: "forward", type: ["A1", "B1"], 
-    reason: "ショートノーズで前乗りに最適。高出力ペダリングをサポート。" },
-  { id: "argo-r3", name: "fi'zi:k Argo Tempo R3", brand: "fi'zi:k", price: 15000, category: "saddle",
-    style: "forward", type: ["A1", "B1"],
-    reason: "ショートノーズの入門モデル。前乗りポジションに。" },
-  // F-O向け（後ろ乗り・ロングノーズ）
-  { id: "antares-r3", name: "fi'zi:k Antares R3", brand: "fi'zi:k", price: 18000, category: "saddle",
-    style: "rear", type: ["A2", "B2"],
-    reason: "クラシックな形状で後ろ乗りに最適。ロングライドも快適。" },
-  { id: "aspide", name: "Selle Italia SLR Boost", brand: "Selle Italia", price: 22000, category: "saddle",
-    style: "rear", type: ["A2"],
-    reason: "軽量でクライマー向け。後ろ乗りでトルクをかけやすい。" },
-  // R-I/R-O向け（バランス型）
-  { id: "romin-evo", name: "Specialized Romin Evo", brand: "Specialized", price: 25000, category: "saddle",
-    style: "neutral", type: ["B1", "B2"],
-    reason: "オールラウンドな形状。様々なポジションに対応。" },
-  { id: "cambium-c17", name: "Brooks Cambium C17", brand: "Brooks", price: 16000, category: "saddle",
-    style: "neutral", type: ["B2"],
-    reason: "快適性重視。ロングライドやエンデュランスに。" },
+// 機材傾向（タイプ別の抽象的ガイダンス）
+// ========================================
+const GEAR_TENDENCIES = {
+  FIX:  { saddle: "ショートノーズ・フラット系", pedal: "高剛性でダイレクト感", shoes: "高剛性ソール", bartape: "薄手でハンドリング重視" },
+  FIII: { saddle: "ショートノーズ・やや丸み", pedal: "剛性と回転効率のバランス", shoes: "剛性重視", bartape: "薄手でフィードバック重視" },
+  FOX:  { saddle: "幅広め・前乗り対応", pedal: "プラットフォーム広め", shoes: "フィット感重視の高剛性", bartape: "薄手〜中厚" },
+  FOII: { saddle: "中〜幅広・クッション適度", pedal: "バランス型", shoes: "快適性と剛性の両立", bartape: "中厚" },
+  RIX:  { saddle: "フラット・やや幅広", pedal: "バランス型", shoes: "安定感ある剛性", bartape: "中厚で安定感" },
+  RIII: { saddle: "フラット・中幅", pedal: "効率重視", shoes: "剛性と快適性の中間", bartape: "中厚" },
+  ROX:  { saddle: "ラウンド形状・幅広め", pedal: "安定性重視", shoes: "快適性寄り", bartape: "厚手でクッション性" },
+  ROII: { saddle: "ラウンド・幅広・クッション多め", pedal: "安定性重視", shoes: "快適フィット", bartape: "厚手で振動吸収" },
+};
 
-  // === ペダル ===
-  // F-I向け（高剛性・軽量）
-  { id: "dura-ace-pedal", name: "Shimano Dura-Ace PD-R9200", brand: "Shimano", price: 35000, category: "pedal",
-    style: "stiff", type: ["A1"],
-    reason: "最高剛性でパワー伝達ロスなし。スプリンター向け。" },
-  { id: "keo-blade", name: "Look Keo Blade Carbon", brand: "Look", price: 28000, category: "pedal",
-    style: "stiff", type: ["A1", "B1"],
-    reason: "カーボンブレードで軽量×高剛性。反応の良いペダリングに。" },
-  // F-O/R-O向け（バランス型）
-  { id: "ultegra-pedal", name: "Shimano Ultegra PD-R8000", brand: "Shimano", price: 18000, category: "pedal",
-    style: "balanced", type: ["A2", "B1", "B2"],
-    reason: "剛性と価格のバランス◎。オールラウンドに使える定番。" },
-  { id: "keo-classic", name: "Look Keo Classic 3", brand: "Look", price: 8000, category: "pedal",
-    style: "balanced", type: ["A2", "B2"],
-    reason: "入門〜中級向け。軽いエントリーで始めやすい。" },
-
-  // === シューズ ===
-  // F-I向け（高剛性）
-  { id: "s-works-torch", name: "Specialized S-Works Torch", brand: "Specialized", price: 55000, category: "shoes",
-    style: "stiff", type: ["A1"],
-    reason: "最高剛性ソール。スプリントでパワーを逃さない。" },
-  { id: "rc9", name: "Shimano RC9", brand: "Shimano", price: 45000, category: "shoes",
-    style: "stiff", type: ["A1", "B1"],
-    reason: "カーボンソールで高剛性。レースからロングライドまで。" },
-  // バランス型
-  { id: "rc7", name: "Shimano RC7", brand: "Shimano", price: 28000, category: "shoes",
-    style: "balanced", type: ["A2", "B1", "B2"],
-    reason: "剛性と快適性のバランス。長時間でも疲れにくい。" },
-  { id: "torch-2", name: "Specialized Torch 2.0", brand: "Specialized", price: 22000, category: "shoes",
-    style: "balanced", type: ["A2", "B2"],
-    reason: "快適フィットで長距離向け。初めてのビンディングにも。" },
-
-  // === バーテープ ===
-  { id: "supacaz-sticky", name: "Supacaz Super Sticky Kush", brand: "Supacaz", price: 4000, category: "bartape",
-    style: "thin", type: ["A1", "B1"],
-    reason: "薄手でダイレクト感◎。振動よりハンドリング重視。" },
-  { id: "lizard-dsp", name: "Lizard Skins DSP 3.2mm", brand: "Lizard Skins", price: 5000, category: "bartape",
-    style: "cushion", type: ["A2", "B2"],
-    reason: "厚手でクッション性◎。ロングライドの疲労軽減。" },
-];
-
-// サイクリング機材カテゴリ（フィッティングパーツのみ）
-const CYCLING_CATEGORIES = [
-  { id: "saddle", label: "サドル", icon: "saddle" },
-  { id: "pedal", label: "ペダル", icon: "pedal" },
-  { id: "shoes", label: "シューズ", icon: "shoe" },
-  { id: "bartape", label: "バーテープ", icon: "bartape" },
-];
-
-// サイクリングブランドリスト
-const CYCLING_BRANDS = ["Shimano", "Specialized", "fi'zi:k", "Selle Italia", "Look", "Supacaz", "Lizard Skins", "Brooks"];
+// シェア画像生成（Canvas - リッチデザイン）
+const generateShareImage = async (typeInfo, type, spectrum, confidence) => {
+  const W = 1200, H = 630;
+  const canvas = document.createElement("canvas");
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext("2d");
+  const color = typeInfo.color;
+  
+  // ── 白背景 ──
+  ctx.fillStyle = "#FFFFFF";
+  ctx.fillRect(0, 0, W, H);
+  
+  // ── 装飾：大きな円形シンボル（右側） ──
+  const cx = W - 200, cy = H / 2;
+  const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, 260);
+  glow.addColorStop(0, color + "18");
+  glow.addColorStop(0.5, color + "08");
+  glow.addColorStop(1, "transparent");
+  ctx.fillStyle = glow;
+  ctx.fillRect(cx - 260, cy - 260, 520, 520);
+  
+  // 同心円
+  [200, 150, 100].forEach((r, i) => {
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.strokeStyle = color;
+    ctx.globalAlpha = 0.06 + i * 0.03;
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  });
+  ctx.globalAlpha = 1;
+  
+  // タイプシンボル（中央の大文字）
+  ctx.fillStyle = color;
+  ctx.globalAlpha = 0.07;
+  ctx.font = "900 180px sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText(type.charAt(0), cx, cy + 60);
+  ctx.globalAlpha = 1;
+  ctx.textAlign = "left";
+  
+  // ── 上部アクセントライン ──
+  const lineGrad = ctx.createLinearGradient(0, 0, 400, 0);
+  lineGrad.addColorStop(0, color);
+  lineGrad.addColorStop(1, color + "00");
+  ctx.fillStyle = lineGrad;
+  ctx.fillRect(0, 0, 400, 3);
+  
+  // ── STANCE CORE ロゴ ──
+  ctx.fillStyle = "#999";
+  ctx.font = "700 13px sans-serif";
+  ctx.fillText("S T A N C E   C O R E", 60, 48);
+  
+  // ── タイプ名（大） ──
+  ctx.fillStyle = color;
+  ctx.font = "900 80px sans-serif";
+  ctx.fillText(type, 60, 150);
+  
+  // タイプ名の横にドット装飾
+  const typeW = ctx.measureText(type).width;
+  ctx.beginPath();
+  ctx.arc(60 + typeW + 20, 130, 6, 0, Math.PI * 2);
+  ctx.fillStyle = color;
+  ctx.fill();
+  
+  // ── サブタイトル ──
+  ctx.fillStyle = "#777";
+  ctx.font = "500 22px sans-serif";
+  ctx.fillText(typeInfo.sub || "", 60, 190);
+  
+  // ── 3つの特性タグ ──
+  const traits = typeInfo.traits || [];
+  let tagX = 60;
+  ctx.font = "600 14px sans-serif";
+  traits.slice(0, 3).forEach(trait => {
+    const tw = ctx.measureText(trait).width;
+    // タグ背景
+    ctx.fillStyle = color + "12";
+    ctx.fillRect(tagX, 210, tw + 20, 28);
+    // 左ボーダー
+    ctx.fillStyle = color;
+    ctx.fillRect(tagX, 210, 2, 28);
+    // テキスト
+    ctx.fillStyle = color;
+    ctx.fillText(trait, tagX + 12, 229);
+    tagX += tw + 32;
+  });
+  
+  // ── 説明文 ──
+  ctx.fillStyle = "#555";
+  ctx.font = "400 18px sans-serif";
+  const desc = typeInfo.description || "";
+  const maxDescW = 640;
+  let line = "", descY = 280;
+  for (const ch of desc) {
+    line += ch;
+    if (ctx.measureText(line).width > maxDescW) {
+      ctx.fillText(line.slice(0, -1), 60, descY);
+      line = ch; descY += 28;
+      if (descY > 330) break;
+    }
+  }
+  if (line && descY <= 330) ctx.fillText(line, 60, descY);
+  
+  // ── スペクトラムバー（左半分） ──
+  if (spectrum) {
+    const bars = [
+      { left: "F", right: "R", value: spectrum.fr, colors: ["#FF6B35", "#06B6D4"], full: ["前体幹", "後体幹"] },
+      { left: "I", right: "O", value: spectrum.io, colors: ["#10B981", "#EC4899"], full: ["内側荷重", "外側荷重"] },
+      { left: "X", right: "II", value: spectrum.xp, colors: ["#EC4899", "#3B82F6"], full: ["クロス", "パラレル"] },
+    ];
+    const barStartY = 380;
+    const barW = 520;
+    const barH = 12;
+    
+    bars.forEach((bar, i) => {
+      const by = barStartY + i * 58;
+      
+      // ラベル（左）
+      const isLeftDominant = bar.value >= 50;
+      ctx.font = isLeftDominant ? "800 16px sans-serif" : "400 16px sans-serif";
+      ctx.fillStyle = isLeftDominant ? bar.colors[0] : "#bbb";
+      ctx.textAlign = "left";
+      ctx.fillText(bar.left, 60, by - 6);
+      ctx.font = "400 11px sans-serif";
+      ctx.fillStyle = "#aaa";
+      ctx.fillText(bar.full[0], 60 + ctx.measureText(bar.left + " ").width + 8, by - 6);
+      
+      // ラベル（右）
+      ctx.textAlign = "right";
+      ctx.font = !isLeftDominant ? "800 16px sans-serif" : "400 16px sans-serif";
+      ctx.fillStyle = !isLeftDominant ? bar.colors[1] : "#bbb";
+      ctx.fillText(bar.right, 60 + barW, by - 6);
+      
+      // バー背景
+      ctx.fillStyle = "#f0f0f0";
+      ctx.fillRect(60, by + 2, barW, barH);
+      
+      // 左バー
+      const leftW = barW * bar.value / 100;
+      ctx.fillStyle = bar.colors[0];
+      ctx.globalAlpha = 0.85;
+      ctx.fillRect(60, by + 2, leftW, barH);
+      
+      // 右バー
+      ctx.fillStyle = bar.colors[1];
+      ctx.fillRect(60 + leftW, by + 2, barW - leftW, barH);
+      ctx.globalAlpha = 1;
+      
+      // パーセント
+      ctx.font = "700 12px sans-serif";
+      ctx.textAlign = "left";
+      ctx.fillStyle = isLeftDominant ? bar.colors[0] : "#ccc";
+      ctx.fillText(bar.value + "%", 60, by + barH + 18);
+      ctx.textAlign = "right";
+      ctx.fillStyle = !isLeftDominant ? bar.colors[1] : "#ccc";
+      ctx.fillText((100 - bar.value) + "%", 60 + barW, by + barH + 18);
+      ctx.textAlign = "left";
+    });
+  }
+  
+  // ── 下部フッター ──
+  ctx.fillStyle = "#e8e8e8";
+  ctx.fillRect(60, H - 55, W - 120, 1);
+  
+  ctx.fillStyle = "#aaa";
+  ctx.font = "500 14px sans-serif";
+  ctx.fillText("stancecore.vercel.app", 60, H - 25);
+  
+  ctx.textAlign = "right";
+  ctx.fillStyle = "#bbb";
+  ctx.font = "400 13px sans-serif";
+  ctx.fillText("Cyclist Body Type Diagnosis", W - 60, H - 25);
+  ctx.textAlign = "left";
+  
+  return canvas.toDataURL("image/png");
+};
 
 
 // カスタムSVGアイコン（Premium Minimal Style - strokeWidth: 1.5）
@@ -505,6 +619,11 @@ const Icons = {
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/>
       <path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/>
+    </svg>
+  ),
+  download: (color = C.textDim, size = 24) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
     </svg>
   ),
   road: (color = C.accent, size = 24) => (
@@ -1780,9 +1899,6 @@ const TYPE_INFO_CYCLING = {
     selfCheck: [
       { name: "股関節屈曲", method: "仰向けで膝を胸に", good: "120°以上", action: "深い前傾OK" },
     ],
-    products: [
-      { name: "Specialized Tarmac SL8", price: "550,000〜", reason: "高剛性。スプリント向き。", image: "" },
-    ],
     form: {
       landing: { title: "ペダリング", type: "高回転型（90rpm+）", detail: "軽いギアで回す" },
       posture: { title: "ポジション", type: "前乗り", detail: "サドル前方" },
@@ -1849,9 +1965,6 @@ const TYPE_INFO_CYCLING = {
     },
     selfCheck: [
       { name: "片足ペダリング", method: "30秒スムーズに", good: "カクつかない", action: "効率型" },
-    ],
-    products: [
-      { name: "Canyon Aeroad", price: "450,000〜", reason: "エアロ効率。TT向き。", image: "" },
     ],
     form: {
       landing: { title: "ペダリング", type: "効率型（85-95rpm）", detail: "円運動を意識" },
@@ -1920,9 +2033,6 @@ const TYPE_INFO_CYCLING = {
     selfCheck: [
       { name: "ダンシングテスト", method: "1分全力", good: "バイク振れる", action: "クロス型確定" },
     ],
-    products: [
-      { name: "Pinarello Dogma F", price: "800,000〜", reason: "剛性とエアロ。アタック向き。", image: "" },
-    ],
     form: {
       landing: { title: "ペダリング", type: "トルク型（75-90rpm）", detail: "力強く踏む" },
       posture: { title: "ポジション", type: "前乗り", detail: "攻撃的姿勢" },
@@ -1990,9 +2100,6 @@ const TYPE_INFO_CYCLING = {
     selfCheck: [
       { name: "片足ペダリング", method: "30秒", good: "スムーズ", action: "効率型" },
     ],
-    products: [
-      { name: "Trek Émonda SLR", price: "650,000〜", reason: "軽量。ヒルクライム向き。", image: "" },
-    ],
     form: {
       landing: { title: "ペダリング", type: "効率型（80-90rpm）", detail: "安定して回す" },
       posture: { title: "ポジション", type: "前乗り〜中央", detail: "効率重視" },
@@ -2059,9 +2166,6 @@ const TYPE_INFO_CYCLING = {
     },
     selfCheck: [
       { name: "腰回旋", method: "座って左右に捻る", good: "スムーズ", action: "クロス型" },
-    ],
-    products: [
-      { name: "Cervélo R5", price: "550,000〜", reason: "バランス型。オールラウンド。", image: "" },
     ],
     form: {
       landing: { title: "ペダリング", type: "リズム型（80-95rpm）", detail: "リズムよく回す" },
@@ -2131,9 +2235,6 @@ const TYPE_INFO_CYCLING = {
       { name: "片足立ち", method: "30秒", good: "ほぼ動かない", action: "体幹安定" },
       { name: "スムーズペダリング", method: "片足30秒", good: "カクつかない", action: "効率型" },
     ],
-    products: [
-      { name: "Canyon Ultimate CF SLX", price: "450,000〜", reason: "コスパ最強オールラウンダー。", image: "" },
-    ],
     form: {
       landing: { title: "ペダリング", type: "高効率型（85-95rpm）", detail: "綺麗な円運動" },
       posture: { title: "ポジション", type: "ニュートラル", detail: "効率重視" },
@@ -2201,9 +2302,6 @@ const TYPE_INFO_CYCLING = {
     selfCheck: [
       { name: "スクワット", method: "ゆっくり10回", good: "膝がつま先方向", action: "安定型" },
     ],
-    products: [
-      { name: "Pinarello Dogma F", price: "800,000〜", reason: "あらゆる状況対応。", image: "" },
-    ],
     form: {
       landing: { title: "ペダリング", type: "適応型（75-90rpm）", detail: "状況に応じて" },
       posture: { title: "ポジション", type: "やや後ろ乗り", detail: "安定重視" },
@@ -2270,9 +2368,6 @@ const TYPE_INFO_CYCLING = {
     },
     selfCheck: [
       { name: "長時間立ち", method: "5分", good: "楽に立てる", action: "安定型" },
-    ],
-    products: [
-      { name: "Trek Domane", price: "400,000〜", reason: "快適性重視。ロングライド向き。", image: "" },
     ],
     form: {
       landing: { title: "ペダリング", type: "安定型（70-85rpm）", detail: "どっしり踏む" },
@@ -2361,17 +2456,6 @@ export default function App() {
   const [isPro, setIsPro] = useState(false);
   const [savedResult, setSavedResult] = useState(null);
   
-  // シューズ/ギアフィルター用state
-  const [shoeFilters, setShoeFilters] = useState({
-    priceMax: 999999,
-    brands: [],
-    use: null,
-    category: null, // サイクリング用カテゴリ
-  });
-  
-  // 商品シャッフル用state（カテゴリごと）
-  const [shuffleKey, setShuffleKey] = useState({});
-  
   // フィッティング計算用state
   const [bodyMetrics, setBodyMetrics] = useState({
     height: "", // 身長(cm)
@@ -2382,6 +2466,11 @@ export default function App() {
     shoulderType: "standard", // 肩幅タイプ: "wide" | "standard" | "narrow"
   });
   const [showFittingCalc, setShowFittingCalc] = useState(false);
+  const [shareImageUrl, setShareImageUrl] = useState(null);
+  const [copiedLink, setCopiedLink] = useState(false);
+  const [resultHistory, setResultHistory] = useState([]);
+  const [showComparison, setShowComparison] = useState(false);
+  const [extraRoundDone, setExtraRoundDone] = useState(false);
   const [showHistory, setShowHistory] = useState(false); // 回答履歴表示
   const [showAllBodyFeel, setShowAllBodyFeel] = useState(false);
   const [openSections, setOpenSections] = useState({ body: true, fitting: true, selfCheck: true, hill: false, ride: false, feel: false, gear: false });
@@ -2415,6 +2504,8 @@ export default function App() {
   
   // 初期化：コア質問 + ランダム追加
   useEffect(() => {
+    document.title = "STANCE CORE - サイクリスト身体タイプ診断";
+    
     // カテゴリごとにグループ化
     const byCategory = {};
     QUESTION_POOL.forEach(q => {
@@ -2455,6 +2546,31 @@ export default function App() {
       return mapping[oldKey] || oldKey;
     };
     
+    // URLパラメータから結果を復元（パーマリンク）
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const urlType = params.get("t");
+      if (urlType && TYPE_INFO.cycling[urlType]) {
+        const urlResult = {
+          type: urlType,
+          spectrum: {
+            fr: parseInt(params.get("fr")) || 50,
+            io: parseInt(params.get("io")) || 50,
+            xp: parseInt(params.get("xp")) || 50,
+          },
+          confidence: {
+            fr: params.get("fr") ? ((parseInt(params.get("fr")) || 50) >= 65 || (parseInt(params.get("fr")) || 50) <= 35 ? "clear" : "leaning") : "clear",
+            io: params.get("io") ? ((parseInt(params.get("io")) || 50) >= 65 || (parseInt(params.get("io")) || 50) <= 35 ? "clear" : "leaning") : "clear",
+            xp: params.get("xp") ? ((parseInt(params.get("xp")) || 50) >= 65 || (parseInt(params.get("xp")) || 50) <= 35 ? "clear" : "leaning") : "clear",
+          },
+        };
+        setSavedResult(urlResult);
+        setMode("result");
+        setResult(urlResult);
+        return; // URLパラメータ優先、LocalStorage読み込みスキップ
+      }
+    } catch (e) {}
+    
     // LocalStorageから保存された結果を読み込み
     try {
       const saved = localStorage.getItem("stancecore_result");
@@ -2473,6 +2589,9 @@ export default function App() {
         const parsedMetrics = JSON.parse(savedMetrics);
         setBodyMetrics(prev => ({ ...prev, ...parsedMetrics }));
       }
+      // 履歴読み込み
+      const savedHistory = JSON.parse(localStorage.getItem("stancecore_history") || "[]");
+      setResultHistory(savedHistory);
     } catch (e) {
       console.log("No saved result");
     }
@@ -2629,35 +2748,31 @@ export default function App() {
     const ioClose = ioDiff <= 2;
     const xpClose = xpDiff <= 2;
     
-    // 質問が残っていない＆僅差 → 追加質問を投入
-    if (unanswered.length === 0 && (frClose || ioClose || xpClose) && extraQuestionPool.length > 0) {
+    // 質問が残っていない＆僅差 → 追加質問を投入（1回のみ）
+    if (unanswered.length === 0 && (frClose || ioClose || xpClose) && extraQuestionPool.length > 0 && !extraRoundDone) {
       const extraToAdd = [];
       
       if (frClose) {
-        // 体幹(F/R)が僅差 → trunkカテゴリから追加
         const trunkExtras = extraQuestionPool.filter(q => q.cat === "trunk" && !currentAnswers[q.id]);
         extraToAdd.push(...trunkExtras.slice(0, EXTRA_ON_TIE));
       }
       
       if (ioClose) {
-        // 荷重(I/O)が僅差 → balanceカテゴリから追加
         const balanceExtras = extraQuestionPool.filter(q => q.cat === "balance" && !currentAnswers[q.id]);
         extraToAdd.push(...balanceExtras.slice(0, EXTRA_ON_TIE));
       }
       
       if (xpClose) {
-        // 連動(X/II)が僅差 → movementカテゴリから追加
         const movementExtras = extraQuestionPool.filter(q => q.cat === "movement" && !currentAnswers[q.id]);
         extraToAdd.push(...movementExtras.slice(0, EXTRA_ON_TIE));
       }
       
       if (extraToAdd.length > 0) {
-        // 追加質問を現在の質問リストに追加
         const newQuestions = [...questions, ...extraToAdd];
         setQuestions(newQuestions);
         setExtraQuestionPool(prev => prev.filter(q => !extraToAdd.find(e => e.id === q.id)));
-        // 追加した最初の質問のインデックスへ移動
         setCurrentIndex(questions.length);
+        setExtraRoundDone(true); // 追加は1回のみ
         return;
       }
     }
@@ -2772,6 +2887,21 @@ export default function App() {
     try {
       localStorage.setItem("stancecore_result", JSON.stringify(resultData));
       setSavedResult(resultData);
+      
+      // 履歴に追加（Before/After用）
+      const historyEntry = {
+        ...resultData,
+        date: new Date().toISOString(),
+      };
+      const existingHistory = JSON.parse(localStorage.getItem("stancecore_history") || "[]");
+      // 同日の重複回避（同じ日は最新で上書き）
+      const today = new Date().toDateString();
+      const filtered = existingHistory.filter(h => new Date(h.date).toDateString() !== today);
+      filtered.push(historyEntry);
+      // 最大10件保持
+      const trimmed = filtered.slice(-10);
+      localStorage.setItem("stancecore_history", JSON.stringify(trimmed));
+      setResultHistory(trimmed);
     } catch (e) {
       console.log("Failed to save result");
     }
@@ -3231,7 +3361,7 @@ export default function App() {
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", marginTop: 10 }}>
               <p style={{ color: C.textDim, fontSize: 11, margin: 0 }}>回答: {accuracy.count}</p>
-              <p style={{ color: C.textDim, fontSize: 11, margin: 0 }}>残り: {remainingQuestions}</p>
+              <p style={{ color: C.textDim, fontSize: 11, margin: 0 }}>残り: {remainingQuestions}{extraRoundDone && remainingQuestions > 0 ? "（追加質問）" : ""}</p>
             </div>
             
             {/* 履歴ボタン */}
@@ -3685,9 +3815,200 @@ export default function App() {
               </div>
               );
             })()}
+            
+            {/* シェア・パーマリンク */}
+            <div style={{ marginTop: 20, display: "flex", flexDirection: "column", gap: 10 }}>
+              <div style={{ display: "flex", gap: 10 }}>
+                <button
+                  onClick={() => {
+                    generateShareImage(typeInfo, type, result.spectrum, result.confidence).then(dataUrl => {
+                      setShareImageUrl(dataUrl);
+                    }).catch(() => {});
+                  }}
+                  style={{
+                    flex: 1, padding: "12px 16px", borderRadius: 12, border: `1px solid ${theme.cardBorder}`,
+                    background: C.bg, color: C.text, fontSize: 13, fontWeight: 600,
+                    cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                    ...neu.raised,
+                  }}
+                >
+                  {Icons.download(C.textMuted, 16)}
+                  画像を生成
+                </button>
+                <button
+                  onClick={() => {
+                    const text = `STANCE COREで診断したら「${type}」タイプでした！\n${typeInfo.description}\n\nhttps://stancecore.vercel.app`;
+                    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, "_blank");
+                  }}
+                  style={{
+                    flex: 1, padding: "12px 16px", borderRadius: 12, border: "none",
+                    background: typeInfo.color, color: "#fff", fontSize: 13, fontWeight: 600,
+                    cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                  }}
+                >
+                  Xでシェア
+                </button>
+              </div>
+              
+              {/* パーマリンクコピー */}
+              <button
+                onClick={() => {
+                  const sp = result.spectrum || { fr: 50, io: 50, xp: 50 };
+                  const url = `https://stancecore.vercel.app?t=${type}&fr=${sp.fr}&io=${sp.io}&xp=${sp.xp}`;
+                  if (navigator.clipboard) {
+                    navigator.clipboard.writeText(url).then(() => {
+                      setCopiedLink(true);
+                      setTimeout(() => setCopiedLink(false), 2000);
+                    }).catch(() => {
+                      prompt("URLをコピーしてください:", url);
+                    });
+                  } else {
+                    prompt("URLをコピーしてください:", url);
+                  }
+                }}
+                style={{
+                  width: "100%", padding: "12px 16px", borderRadius: 12,
+                  border: `1px solid ${copiedLink ? typeInfo.color : theme.cardBorder}`,
+                  background: copiedLink ? `${typeInfo.color}10` : C.bg,
+                  color: copiedLink ? typeInfo.color : C.textMuted, fontSize: 13, fontWeight: 600,
+                  cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                  transition: "all 0.3s ease",
+                }}
+              >
+                {copiedLink ? "✓ コピーしました！" : "結果のリンクをコピー（フィッターに共有）"}
+              </button>
+            </div>
+            
+            {/* シェア画像プレビュー */}
+            {shareImageUrl && (
+              <div style={{ marginTop: 16 }}>
+                <div style={{ 
+                  background: "#111", borderRadius: 12, overflow: "hidden",
+                  border: `1px solid ${theme.cardBorder}`,
+                }}>
+                  <img 
+                    src={shareImageUrl} 
+                    alt="シェア画像" 
+                    style={{ width: "100%", display: "block" }} 
+                  />
+                </div>
+                <p style={{ color: C.textDim, fontSize: 11, textAlign: "center", margin: "8px 0 0" }}>
+                  画像を長押しして保存できます
+                </p>
+                <button
+                  onClick={() => setShareImageUrl(null)}
+                  style={{
+                    width: "100%", marginTop: 8, padding: "10px", borderRadius: 10,
+                    border: `1px solid ${theme.cardBorder}`, background: C.bg,
+                    color: C.textMuted, fontSize: 12, cursor: "pointer",
+                  }}
+                >
+                  閉じる
+                </button>
+              </div>
+            )}
           </Card>
           
-          {/* 僅差警告（残り質問あり） */}
+          {/* Before/After 比較 */}
+          {resultHistory.length >= 2 && (() => {
+            const current = resultHistory[resultHistory.length - 1];
+            const prev = resultHistory[resultHistory.length - 2];
+            const prevDate = new Date(prev.date);
+            const dateStr = `${prevDate.getMonth() + 1}/${prevDate.getDate()}`;
+            const axes = [
+              { label: "F / R", key: "fr", colors: ["#FF6B35", "#06B6D4"], leftLabel: "F", rightLabel: "R" },
+              { label: "I / O", key: "io", colors: ["#10B981", "#EC4899"], leftLabel: "I", rightLabel: "O" },
+              { label: "X / II", key: "xp", colors: ["#EC4899", "#3B82F6"], leftLabel: "X", rightLabel: "II" },
+            ];
+            const typeChanged = current.type !== prev.type;
+            
+            return (
+            <>
+            <div onClick={() => setShowComparison(!showComparison)} style={{ marginTop: 16, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 24px", cursor: "pointer", background: theme.card, border: `1px solid ${theme.cardBorder}` }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                {Icons.activity(typeInfo.color, 20)}
+                <span style={{ color: C.text, fontSize: 15, fontWeight: 700 }}>前回との比較</span>
+                {typeChanged && (
+                  <span style={{ background: `${C.orange}20`, color: C.orange, fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 8 }}>
+                    タイプ変化
+                  </span>
+                )}
+              </div>
+              <span style={{ color: C.textDim }}>{showComparison ? "▲" : "▼"}</span>
+            </div>
+            {showComparison && (
+            <Card style={{ marginTop: 0, borderTop: "none" }}>
+              {/* タイプ変化 */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, marginBottom: 20 }}>
+                <div style={{ textAlign: "center" }}>
+                  <p style={{ color: C.textDim, fontSize: 10, margin: "0 0 4px" }}>{dateStr}</p>
+                  <span style={{ 
+                    background: typeChanged ? `${getTypeInfo("cycling", prev.type).color}15` : `${C.textDim}10`,
+                    color: typeChanged ? getTypeInfo("cycling", prev.type).color : C.textMuted,
+                    fontSize: 18, fontWeight: 800, padding: "6px 14px", borderRadius: 10,
+                  }}>
+                    {prev.type}
+                  </span>
+                </div>
+                <span style={{ color: C.textDim, fontSize: 20 }}>→</span>
+                <div style={{ textAlign: "center" }}>
+                  <p style={{ color: C.textDim, fontSize: 10, margin: "0 0 4px" }}>今回</p>
+                  <span style={{ 
+                    background: `${typeInfo.color}15`, color: typeInfo.color,
+                    fontSize: 18, fontWeight: 800, padding: "6px 14px", borderRadius: 10,
+                  }}>
+                    {current.type}
+                  </span>
+                </div>
+              </div>
+              
+              {/* スペクトラム差分 */}
+              {axes.map(axis => {
+                const curVal = current.spectrum?.[axis.key] ?? 50;
+                const prevVal = prev.spectrum?.[axis.key] ?? 50;
+                const diff = curVal - prevVal;
+                return (
+                  <div key={axis.key} style={{ marginBottom: 16 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                      <span style={{ fontSize: 12, fontWeight: 600, color: C.textMuted }}>{axis.label}</span>
+                      {diff !== 0 && (
+                        <span style={{ 
+                          fontSize: 11, fontWeight: 700,
+                          color: Math.abs(diff) >= 10 ? C.orange : C.textMuted,
+                        }}>
+                          {diff > 0 ? `${axis.leftLabel} +${diff}` : `${axis.rightLabel} +${Math.abs(diff)}`}
+                        </span>
+                      )}
+                    </div>
+                    {/* 前回バー（薄い） */}
+                    <div style={{ position: "relative", height: 20 }}>
+                      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 8, display: "flex", borderRadius: 4, overflow: "hidden", background: `${C.textDim}10` }}>
+                        <div style={{ width: `${prevVal}%`, background: axis.colors[0], opacity: 0.25 }} />
+                        <div style={{ width: `${100 - prevVal}%`, background: axis.colors[1], opacity: 0.25 }} />
+                      </div>
+                      {/* 今回バー */}
+                      <div style={{ position: "absolute", top: 10, left: 0, right: 0, height: 8, display: "flex", borderRadius: 4, overflow: "hidden", background: `${C.textDim}10` }}>
+                        <div style={{ width: `${curVal}%`, background: axis.colors[0], opacity: 0.85, transition: "width 0.5s ease" }} />
+                        <div style={{ width: `${100 - curVal}%`, background: axis.colors[1], opacity: 0.85, transition: "width 0.5s ease" }} />
+                      </div>
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-between", marginTop: 2 }}>
+                      <span style={{ fontSize: 9, color: C.textDim }}>{prevVal}% → {curVal}%</span>
+                      <span style={{ fontSize: 9, color: C.textDim }}>{100 - prevVal}% → {100 - curVal}%</span>
+                    </div>
+                  </div>
+                );
+              })}
+              
+              <p style={{ color: C.textDim, fontSize: 10, textAlign: "center", margin: "8px 0 0" }}>
+                上段: 前回（{dateStr}） / 下段: 今回
+              </p>
+            </Card>
+            )}
+            </>
+            );
+          })()}
+          
           {result.confidence && Object.values(result.confidence).some(c => c !== "clear") && remainingQuestions > 0 && (
             <Card style={{ 
               marginTop: 16, 
@@ -4115,320 +4436,51 @@ export default function App() {
             <span style={{ color: C.textDim }}>{openSections.gear ? "▲" : "▼"}</span>
           </div>
           {openSections.gear && (
-          <Card style={{ marginTop: 0, borderTop: "none", padding: "24px 0" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, padding: "0 24px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <div style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: 10,
-                  background: `${typeInfo.color}15`,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}>
-                  {Icons.settings(typeInfo.color, 20)}
-                </div>
-                <div>
-                  <p style={{ color: C.text, fontSize: 16, fontWeight: 700, margin: 0 }}>機材セレクト</p>
-                  <p style={{ color: C.textMuted, fontSize: 11, margin: 0 }}>あなたのタイプに合ったパーツ</p>
-                </div>
+          <Card style={{ marginTop: 0, borderTop: "none", padding: "24px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+              <div style={{
+                width: 36, height: 36, borderRadius: 10,
+                background: `${typeInfo.color}15`,
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}>
+                {Icons.settings(typeInfo.color, 20)}
               </div>
-              <span style={{ background: typeInfo.color, color: "#fff", fontSize: 10, fontWeight: 700, padding: "5px 10px", borderRadius: 20 }}>
-                {typeInfo.name.split("（")[0]}
-              </span>
-            </div>
-            
-            {/* タイプ条件表示 */}
-            <div style={{ background: `${typeInfo.color}08`, border: `1px solid ${typeInfo.color}20`, borderRadius: 12, padding: 14, marginBottom: 16, marginLeft: 24, marginRight: 24 }}>
-              <p style={{ color: C.textMuted, fontSize: 11, margin: "0 0 4px", fontWeight: 600 }}>あなたに合うスタイル</p>
-              <p style={{ color: typeInfo.color, fontSize: 13, fontWeight: 600, margin: 0 }}>
-                {type === "FIX" && "高剛性・前乗り・ダイレクト感重視"}
-                {type === "FIII" && "効率・前乗り・エアロ重視"}
-                {type === "FOX" && "高剛性・パワー・攻撃的ポジション"}
-                {type === "FOII" && "軽量・後ろ乗り・ヒルクライム向け"}
-                {type === "RIX" && "バランス・適応力・リズム重視"}
-                {type === "RIII" && "バランス・効率重視・オールラウンド"}
-                {type === "ROX" && "適応力・安定感・レース全般"}
-                {type === "ROII" && "快適性・安定感・ロングライド向け"}
-              </p>
-            </div>
-            
-            {/* カテゴリ選択 */}
-            <div style={{ marginBottom: 16, padding: "0 24px" }}>
-              <p style={{ color: C.textMuted, fontSize: 12, fontWeight: 700, margin: "0 0 10px" }}>カテゴリ</p>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                {CYCLING_CATEGORIES.map(cat => {
-                  const isSelected = shoeFilters.category === cat.id;
-                  return (
-                  <button
-                    key={cat.id}
-                    onClick={() => setShoeFilters(f => ({ ...f, category: f.category === cat.id ? null : cat.id }))}
-                    style={{
-                      padding: "10px 16px", borderRadius: 12, fontSize: 13, fontWeight: 600,
-                      border: isSelected ? `2px solid ${typeInfo.color}` : `1px solid ${theme.cardBorder}`,
-                      background: isSelected ? `${typeInfo.color}10` : theme.card,
-                      color: isSelected ? typeInfo.color : C.textMuted,
-                      cursor: "pointer",
-                      boxShadow: isSelected ? `0 2px 8px ${typeInfo.color}20` : "none",
-                      transition: "all 0.2s ease",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 6,
-                    }}
-                  >
-                    {Icons[cat.icon] && Icons[cat.icon](isSelected ? typeInfo.color : C.textMuted, 16)}
-                    {cat.label}
-                  </button>
-                  );
-                })}
+              <div>
+                <p style={{ color: C.text, fontSize: 16, fontWeight: 700, margin: 0 }}>機材の傾向</p>
+                <p style={{ color: C.textMuted, fontSize: 11, margin: 0 }}>あなたのタイプに合うパーツの方向性</p>
               </div>
             </div>
             
-            {/* ブランド選択 */}
-            <div style={{ marginBottom: 20, padding: "0 24px" }}>
-              <p style={{ color: C.textMuted, fontSize: 12, fontWeight: 700, margin: "0 0 10px" }}>ブランド</p>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                {CYCLING_BRANDS.map(brand => {
-                  const isSelected = shoeFilters.brands.includes(brand);
-                  return (
-                    <button
-                      key={brand}
-                      onClick={() => setShoeFilters(f => ({
-                        ...f,
-                        brands: isSelected ? f.brands.filter(b => b !== brand) : [...f.brands, brand]
-                      }))}
-                      style={{
-                        padding: "8px 14px", borderRadius: 10, fontSize: 12, fontWeight: 600,
-                        border: isSelected ? `2px solid ${typeInfo.color}` : `1px solid ${theme.cardBorder}`,
-                        background: isSelected ? `${typeInfo.color}10` : theme.card,
-                        color: isSelected ? typeInfo.color : C.textMuted,
-                        cursor: "pointer",
-                        boxShadow: isSelected ? `0 2px 8px ${typeInfo.color}20` : "none",
-                        transition: "all 0.2s ease",
-                      }}
-                    >
-                      {brand}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-            
-            {/* フィルター結果 */}
             {(() => {
-              // 8タイプ → 旧4タイプへのマッピング（機材DBは旧キーのまま）
-              // 8タイプ → 旧4タイプへのマッピング
-              // 前後乗りは体幹(F/R)で決まる: F=前乗り(A1), R=後乗り(B2)
-              // 荷重(I/O)で剛性・スタイルを分ける
-              const typeToLegacy = {
-                "FIX": ["A1"],           // 前乗り・高剛性
-                "FIII": ["A1"],          // 前乗り・効率型
-                "FOX": ["A1"],           // 前乗り・パワー型
-                "FOII": ["A1", "A2"],    // 前乗り〜中間
-                "RIX": ["B1", "B2"],     // 後乗り・バランス
-                "RIII": ["B1"],          // 後乗り・効率型
-                "ROX": ["B2"],           // 後乗り・適応型
-                "ROII": ["B2"],          // 後乗り・安定型
-              };
-              const legacyTypes = typeToLegacy[type] || [];
-              
-              const filtered = CYCLING_GEAR_DB.filter(gear => {
-                // タイプ条件（旧キーでマッチング）
-                if (!legacyTypes.some(lt => gear.type.includes(lt))) return false;
-                // カテゴリ
-                if (shoeFilters.category && gear.category !== shoeFilters.category) return false;
-                // ブランド
-                if (shoeFilters.brands.length > 0 && !shoeFilters.brands.includes(gear.brand)) return false;
-                return true;
-              });
-              
-              // カテゴリでグループ化
-              const grouped = {};
-              filtered.forEach(gear => {
-                if (!grouped[gear.category]) grouped[gear.category] = [];
-                grouped[gear.category].push(gear);
-              });
-              
-              // カテゴリごとのシャッフル状態を適用
-              Object.keys(grouped).forEach(cat => {
-                const catShuffleKey = shuffleKey[cat] || 0;
-                if (catShuffleKey > 0) {
-                  // シード値を使って同じshuffleKeyなら同じ順序になるように
-                  const shuffled = [...grouped[cat]];
-                  for (let i = shuffled.length - 1; i > 0; i--) {
-                    const seed = (catShuffleKey * 9301 + 49297) % 233280;
-                    const j = Math.floor((seed / 233280 + i * catShuffleKey) % (i + 1));
-                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-                  }
-                  grouped[cat] = shuffled;
-                }
-              });
-              
+              const tend = GEAR_TENDENCIES[type] || {};
+              const items = [
+                { icon: "saddle", label: "サドル", value: tend.saddle },
+                { icon: "pedal", label: "ペダル", value: tend.pedal },
+                { icon: "shoe", label: "シューズ", value: tend.shoes },
+                { icon: "bartape", label: "バーテープ", value: tend.bartape },
+              ];
               return (
-                <div>
-                  <p style={{ color: C.textDim, fontSize: 12, marginBottom: 12, padding: "0 24px" }}>
-                    {filtered.length}件の機材がマッチ
-                  </p>
-                  
-                  {filtered.length === 0 ? (
-                    <div style={{ background: theme.bg, borderRadius: 12, padding: 20, textAlign: "center", margin: "0 24px" }}>
-                      <p style={{ color: C.textMuted, fontSize: 14, margin: 0 }}>条件に合う機材がありません</p>
-                      <p style={{ color: C.textDim, fontSize: 12, marginTop: 8 }}>フィルターを調整してみてください</p>
+                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                  {items.map(item => (
+                    <div key={item.label} style={{ 
+                      display: "flex", alignItems: "center", gap: 12,
+                      background: C.bg, borderRadius: 12, padding: "12px 14px", ...neu.raised,
+                    }}>
+                      <div style={{ minWidth: 32, display: "flex", justifyContent: "center" }}>
+                        {Icons[item.icon] && Icons[item.icon](typeInfo.color, 20)}
+                      </div>
+                      <div>
+                        <p style={{ color: C.text, fontSize: 12, fontWeight: 700, margin: 0 }}>{item.label}</p>
+                        <p style={{ color: C.textMuted, fontSize: 11, margin: "2px 0 0", lineHeight: 1.4 }}>{item.value}</p>
+                      </div>
                     </div>
-                  ) : (
-                    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-                      {Object.entries(grouped).map(([catId, gears]) => {
-                        const catInfo = CYCLING_CATEGORIES.find(c => c.id === catId);
-                        return (
-                          <div key={catId}>
-                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", margin: "0 0 12px", padding: "0 24px" }}>
-                              <p style={{ color: C.text, fontSize: 14, fontWeight: 700, margin: 0, display: "flex", alignItems: "center", gap: 8 }}>
-                                {catInfo?.icon && Icons[catInfo.icon] && Icons[catInfo.icon](typeInfo.color, 20)}
-                                {catInfo?.label}
-                                <span style={{ color: C.textDim, fontSize: 11, fontWeight: 500, marginLeft: 4 }}>
-                                  ({gears.length})
-                                </span>
-                              </p>
-                              {gears.length > 1 && (
-                                <button
-                                  onClick={() => setShuffleKey(prev => ({ ...prev, [catId]: (prev[catId] || 0) + 1 }))}
-                                  style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: 4,
-                                    padding: "4px 10px",
-                                    borderRadius: 6,
-                                    border: `1px solid ${theme.cardBorder}`,
-                                    background: theme.bg,
-                                    color: C.textDim,
-                                    fontSize: 10,
-                                    cursor: "pointer",
-                                  }}
-                                >
-                                  {Icons.refresh(C.textDim, 12)}
-                                  他を見る
-                                </button>
-                              )}
-                            </div>
-                            
-                            {/* カルーセル */}
-                            <div style={{ 
-                              display: "flex", 
-                              overflowX: "auto",
-                              scrollSnapType: "x mandatory",
-                              WebkitOverflowScrolling: "touch",
-                              gap: 12,
-                              paddingLeft: 24,
-                              paddingRight: 24,
-                              paddingBottom: 8,
-                              msOverflowStyle: "none",
-                              scrollbarWidth: "none",
-                            }}>
-                              {gears.slice(0, 5).map((gear, i) => (
-                                <div key={gear.id} style={{ 
-                                  minWidth: "calc(100% - 48px)",
-                                  maxWidth: "calc(100% - 48px)",
-                                  scrollSnapAlign: "start",
-                                  background: theme.card, 
-                                  borderRadius: 16, 
-                                  padding: 0,
-                                  overflow: "hidden",
-                                  border: `1px solid ${theme.cardBorder}`,
-                                  boxShadow: theme.shadowCard || theme.shadow,
-                                  flexShrink: 0,
-                                }}>
-                                  {/* 商品アイコンエリア */}
-                                  <div style={{
-                                    height: 100,
-                                    background: `linear-gradient(135deg, ${typeInfo.color}08, ${typeInfo.color}15)`,
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    position: "relative",
-                                    overflow: "hidden",
-                                  }}>
-                                    {catInfo?.icon && Icons[catInfo.icon] && Icons[catInfo.icon](typeInfo.color, 40)}
-                                    {/* ブランドバッジ */}
-                                    <div style={{
-                                      position: "absolute",
-                                      top: 10,
-                                      left: 10,
-                                      background: "rgba(255,255,255,0.95)",
-                                      padding: "4px 10px",
-                                      borderRadius: 20,
-                                      fontSize: 10,
-                                      fontWeight: 700,
-                                      color: C.text,
-                                      boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-                                    }}>
-                                      {gear.brand}
-                                    </div>
-                                    {/* インジケーター */}
-                                    <div style={{
-                                      position: "absolute",
-                                      bottom: 8,
-                                      left: "50%",
-                                      transform: "translateX(-50%)",
-                                      display: "flex",
-                                      gap: 6,
-                                    }}>
-                                      {gears.slice(0, 5).map((_, idx) => (
-                                        <div key={idx} style={{
-                                          width: idx === i ? 16 : 6,
-                                          height: 6,
-                                          borderRadius: 3,
-                                          background: idx === i ? typeInfo.color : "rgba(0,0,0,0.2)",
-                                          transition: "all 0.2s ease",
-                                        }} />
-                                      ))}
-                                    </div>
-                                  </div>
-                                  
-                                  {/* 商品情報 */}
-                                  <div style={{ padding: 16 }}>
-                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 6 }}>
-                                      <p style={{ color: C.text, fontSize: 15, fontWeight: 700, margin: 0, flex: 1 }}>
-                                        {gear.name}
-                                      </p>
-                                      <p style={{ color: C.textMuted, fontSize: 13, fontWeight: 600, margin: 0, marginLeft: 8, whiteSpace: "nowrap" }}>
-                                        ¥{gear.price.toLocaleString()}
-                                      </p>
-                                    </div>
-                                    <p style={{ color: C.textMuted, fontSize: 12, margin: 0, lineHeight: 1.6 }}>
-                                      {gear.reason}
-                                    </p>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                            
-                            {/* スワイプヒント（複数ある場合のみ） */}
-                            {gears.length > 1 && (
-                              <p style={{ 
-                                color: C.textDim, 
-                                fontSize: 10, 
-                                textAlign: "center", 
-                                margin: "8px 0 0",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                gap: 4,
-                              }}>
-                                ← スワイプで他の商品を見る →
-                              </p>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
+                  ))}
                 </div>
               );
             })()}
             
-            <p style={{ color: C.textDim, fontSize: 10, marginTop: 16, textAlign: "center", padding: "0 24px" }}>
-              ※ 機材選びの参考情報です。詳しくはフィッターにご相談ください。
+            <p style={{ color: C.textDim, fontSize: 10, marginTop: 14, textAlign: "center" }}>
+              ※ 傾向の目安です。実際の選択はフィッターにご相談ください。
             </p>
           </Card>
           )}
@@ -5543,6 +5595,7 @@ export default function App() {
               setCurrentIndex(0);
               setResult(null);
               setIsPro(false);
+              setExtraRoundDone(false);
               setQuestions([...QUESTION_POOL].sort(() => Math.random() - 0.5));
             }}
             style={{
