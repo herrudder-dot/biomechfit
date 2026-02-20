@@ -2439,7 +2439,32 @@ const StarRating = ({ stars, maxStars = 5, color = C.accent, size = 14 }) => (
 );
 
 export default function App() {
-  const [mode, setMode] = useState("start");
+  // URLパラメータチェック（初期値に使用）
+  const getInitialFromURL = () => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const urlType = params.get("t");
+      if (urlType && TYPE_INFO.cycling[urlType]) {
+        return {
+          type: urlType,
+          spectrum: {
+            fr: parseInt(params.get("fr")) || 50,
+            io: parseInt(params.get("io")) || 50,
+            xp: parseInt(params.get("xp")) || 50,
+          },
+          confidence: {
+            fr: (parseInt(params.get("fr")) || 50) >= 65 || (parseInt(params.get("fr")) || 50) <= 35 ? "clear" : "leaning",
+            io: (parseInt(params.get("io")) || 50) >= 65 || (parseInt(params.get("io")) || 50) <= 35 ? "clear" : "leaning",
+            xp: (parseInt(params.get("xp")) || 50) >= 65 || (parseInt(params.get("xp")) || 50) <= 35 ? "clear" : "leaning",
+          },
+        };
+      }
+    } catch (e) {}
+    return null;
+  };
+  const _urlResult = getInitialFromURL();
+  
+  const [mode, setMode] = useState(_urlResult ? "result" : "start");
   const [sport, setSport] = useState("cycling"); // "cycling" only
   const [questions, setQuestions] = useState([]);
   const [extraQuestionPool, setExtraQuestionPool] = useState([]); // 僅差時の追加質問用
@@ -2452,7 +2477,7 @@ export default function App() {
     cross: 0, parallel: 0, // クロス/パラレル（横の動き）
   });
   const [showingAnswer, setShowingAnswer] = useState(false);
-  const [result, setResult] = useState(null);
+  const [result, setResult] = useState(_urlResult);
   const [isPro, setIsPro] = useState(false);
   const [savedResult, setSavedResult] = useState(null);
   
@@ -2546,32 +2571,8 @@ export default function App() {
       return mapping[oldKey] || oldKey;
     };
     
-    // URLパラメータから結果を復元（パーマリンク）
-    try {
-      const params = new URLSearchParams(window.location.search);
-      const urlType = params.get("t");
-      if (urlType && TYPE_INFO.cycling[urlType]) {
-        const urlResult = {
-          type: urlType,
-          spectrum: {
-            fr: parseInt(params.get("fr")) || 50,
-            io: parseInt(params.get("io")) || 50,
-            xp: parseInt(params.get("xp")) || 50,
-          },
-          confidence: {
-            fr: params.get("fr") ? ((parseInt(params.get("fr")) || 50) >= 65 || (parseInt(params.get("fr")) || 50) <= 35 ? "clear" : "leaning") : "clear",
-            io: params.get("io") ? ((parseInt(params.get("io")) || 50) >= 65 || (parseInt(params.get("io")) || 50) <= 35 ? "clear" : "leaning") : "clear",
-            xp: params.get("xp") ? ((parseInt(params.get("xp")) || 50) >= 65 || (parseInt(params.get("xp")) || 50) <= 35 ? "clear" : "leaning") : "clear",
-          },
-        };
-        setSavedResult(urlResult);
-        setMode("result");
-        setResult(urlResult);
-        return; // URLパラメータ優先、LocalStorage読み込みスキップ
-      }
-    } catch (e) {}
-    
-    // LocalStorageから保存された結果を読み込み
+    // LocalStorageから保存された結果を読み込み（URLパラメータがない場合のみ）
+    if (!_urlResult) {
     try {
       const saved = localStorage.getItem("stancecore_result");
       if (saved) {
@@ -2595,6 +2596,7 @@ export default function App() {
     } catch (e) {
       console.log("No saved result");
     }
+    } // end if (!_urlResult)
   }, []);
   
   // bodyMetricsが変更されたら保存
