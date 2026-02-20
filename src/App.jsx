@@ -3837,7 +3837,7 @@ export default function App() {
                 </button>
                 <button
                   onClick={() => {
-                    const text = `STANCE COREで診断したら「${type}」タイプでした！\n${typeInfo.description}\n\nhttps://stancecore.vercel.app`;
+                    const text = `STANCE COREで診断したら「${type}」タイプでした！\n${typeInfo.description}\n\n${window.location.origin}`;
                     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, "_blank");
                   }}
                   style={{
@@ -3854,7 +3854,7 @@ export default function App() {
               <button
                 onClick={() => {
                   const sp = result.spectrum || { fr: 50, io: 50, xp: 50 };
-                  const url = `https://stancecore.vercel.app?t=${type}&fr=${sp.fr}&io=${sp.io}&xp=${sp.xp}`;
+                  const url = `${window.location.origin}?t=${type}&fr=${sp.fr}&io=${sp.io}&xp=${sp.xp}`;
                   if (navigator.clipboard) {
                     navigator.clipboard.writeText(url).then(() => {
                       setCopiedLink(true);
@@ -5798,7 +5798,7 @@ export default function App() {
 合わないアドバイスに悩んでたのは、身体の使い方が違っただけだった。
 
 あなたも自分のタイプ、調べてみて
-https://stancecore.vercel.app
+${window.location.origin}
 
 #STANCECORE #StanceType`;
                   const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
@@ -5828,9 +5828,9 @@ https://stancecore.vercel.app
               
               <button
                 onClick={() => {
-                  const text = `自分の身体の使い方がわかった。私は "${typeInfo.name}" タイプ。 https://stancecore.vercel.app`;
+                  const text = `自分の身体の使い方がわかった。私は "${typeInfo.name}" タイプ。 ${window.location.origin}`;
                   if (navigator.share) {
-                    navigator.share({ title: 'STANCE CORE 診断結果', text: text, url: 'https://stancecore.vercel.app' });
+                    navigator.share({ title: 'STANCE CORE 診断結果', text: text, url: window.location.origin });
                   } else {
                     navigator.clipboard.writeText(text);
                     alert('クリップボードにコピーしました！');
