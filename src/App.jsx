@@ -3515,6 +3515,45 @@ export default function App() {
               >
                 ピンとこない、スキップ &gt;
               </button>
+              
+              {/* 前へ / 次へ ナビゲーション */}
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 12 }}>
+                <button
+                  onClick={() => { if (currentIndex > 0) setCurrentIndex(currentIndex - 1); }}
+                  disabled={currentIndex === 0}
+                  style={{
+                    width: 36, height: 36, borderRadius: "50%",
+                    border: "1px solid rgba(0,0,0,0.08)",
+                    background: "rgba(255,255,255,0.6)",
+                    color: currentIndex === 0 ? C.textDim : C.text,
+                    fontSize: 14, cursor: currentIndex === 0 ? "default" : "pointer",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    opacity: currentIndex === 0 ? 0.4 : 1,
+                    flexShrink: 0,
+                  }}
+                >
+                  ‹
+                </button>
+                <button
+                  onClick={() => {
+                    if (answers[q.id]) {
+                      if (currentIndex < questions.length - 1) setCurrentIndex(currentIndex + 1);
+                    }
+                  }}
+                  disabled={!answers[q.id]}
+                  style={{
+                    flex: 1, padding: "12px", borderRadius: 50,
+                    border: "none",
+                    background: answers[q.id] ? theme.accentGradient : "rgba(0,0,0,0.06)",
+                    color: answers[q.id] ? "#fff" : C.textDim,
+                    fontSize: 14, fontWeight: 600, cursor: answers[q.id] ? "pointer" : "default",
+                    display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+                    boxShadow: answers[q.id] ? `0 3px 12px ${theme.accent}25` : "none",
+                  }}
+                >
+                  次へ <span style={{ fontSize: 16 }}>›</span>
+                </button>
+              </div>
             </div>
           </Card>
           
