@@ -53,79 +53,81 @@ const GlobalStyles = () => (
 // テーマ設定（STANCE CORE Premium Design）
 // ========================================
 const THEMES = {
-  // Premium: ミニマル＆高級感（メインテーマ）
+  // Light Glass UI: ライト背景 + ティールアクセント + 透過カード
   premium: {
     name: "premium",
-    // ベース
-    bg: "#FAFAFA",
-    bgSolid: "#FAFAFA",
+    bg: "#F0F2F5",
+    bgSolid: "#F0F2F5",
     aurora: null,
+    startBg: null,
+    startBgSolid: "#F0F2F5",
     
-    // カード
-    card: "#FFFFFF",
-    cardBorder: "#E8E8E8",
-    cardHover: "#FFFFFF",
+    // カード（半透明ガラス）
+    card: "rgba(255, 255, 255, 0.65)",
+    cardBorder: "rgba(255, 255, 255, 0.5)",
+    cardHover: "rgba(255, 255, 255, 0.8)",
     
     // テキスト
     text: "#1a1a1a",
-    textMuted: "#666666",
+    textMuted: "#555555",
     textDim: "#999999",
     
-    // アクセント（STANCE COREのグリーン）
-    accent: "#10B981",
-    accentGradient: "linear-gradient(135deg, #10B981, #059669)",
-    accentLight: "#34D399",
-    accentDark: "#059669",
+    // アクセント（ティール）
+    accent: "#1a7a7a",
+    accentGradient: "linear-gradient(135deg, #1a8a8a, #4DB8B8)",
+    accentLight: "#2a9a9a",
+    accentDark: "#156e6e",
     
-    // タイプ別カラー（8タイプ対応）
+    // タイプ別カラー
     typeColors: {
-      FIX:  { main: "#F59E0B", gradient: "linear-gradient(135deg, #F59E0B, #D97706)", glow: "rgba(245, 158, 11, 0.15)" },
-      FIII: { main: "#06B6D4", gradient: "linear-gradient(135deg, #06B6D4, #0891B2)", glow: "rgba(6, 182, 212, 0.15)" },
-      FOX:  { main: "#EF4444", gradient: "linear-gradient(135deg, #EF4444, #DC2626)", glow: "rgba(239, 68, 68, 0.15)" },
-      FOII: { main: "#10B981", gradient: "linear-gradient(135deg, #10B981, #059669)", glow: "rgba(16, 185, 129, 0.15)" },
-      RIX:  { main: "#8B5CF6", gradient: "linear-gradient(135deg, #8B5CF6, #7C3AED)", glow: "rgba(139, 92, 246, 0.15)" },
-      RIII: { main: "#6366F1", gradient: "linear-gradient(135deg, #6366F1, #4F46E5)", glow: "rgba(99, 102, 241, 0.15)" },
-      ROX:  { main: "#EC4899", gradient: "linear-gradient(135deg, #EC4899, #DB2777)", glow: "rgba(236, 72, 153, 0.15)" },
-      ROII: { main: "#64748B", gradient: "linear-gradient(135deg, #64748B, #475569)", glow: "rgba(100, 116, 139, 0.15)" },
+      FIX:  { main: "#E8960C", gradient: "linear-gradient(135deg, #E8960C, #C67D08)", glow: "rgba(232, 150, 12, 0.12)" },
+      FIII: { main: "#0891B2", gradient: "linear-gradient(135deg, #06B6D4, #0891B2)", glow: "rgba(6, 182, 212, 0.12)" },
+      FOX:  { main: "#DC2626", gradient: "linear-gradient(135deg, #EF4444, #DC2626)", glow: "rgba(239, 68, 68, 0.12)" },
+      FOII: { main: "#059669", gradient: "linear-gradient(135deg, #10B981, #059669)", glow: "rgba(16, 185, 129, 0.12)" },
+      RIX:  { main: "#7C3AED", gradient: "linear-gradient(135deg, #8B5CF6, #7C3AED)", glow: "rgba(139, 92, 246, 0.12)" },
+      RIII: { main: "#4F46E5", gradient: "linear-gradient(135deg, #6366F1, #4F46E5)", glow: "rgba(99, 102, 241, 0.12)" },
+      ROX:  { main: "#DB2777", gradient: "linear-gradient(135deg, #EC4899, #DB2777)", glow: "rgba(236, 72, 153, 0.12)" },
+      ROII: { main: "#475569", gradient: "linear-gradient(135deg, #64748B, #475569)", glow: "rgba(100, 116, 139, 0.12)" },
     },
     
     // セマンティック
     pink: "#EC4899",
     green: "#10B981",
-    orange: "#F59E0B",
+    orange: "#E8960C",
     red: "#EF4444",
-    cyan: "#10B981",
-    yellow: "#F59E0B",
+    cyan: "#1a7a7a",
+    yellow: "#E8960C",
     
-    // エフェクト（控えめなシャドウ）
-    shadow: "none",
-    shadowLg: "0 20px 40px rgba(0, 0, 0, 0.08)",
-    shadowCard: "none",
-    glow: (color) => `0 0 30px ${color}20`,
-    glassBg: "#FFFFFF",
-    glassBorder: "#E8E8E8",
-    blur: "none",
+    // エフェクト
+    shadow: "0 2px 16px rgba(0, 0, 0, 0.05)",
+    shadowLg: "0 12px 40px rgba(0, 0, 0, 0.08)",
+    shadowCard: "0 2px 20px rgba(0, 0, 0, 0.04)",
+    glow: (color) => `0 0 30px ${color}18`,
+    glassBg: "rgba(255, 255, 255, 0.5)",
+    glassBorder: "rgba(255, 255, 255, 0.4)",
+    blur: "blur(16px)",
   },
   
-  // Premium Dark
   premiumDark: {
     name: "premiumDark",
     bg: "#0a0a0a",
     bgSolid: "#0a0a0a",
     aurora: null,
+    startBg: null,
+    startBgSolid: "#0a0a0a",
     
-    card: "#141414",
-    cardBorder: "#2a2a2a",
-    cardHover: "#1a1a1a",
+    card: "rgba(255, 255, 255, 0.06)",
+    cardBorder: "rgba(255, 255, 255, 0.08)",
+    cardHover: "rgba(255, 255, 255, 0.1)",
     
     text: "#FFFFFF",
-    textMuted: "#999999",
-    textDim: "#666666",
+    textMuted: "rgba(255, 255, 255, 0.65)",
+    textDim: "rgba(255, 255, 255, 0.35)",
     
-    accent: "#10B981",
-    accentGradient: "linear-gradient(135deg, #10B981, #059669)",
-    accentLight: "#34D399",
-    accentDark: "#059669",
+    accent: "#2a9a9a",
+    accentGradient: "linear-gradient(135deg, #2a9a9a, #1a8a8a)",
+    accentLight: "#3ab0b0",
+    accentDark: "#1a7a7a",
     
     typeColors: {
       FIX:  { main: "#F59E0B", gradient: "linear-gradient(135deg, #F59E0B, #D97706)", glow: "rgba(245, 158, 11, 0.3)" },
@@ -139,19 +141,19 @@ const THEMES = {
     },
     
     pink: "#EC4899",
-    green: "#10B981",
+    green: "#2a9a9a",
     orange: "#F59E0B",
     red: "#EF4444",
-    cyan: "#10B981",
+    cyan: "#2a9a9a",
     yellow: "#F59E0B",
     
-    shadow: "none",
-    shadowLg: "0 20px 40px rgba(0, 0, 0, 0.3)",
-    shadowCard: "none",
-    glow: (color) => `0 0 30px ${color}40`,
-    glassBg: "#141414",
-    glassBorder: "#2a2a2a",
-    blur: "none",
+    shadow: "0 4px 30px rgba(0, 0, 0, 0.2)",
+    shadowLg: "0 20px 50px rgba(0, 0, 0, 0.35)",
+    shadowCard: "0 4px 30px rgba(0, 0, 0, 0.15)",
+    glow: (color) => `0 0 40px ${color}40`,
+    glassBg: "rgba(255, 255, 255, 0.04)",
+    glassBorder: "rgba(255, 255, 255, 0.06)",
+    blur: "blur(16px)",
   },
 };
 
@@ -177,47 +179,51 @@ const C = {
   cyan: theme.cyan,
   yellow: theme.yellow,
   shadowLight: "#FFFFFF",
-  shadowDark: "#E8E8E8",
+  shadowDark: "rgba(0,0,0,0.06)",
 };
 
-// スタイルヘルパー（Premiumデザイン）
+// スタイルヘルパー（Light Glass UIデザイン）
 const styles = {
   card: {
-    background: theme.card,
-    borderRadius: 0,
-    padding: 32,
-    border: `1px solid ${theme.cardBorder}`,
-    boxShadow: "none",
+    background: "rgba(255, 255, 255, 0.65)",
+    backdropFilter: "blur(16px)",
+    WebkitBackdropFilter: "blur(16px)",
+    borderRadius: 20,
+    padding: 24,
+    border: "1px solid rgba(255, 255, 255, 0.5)",
+    boxShadow: "0 2px 20px rgba(0, 0, 0, 0.04)",
   },
   cardPressed: {
-    background: theme.glassBg,
-    borderRadius: 0,
-    padding: 24,
-    border: `1px solid ${theme.glassBorder}`,
+    background: "rgba(255, 255, 255, 0.45)",
+    backdropFilter: "blur(16px)",
+    WebkitBackdropFilter: "blur(16px)",
+    borderRadius: 16,
+    padding: 20,
+    border: "1px solid rgba(255, 255, 255, 0.35)",
     boxShadow: "none",
   },
   buttonPrimary: {
-    background: theme.accent,
+    background: theme.accentGradient,
     border: "none",
-    borderRadius: 0,
-    padding: "16px 32px",
+    borderRadius: 50,
+    padding: "16px 36px",
     color: "#fff",
-    fontWeight: 500,
-    fontSize: 14,
-    letterSpacing: "2px",
-    textTransform: "uppercase",
+    fontWeight: 600,
+    fontSize: 15,
     cursor: "pointer",
     transition: "all 0.3s ease",
+    boxShadow: `0 4px 20px ${theme.accent}35`,
   },
   buttonSecondary: {
-    background: "transparent",
-    border: `1px solid ${theme.cardBorder}`,
-    borderRadius: 0,
+    background: "rgba(255, 255, 255, 0.5)",
+    backdropFilter: "blur(12px)",
+    WebkitBackdropFilter: "blur(12px)",
+    border: "1px solid rgba(255, 255, 255, 0.4)",
+    borderRadius: 50,
     padding: "14px 28px",
     color: theme.textMuted,
     fontWeight: 500,
     fontSize: 13,
-    letterSpacing: "1px",
     cursor: "pointer",
     transition: "all 0.3s ease",
   },
@@ -225,12 +231,12 @@ const styles = {
     boxShadow: theme.typeColors[type]?.glow ? `0 0 40px ${theme.typeColors[type].glow}` : "none",
   }),
   auroraBg: {
-    background: theme.bg,
+    background: "rgba(255,255,255,0.35)",
     backgroundColor: theme.bgSolid,
     minHeight: "100vh",
   },
   gradientBg: {
-    background: theme.bg,
+    background: "rgba(255,255,255,0.35)",
     backgroundColor: theme.bgSolid,
     minHeight: "100vh",
   },
@@ -242,15 +248,20 @@ const styles = {
   },
 };
 
-// フラットスタイル（ニューモーフィズムを廃止）
+// Light Glass UIスタイル
 const neu = {
-  raised: { boxShadow: "none", border: `1px solid ${theme.cardBorder}` },
-  raisedLg: { boxShadow: "0 10px 30px rgba(0,0,0,0.08)" },
-  pressed: { boxShadow: "none", background: "#F5F5F5" },
-  pressedSm: { boxShadow: "none", background: "#F5F5F5" },
+  raised: { 
+    boxShadow: "0 2px 12px rgba(0,0,0,0.05)", 
+    border: "1px solid rgba(255, 255, 255, 0.4)",
+    backdropFilter: "blur(12px)",
+    WebkitBackdropFilter: "blur(12px)",
+  },
+  raisedLg: { boxShadow: "0 8px 30px rgba(0,0,0,0.06)" },
+  pressed: { boxShadow: "inset 0 1px 3px rgba(0,0,0,0.06)", background: "rgba(255,255,255,0.4)" },
+  pressedSm: { boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)", background: "rgba(255,255,255,0.4)" },
   flat: { boxShadow: "none" },
   accentRaised: (color) => ({
-    boxShadow: "none",
+    boxShadow: `0 4px 20px ${color}18`,
     border: `1.5px solid ${color}`,
   }),
 };
@@ -2391,11 +2402,13 @@ const getTypeInfo = (sport, type) => {
 // Premium Card コンポーネント
 const Card = ({ children, style = {}, pressed = false }) => (
   <div style={{ 
-    background: theme.card,
-    borderRadius: 0, 
-    padding: 32,
-    border: `1px solid ${theme.cardBorder}`,
-    boxShadow: "none",
+    background: "rgba(255, 255, 255, 0.65)",
+    backdropFilter: "blur(16px)",
+    WebkitBackdropFilter: "blur(16px)",
+    borderRadius: 20, 
+    padding: 24,
+    border: "1px solid rgba(255, 255, 255, 0.5)",
+    boxShadow: "0 2px 20px rgba(0, 0, 0, 0.04)",
     transition: "all 0.3s ease",
     ...style 
   }}>
@@ -2403,23 +2416,23 @@ const Card = ({ children, style = {}, pressed = false }) => (
   </div>
 );
 
-// Premium ボタン
+// Light Glass UIボタン
 const NeuButton = ({ children, onClick, active = false, color = C.accent, style = {} }) => (
   <button
     onClick={onClick}
     style={{
-      background: active ? color : "transparent",
-      border: `1px solid ${active ? color : theme.cardBorder}`,
-      borderRadius: 0,
+      background: active ? color : "rgba(255, 255, 255, 0.55)",
+      backdropFilter: "blur(12px)",
+      WebkitBackdropFilter: "blur(12px)",
+      border: active ? `1px solid ${color}` : "1px solid rgba(255, 255, 255, 0.4)",
+      borderRadius: 16,
       padding: "14px 28px",
       cursor: "pointer",
       transition: "all 0.3s ease",
-      boxShadow: "none",
-      color: active ? "#fff" : C.textMuted,
+      boxShadow: active ? `0 4px 20px ${color}25` : "0 1px 8px rgba(0,0,0,0.04)",
+      color: active ? "#fff" : C.text,
       fontWeight: 500,
-      fontSize: 13,
-      letterSpacing: "1px",
-      textTransform: "uppercase",
+      fontSize: 14,
       ...style
     }}
   >
@@ -2967,7 +2980,7 @@ export default function App() {
     return (
       <>
       <GlobalStyles />
-      <div style={{ minHeight: "100vh", background: theme.aurora || theme.bg, backgroundColor: theme.bgSolid, padding: "32px 20px" }}>
+      <div style={{ minHeight: "100vh", background: theme.bg, backgroundColor: theme.bgSolid, padding: "32px 20px" }}>
         <div style={{ maxWidth: 440, margin: "0 auto", animation: "fadeIn 0.5s ease-out" }}>
           {/* ロゴ・ヘッダー */}
           <div style={{ textAlign: "center", marginBottom: 32 }}>
@@ -3103,52 +3116,46 @@ export default function App() {
           
           {/* 初回ユーザー向け */}
           {!savedResult && (
-          <Card>
-            <p style={{ color: C.textDim, fontSize: 11, fontWeight: 700, margin: "0 0 20px", letterSpacing: "1px", textTransform: "uppercase", textAlign: "center" }}>
-              What You'll Learn
-            </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {[
-                { icon: Icons.user, color: C.pink, label: "体幹タイプ", desc: "F or R" },
-                { icon: Icons.foot, color: C.cyan, label: "荷重タイプ", desc: "Inner or Outer" },
-                { icon: Icons.activity, color: C.orange, label: "連動パターン", desc: "クロス or パラレル" },
-                { icon: Icons.zap, color: C.green, label: "メンタル", desc: "攻撃性 & チーム性" },
-              ].map(item => (
-                <div key={item.label} style={{ 
-                  display: "flex", 
-                  alignItems: "center", 
-                  gap: 14, 
-                  background: C.bg, 
-                  borderRadius: 14, 
-                  padding: "12px 16px",
-                  ...neu.pressedSm
+          <>
+          <div style={{ textAlign: "center", marginBottom: 20, marginTop: 8 }}>
+            <h2 style={{ color: C.text, fontSize: 20, fontWeight: 800, margin: "0 0 4px" }}>この診断でわかること</h2>
+            <p style={{ color: theme.accent, fontSize: 12, fontWeight: 500, margin: 0, letterSpacing: "1px" }}>What You'll Discover</p>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
+            {[
+              { num: "01", icon: Icons.user, color: "#EC8B8B", label: "体幹タイプ", desc: "F or R" },
+              { num: "02", icon: Icons.foot, color: "#7EC8C8", label: "荷重タイプ", desc: "Inner or Outer" },
+              { num: "03", icon: Icons.activity, color: "#E8A87C", label: "連動パターン", desc: "クロス or パラレル" },
+              { num: "04", icon: Icons.zap, color: "#7EC8A0", label: "メンタル", desc: "攻撃性 & チーム性" },
+            ].map(item => (
+              <Card key={item.num} style={{ padding: 20, textAlign: "center" }}>
+                <p style={{ color: theme.accent, fontSize: 28, fontWeight: 800, margin: "0 0 4px", opacity: 0.7 }}>{item.num}</p>
+                <p style={{ color: C.text, fontSize: 14, fontWeight: 700, margin: "0 0 12px" }}>{item.label}</p>
+                <div style={{ 
+                  display: "inline-flex", 
+                  padding: 12, 
+                  borderRadius: 16, 
+                  background: "#fff",
+                  boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
+                  marginBottom: 10,
                 }}>
-                  <div style={{ 
-                    padding: 8, 
-                    borderRadius: 10, 
-                    background: C.bg,
-                    ...neu.raised
-                  }}>
-                    {item.icon(item.color, 20)}
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <p style={{ color: C.text, fontSize: 14, fontWeight: 700, margin: 0 }}>{item.label}</p>
-                    <p style={{ color: C.textDim, fontSize: 12, margin: 0 }}>{item.desc}</p>
-                  </div>
+                  {item.icon(item.color, 24)}
                 </div>
-              ))}
-            </div>
-          </Card>
+                <p style={{ color: C.textDim, fontSize: 11, margin: 0 }}>{item.desc}</p>
+              </Card>
+            ))}
+          </div>
+          </>
           )}
           
           {/* 精度説明カード */}
-          <Card style={{ marginTop: 20 }}>
+          <Card style={{ marginTop: 4, border: `1.5px solid ${theme.accent}40` }}>
             <div style={{ textAlign: "center" }}>
-              <p style={{ color: C.textMuted, fontSize: 13, margin: "0 0 10px" }}>
+              <p style={{ color: C.text, fontSize: 14, fontWeight: 500, margin: "0 0 10px" }}>
                 質問に答えるほど精度が上がります
               </p>
               <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
-                <StarRating stars={3} color={C.accent} size={18} />
+                <StarRating stars={3} color={C.orange} size={18} />
               </div>
               <p style={{ color: C.textDim, fontSize: 11, margin: 0 }}>
                 最低5問〜 / 20問で高精度 / いつでも結果を見れます
@@ -3162,9 +3169,9 @@ export default function App() {
             onClick={() => setMode("quiz")}
             style={{
               width: "100%", 
-              marginTop: 28, 
+              marginTop: 24, 
               padding: "18px 24px", 
-              borderRadius: 16, 
+              borderRadius: 50, 
               border: "none",
               background: theme.accentGradient,
               color: "#fff", 
@@ -3175,12 +3182,11 @@ export default function App() {
               alignItems: "center", 
               justifyContent: "center", 
               gap: 10,
-              boxShadow: `0 8px 24px ${theme.accent}40`,
-              letterSpacing: "0.5px",
+              boxShadow: `0 6px 20px ${theme.accent}35`,
               transition: "all 0.3s ease",
             }}
           >
-            診断をはじめる {Icons.arrowRight("#fff", 18)}
+            診断スタート {Icons.stanceCore("#fff", 22)}
           </button>
           )}
         </div>
@@ -3337,61 +3343,33 @@ export default function App() {
         )}
         
         <div style={{ maxWidth: 440, margin: "0 auto" }}>
-          {/* 精度メーター */}
-          <Card style={{ 
-            marginBottom: 24, 
-            padding: "16px 20px", 
-          }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ color: C.textDim, fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px" }}>精度</span>
-                <StarRating stars={accuracy.stars} color={accuracy.color} size={12} />
+          {/* 精度メーター（サークルインジケータ） */}
+          <div style={{ textAlign: "center", marginBottom: 20 }}>
+            <div style={{ position: "relative", display: "inline-block", width: 120, height: 80 }}>
+              <svg width="120" height="80" viewBox="0 0 120 80">
+                {/* 背景の弧 */}
+                <path d="M 15 70 A 50 50 0 0 1 105 70" fill="none" stroke="rgba(0,0,0,0.06)" strokeWidth="8" strokeLinecap="round"/>
+                {/* プログレスの弧 */}
+                <path d="M 15 70 A 50 50 0 0 1 105 70" fill="none" 
+                  stroke={`url(#arcGrad)`} strokeWidth="8" strokeLinecap="round"
+                  strokeDasharray={`${progress * 1.42} 200`}/>
+                <defs>
+                  <linearGradient id="arcGrad" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor={theme.accent}/>
+                    <stop offset="100%" stopColor="#7EC8A0"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div style={{ position: "absolute", bottom: 4, left: "50%", transform: "translateX(-50%)", textAlign: "center" }}>
+                <p style={{ color: C.textDim, fontSize: 10, margin: "0 0 2px", fontWeight: 600 }}>精度</p>
+                <div style={{ display: "flex", justifyContent: "center", marginBottom: 2 }}>
+                  <StarRating stars={accuracy.stars} color={C.orange} size={10} />
+                </div>
               </div>
-              <span style={{ color: accuracy.color, fontSize: 12, fontWeight: 700 }}>{accuracy.label}</span>
             </div>
-            
-            <div style={{ 
-              width: "100%", 
-              height: 8, 
-              background: `${theme.accent}15`, 
-              borderRadius: 4,
-            }}>
-              <div style={{
-                width: `${progress}%`, height: "100%",
-                background: theme.accentGradient,
-                borderRadius: 4, transition: "width 0.5s ease"
-              }} />
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", marginTop: 10 }}>
-              <p style={{ color: C.textDim, fontSize: 11, margin: 0 }}>回答: {accuracy.count}</p>
-              <p style={{ color: C.textDim, fontSize: 11, margin: 0 }}>残り: {remainingQuestions}{extraRoundDone && remainingQuestions > 0 ? "（追加質問）" : ""}</p>
-            </div>
-            
-            {/* 履歴ボタン */}
-            {accuracy.count > 0 && (
-              <button
-                onClick={() => setShowHistory(!showHistory)}
-                style={{
-                  width: "100%",
-                  marginTop: 12,
-                  padding: "8px",
-                  borderRadius: 8,
-                  border: "none",
-                  background: showHistory ? `${theme.accent}15` : "transparent",
-                  color: showHistory ? theme.accent : C.textDim,
-                  fontSize: 11,
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: 6,
-                }}
-              >
-                📋 回答履歴 {showHistory ? "を閉じる" : "を見る・修正する"}
-              </button>
-            )}
-          </Card>
+            <p style={{ color: C.text, fontSize: 16, fontWeight: 700, margin: "4px 0 4px" }}>{accuracy.label}</p>
+            <p style={{ color: C.textDim, fontSize: 11, margin: 0 }}>回答: {accuracy.count}　|　残り: {remainingQuestions}{extraRoundDone && remainingQuestions > 0 ? "（追加質問）" : ""}</p>
+          </div>
           
           {/* 回答履歴パネル */}
           {showHistory && (
@@ -3473,8 +3451,8 @@ export default function App() {
             <div style={{ textAlign: "center", marginBottom: 24 }}>
               <span style={{ 
                 display: "inline-flex", alignItems: "center", gap: 6,
-                background: C.bg, padding: "8px 14px", borderRadius: 20,
-                ...neu.pressedSm,
+                background: "rgba(255,255,255,0.6)", padding: "8px 16px", borderRadius: 50,
+                border: "1px solid rgba(0,0,0,0.06)",
                 marginBottom: 20
               }}>
                 {cat.icon}
@@ -3493,67 +3471,79 @@ export default function App() {
             
             {/* テキスト2択（通常・体験型） */}
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              {["a", "b"].map((choice) => (
+              {["a", "b"].map((choice) => {
+                const isSelected = answers[q.id] === choice;
+                return (
                 <button
                   key={choice}
                   onClick={() => handleAnswer(choice)}
                   disabled={showingAnswer}
                   style={{
                     width: "100%", padding: "16px 20px", borderRadius: 16,
-                    border: "none", 
-                    background: C.bg,
+                    border: isSelected ? `2px solid ${theme.accent}` : "1.5px solid rgba(0,0,0,0.08)", 
+                    background: isSelected ? `${theme.accent}08` : "rgba(255, 255, 255, 0.7)",
+                    backdropFilter: "blur(10px)",
+                    WebkitBackdropFilter: "blur(10px)",
                     color: C.text, fontSize: 15, fontWeight: 500, 
                     cursor: showingAnswer ? "default" : "pointer",
                     textAlign: "left", transition: "all 0.15s",
                     opacity: showingAnswer ? 0.6 : 1,
-                    ...neu.raised,
+                    display: "flex", alignItems: "center", gap: 12,
+                    boxShadow: isSelected ? `0 2px 12px ${theme.accent}15` : "0 1px 6px rgba(0,0,0,0.03)",
                   }}
                 >
-                  <span style={{ color: choice === "a" ? C.accent : C.pink, fontWeight: 700, marginRight: 10 }}>
-                    {choice.toUpperCase()}.
-                  </span>
-                  {q[choice]}
+                  {isSelected && (
+                    <span style={{ 
+                      display: "inline-flex", alignItems: "center", justifyContent: "center",
+                      width: 22, height: 22, borderRadius: "50%", 
+                      background: theme.accent, color: "#fff", fontSize: 13, flexShrink: 0,
+                    }}>✓</span>
+                  )}
+                  <span>{q[choice]}</span>
                 </button>
-              ))}
+                );
+              })}
               
               <button
                 onClick={handleSkip}
                 disabled={showingAnswer}
                 style={{
-                  width: "100%", padding: "12px", borderRadius: 10, border: "none",
+                  width: "100%", padding: "10px", borderRadius: 10, border: "none",
                   background: "transparent", color: C.textDim, fontSize: 12, 
-                  cursor: showingAnswer ? "default" : "pointer", marginTop: 8
+                  cursor: showingAnswer ? "default" : "pointer", marginTop: 4,
                 }}
               >
-                ピンとこない、スキップ →
+                ピンとこない、スキップ &gt;
               </button>
             </div>
           </Card>
           
           {/* 結果を見るボタン */}
-          <div style={{ marginTop: 24 }}>
+          <div style={{ marginTop: 20 }}>
             {canShowResult ? (
               <button
                 onClick={calculateResult}
                 style={{
-                  width: "100%", padding: "16px", borderRadius: 16,
+                  width: "100%", padding: "16px", borderRadius: 50,
                   border: "none", 
-                  background: C.bg,
-                  color: C.accent, fontSize: 14, fontWeight: 700, cursor: "pointer",
+                  background: theme.accentGradient,
+                  color: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer",
                   display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                  ...neu.raised,
+                  boxShadow: `0 4px 16px ${theme.accent}30`,
                 }}
               >
-                {Icons.sparkles(C.accent, 16)} この精度で結果を見る
+                {Icons.sparkles("#fff", 16)} この精度で結果を見る
               </button>
             ) : (
-              <p style={{ color: C.textDim, fontSize: 13, textAlign: "center" }}>
-                あと{5 - accuracy.count}問で結果が見れます
-              </p>
+              <Card style={{ textAlign: "center", border: `1.5px solid ${theme.accent}30` }}>
+                <p style={{ color: C.text, fontSize: 14, fontWeight: 600, margin: 0 }}>
+                  あと{5 - accuracy.count}問で結果が見れます
+                </p>
+              </Card>
             )}
           </div>
           
-          <p style={{ color: C.textDim, fontSize: 11, textAlign: "center", marginTop: 16 }}>
+          <p style={{ color: C.textDim, fontSize: 11, textAlign: "center", marginTop: 12 }}>
             直感で答えてください。正解・不正解はありません。
           </p>
         </div>
@@ -3691,7 +3681,7 @@ export default function App() {
             
             {/* レーダーチャート（統合） */}
             <div style={{ 
-              background: theme.bg, 
+              background: "rgba(255,255,255,0.35)", 
               borderRadius: 16, 
               padding: 16,
               marginTop: 8,
@@ -4044,7 +4034,7 @@ export default function App() {
                     style={{
                       width: "100%",
                       padding: "12px 16px",
-                      borderRadius: 0,
+                      borderRadius: 12,
                       border: "none",
                       background: C.orange,
                       color: "#fff",
@@ -4152,7 +4142,7 @@ export default function App() {
               
               {/* 今後のヒント */}
               <div style={{ 
-                background: theme.bg, 
+                background: "rgba(255,255,255,0.35)", 
                 borderRadius: 16, 
                 padding: 16,
               }}>
@@ -4187,7 +4177,7 @@ export default function App() {
             
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {/* 体幹タイプ */}
-              <div style={{ background: theme.bg, borderRadius: 12, padding: 14 }}>
+              <div style={{ background: "rgba(255,255,255,0.35)", borderRadius: 12, padding: 14 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                   <p style={{ color: C.textDim, fontSize: 11, fontWeight: 600, margin: 0, textTransform: "uppercase" }}>体幹タイプ</p>
                   <p style={{ color: typeInfo.color, fontSize: 14, fontWeight: 700, margin: 0 }}>{typeInfo.bodyMechanics.trunk.type}</p>
@@ -4226,7 +4216,7 @@ export default function App() {
               </div>
               
               {/* 連動パターン */}
-              <div style={{ background: theme.bg, borderRadius: 12, padding: 14 }}>
+              <div style={{ background: "rgba(255,255,255,0.35)", borderRadius: 12, padding: 14 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                   <p style={{ color: C.textDim, fontSize: 11, fontWeight: 600, margin: 0, textTransform: "uppercase" }}>連動パターン</p>
                   <p style={{ color: typeInfo.color, fontSize: 14, fontWeight: 700, margin: 0 }}>{typeInfo.bodyMechanics.movement.type}</p>
@@ -4320,7 +4310,7 @@ export default function App() {
               </div>
               
               {/* 荷重タイプ */}
-              <div style={{ background: theme.bg, borderRadius: 12, padding: 14 }}>
+              <div style={{ background: "rgba(255,255,255,0.35)", borderRadius: 12, padding: 14 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                   <p style={{ color: C.textDim, fontSize: 11, fontWeight: 600, margin: 0, textTransform: "uppercase" }}>荷重タイプ</p>
                   <p style={{ color: typeInfo.color, fontSize: 14, fontWeight: 700, margin: 0 }}>{typeInfo.bodyMechanics.balance.type}</p>
@@ -5338,7 +5328,7 @@ export default function App() {
                 <p style={{ color: C.text, fontSize: 14, fontWeight: 800, margin: "0 0 -8px", letterSpacing: "1px" }}>走り方</p>
 
                 {/* 平地 */}
-                <div style={{ background: theme.bg, borderRadius: 12, padding: 16 }}>
+                <div style={{ background: "rgba(255,255,255,0.35)", borderRadius: 12, padding: 16 }}>
                   <p style={{ color: typeInfo.color, fontSize: 13, fontWeight: 700, margin: "0 0 12px" }}>平地</p>
                   <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                     {[
@@ -5355,7 +5345,7 @@ export default function App() {
                 </div>
 
                 {/* 登り */}
-                <div style={{ background: theme.bg, borderRadius: 12, padding: 16 }}>
+                <div style={{ background: "rgba(255,255,255,0.35)", borderRadius: 12, padding: 16 }}>
                   <p style={{ color: typeInfo.color, fontSize: 13, fontWeight: 700, margin: "0 0 12px" }}>登り</p>
                   <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                     {[
@@ -5388,7 +5378,7 @@ export default function App() {
                 </div>
 
                 {/* 下り */}
-                <div style={{ background: theme.bg, borderRadius: 12, padding: 16 }}>
+                <div style={{ background: "rgba(255,255,255,0.35)", borderRadius: 12, padding: 16 }}>
                   <p style={{ color: typeInfo.color, fontSize: 13, fontWeight: 700, margin: "0 0 12px" }}>下り</p>
                   <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                     {[
@@ -5405,7 +5395,7 @@ export default function App() {
                 </div>
 
                 {/* コーナリング */}
-                <div style={{ background: theme.bg, borderRadius: 12, padding: 16 }}>
+                <div style={{ background: "rgba(255,255,255,0.35)", borderRadius: 12, padding: 16 }}>
                   <p style={{ color: typeInfo.color, fontSize: 13, fontWeight: 700, margin: "0 0 12px" }}>コーナリング</p>
                   <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                     {[
@@ -5422,7 +5412,7 @@ export default function App() {
                 </div>
 
                 {/* 加速のコツ */}
-                <div style={{ background: theme.bg, borderRadius: 12, padding: 16 }}>
+                <div style={{ background: "rgba(255,255,255,0.35)", borderRadius: 12, padding: 16 }}>
                   <p style={{ color: typeInfo.color, fontSize: 13, fontWeight: 700, margin: "0 0 12px" }}>加速のコツ</p>
                   <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                     {[
@@ -5445,7 +5435,7 @@ export default function App() {
 
                 {/* ===== レース戦術 ===== */}
                 <p style={{ color: C.text, fontSize: 14, fontWeight: 800, margin: "8px 0 -8px", letterSpacing: "1px" }}>レース戦術</p>
-                <div style={{ background: theme.bg, borderRadius: 12, padding: 16 }}>
+                <div style={{ background: "rgba(255,255,255,0.35)", borderRadius: 12, padding: 16 }}>
                   <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                     {[
                       { label: "クリテリウム", value: guide.race.crit, icon: "🏁" },
@@ -5461,7 +5451,7 @@ export default function App() {
                 </div>
 
                 {/* 弱点と対策 */}
-                <div style={{ background: theme.bg, borderRadius: 12, padding: 16 }}>
+                <div style={{ background: "rgba(255,255,255,0.35)", borderRadius: 12, padding: 16 }}>
                   <p style={{ color: typeInfo.color, fontSize: 13, fontWeight: 700, margin: "0 0 12px" }}>弱点と対策</p>
                   <div style={{ padding: 12, background: `${C.orange}10`, borderRadius: 8, marginBottom: 12, border: `1px solid ${C.orange}20` }}>
                     <div style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
@@ -5497,7 +5487,7 @@ export default function App() {
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {SELF_CHECK[type].checks.map((check, i) => (
-                <div key={i} style={{ background: theme.bg, borderRadius: 12, padding: 14 }}>
+                <div key={i} style={{ background: "rgba(255,255,255,0.35)", borderRadius: 12, padding: 14 }}>
                   <p style={{ color: typeInfo.color, fontSize: 13, fontWeight: 700, margin: "0 0 8px" }}>
                     {i + 1}. {check.name}
                   </p>
@@ -5571,7 +5561,7 @@ export default function App() {
                 const fitColor = myFit === "◎" ? C.green : myFit === "○" ? C.cyan : C.orange;
                 
                 return (
-                  <div key={i} style={{ background: theme.bg, borderRadius: 10, padding: 12, borderLeft: `3px solid ${fitColor}` }}>
+                  <div key={i} style={{ background: "rgba(255,255,255,0.35)", borderRadius: 10, padding: 12, borderLeft: `3px solid ${fitColor}` }}>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
                       <p style={{ color: C.text, fontSize: 13, fontWeight: 700, margin: 0 }}>
                         「{item.vague}」
@@ -5754,7 +5744,7 @@ export default function App() {
                       style={{
                         display: "flex", alignItems: "center", justifyContent: "space-between",
                         padding: "14px 16px", borderRadius: 12,
-                        background: theme.bg, border: `1px solid ${theme.cardBorder}`,
+                        background: "rgba(255,255,255,0.35)", border: `1px solid ${theme.cardBorder}`,
                         textDecoration: "none", transition: "all 0.2s ease",
                       }}
                     >
@@ -5780,7 +5770,7 @@ export default function App() {
                       </div>
                     </a>
                   )) : (
-                    <div style={{ padding: 16, textAlign: "center", background: theme.bg, borderRadius: 12 }}>
+                    <div style={{ padding: 16, textAlign: "center", background: "rgba(255,255,255,0.35)", borderRadius: 12 }}>
                       <p style={{ color: C.textMuted, fontSize: 13, margin: "0 0 8px" }}>
                         「{fitterSearchArea}」の提携フィッターはまだありません
                       </p>
